@@ -104,6 +104,18 @@
                                 <input type="text" class="form-control mb-3" placeholder="{{ translate('+880')}}" name="phone" value="" required>
                             </div>
                         </div>
+                        
+                        
+                        <div class="row">
+                            <div class="col-md-2">
+                                <label>{{ translate('Location')}}</label>
+                            </div>
+                            <div class="col-md-10">
+                                <textarea class="form-control mb-3" placeholder="{{ translate('Your Live Address')}}" rows="2" name="address_live" id="addres_live" required></textarea>
+                            </div>
+                        </div>
+                        
+                        
                         <div class="form-group text-right">
                             <button type="submit" class="btn btn-sm btn-primary">{{translate('Save')}}</button>
                         </div>

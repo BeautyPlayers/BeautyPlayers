@@ -16,7 +16,6 @@ class SmsUtility
         try {
             sendSMS($user->phone, env('APP_NAME'), $sms_body, $template_id);
         } catch (\Exception $e) {
-
         }
     }
 

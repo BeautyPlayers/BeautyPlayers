@@ -55,6 +55,13 @@
                         <input type="text" class="form-control mb-3" placeholder="{{ translate('Address')}}" name="address" value="{{ $shop->address }}" required>
                     </div>
                 </div>
+                
+                <div class="row">
+                    <label class="col-md-2 col-form-label">{{ translate('Live Location') }} <span class="text-danger text-danger">*</span></label>
+                    <div class="col-md-10">
+                        <input id="live_location" type="text" class="form-control mb-3" placeholder="{{ translate('Live Location (Please allow location on device)')}}" name="address" value="{{ $shop->live_location }}">
+                    </div>
+                </div>
                 @if (get_setting('shipping_type') == 'seller_wise_shipping')
                     <div class="row">
                         <div class="col-md-2">
@@ -119,7 +126,7 @@
                                 <label for="exampleInputuname">{{ translate('Latitude') }}</label>
                             </div>
                             <div class="col-md-10" id="">
-                                <input type="text" class="form-control mb-3" id="latitude" name="delivery_pickup_latitude" readonly="" value="{{ $shop->delivery_pickup_latitude }}">
+                                <input id="lat_value" type="text" class="form-control mb-3" id="latitude" name="delivery_pickup_latitude" readonly="" value="{{ $shop->delivery_pickup_latitude }}">
                             </div>
                         </div>
                     @else
@@ -135,8 +142,8 @@
                             <div class="col-md-2" id="">
                                 <label for="exampleInputuname">{{ translate('Latitude') }}</label>
                             </div>
-                            <div class="col-md-10" id="">
-                                <input type="text" class="form-control mb-3" id="latitude" name="delivery_pickup_latitude" value="{{ $shop->delivery_pickup_latitude }}">
+                            <div class="col-md-10">
+                                <input type="text" class="form-control mb-3" id="lat_value" name="delivery_pickup_latitude" value="{{ $shop->delivery_pickup_latitude }}">
                             </div>
                         </div>
                     @endif

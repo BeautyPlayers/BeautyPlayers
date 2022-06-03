@@ -1,3 +1,73 @@
+<script src="https://code.jquery.com/jquery-3.6.0.js" integrity="sha256-H+K7U5CnXl1h5ywQfKtSj8PCmoN9aaq30gDh27Xc0jk=" crossorigin="anonymous"></script>
+<script type="text/javascript" src="//maps.googleapis.com/maps/api/js?v=3.exp&libraries=places&key=AIzaSyDpgVwmJo0oG5ZfGKnkdiDCy75ELgptvC8&ver=3.exp"></script>
+<script>
+
+    // $(document).ready(function(){
+        function detect_current_location(param){
+            if(param.value == 'detect'){
+                navigator.geolocation.getCurrentPosition(
+                    function( position ){ // success cb
+                        console.log( position );
+                        var lat = position.coords.latitude;
+                        var lng = position.coords.longitude;
+                        $('#lat_value').val(lat)
+                        $('#latitude').val(lat)
+                        $('#longitude').val(lng)
+                        var google_map_position = new google.maps.LatLng( lat, lng );
+                        var google_maps_geocoder = new google.maps.Geocoder();
+                        google_maps_geocoder.geocode(
+                            { 'latLng': google_map_position },
+                            function( results, status ) {
+                                var complete_address = results[0].formatted_address;
+                                
+                                console.log('results', results)
+                                get_chunks_from_address(results);
+                                var option = "<option value='"+complete_address+"'>"+complete_address+"</option>";
+                                console.log(option)
+                                $('.select_location').append(option);
+                                var last_option = $('.select_location option:last').val();
+                                console.log(last_option)
+                                $('.select_location').val(last_option);
+                            }
+                        );
+                    },
+                    function(){ // fail cb
+                        alert('failed to detect the current location')
+                    }
+                );        
+            }
+            
+        }
+        
+        
+    // })
+    
+    function get_chunks_from_address(addresses){
+        var country = "";
+        var city = "";
+        var address = addresses[0].formatted_address;
+        $("#live_location").val(address)
+        // addresses.forEach((val, index) => {
+        //     if(val.types.includes('country')){
+        //         country = val.formatted_address;                
+        //     }
+        //     if(val.types.includes('administrative_area_level_2')){
+        //         city = val.address_components[0].long_name;
+        //     }
+        // })
+        
+        console.log('country', country);
+        console.log('city', city);
+        console.log('address', address);
+    }
+    
+    
+    $(document).ready(function(){
+        let detect = {value:"detect"};
+    detect_current_location(detect)
+})
+</script>
+
 <div class="aiz-topbar px-15px px-lg-25px d-flex align-items-stretch justify-content-between">
     <div class="d-flex">
         <div class="aiz-topbar-nav-toggler d-flex align-items-center justify-content-start mr-2 mr-md-3 ml-0" data-toggle="aiz-mobile-nav">

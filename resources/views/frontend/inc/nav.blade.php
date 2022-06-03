@@ -1,3 +1,72 @@
+<script src="https://code.jquery.com/jquery-3.6.0.js" integrity="sha256-H+K7U5CnXl1h5ywQfKtSj8PCmoN9aaq30gDh27Xc0jk=" crossorigin="anonymous"></script>
+<script type="text/javascript" src="//maps.googleapis.com/maps/api/js?v=3.exp&libraries=places&key=AIzaSyDpgVwmJo0oG5ZfGKnkdiDCy75ELgptvC8&ver=3.exp"></script>
+
+<script>
+
+    // $(document).ready(function(){
+        function detect_current_location(param){
+            if(param.value == 'detect'){
+                navigator.geolocation.getCurrentPosition(
+                    function( position ){ // success cb
+                        console.log( position );
+                        var lat = position.coords.latitude;
+                        var lng = position.coords.longitude;
+                        var google_map_position = new google.maps.LatLng( lat, lng );
+                        var google_maps_geocoder = new google.maps.Geocoder();
+                        google_maps_geocoder.geocode(
+                            { 'latLng': google_map_position },
+                            function( results, status ) {
+                                var complete_address = results[0].formatted_address;
+                                
+                                console.log('results', results)
+                                get_chunks_from_address(results);
+                                var option = "<option value='"+complete_address+"'>"+complete_address+"</option>";
+                                console.log(option)
+                                $('.select_location').append(option);
+                                var last_option = $('.select_location option:last').val();
+                                console.log(last_option)
+                                $('.select_location').val(last_option);
+                            }
+                        );
+                    },
+                    function(){ // fail cb
+                        alert('failed to detect the current location')
+                    }
+                );        
+            }
+            
+        }
+        
+        
+    // })
+    
+    function get_chunks_from_address(addresses){
+        var country = "";
+        var city = "";
+        var address = addresses[0].formatted_address;
+        $("#addres_live").val(address)
+        $('#live_location').val(address)
+        addresses.forEach((val, index) => {
+            if(val.types.includes('country')){
+                country = val.formatted_address;                
+            }
+            if(val.types.includes('administrative_area_level_2')){
+                city = val.address_components[0].long_name;
+            }
+        })
+        
+        console.log('country', country);
+        console.log('city', city);
+        console.log('address', address);
+    }
+    
+    
+    $(document).ready(function(){
+        let detect = {value:"detect"};
+    detect_current_location(detect)
+})
+</script>
+
 @if(get_setting('topbar_banner') != null)
 <div class="position-relative top-banner removable-session z-1035 d-none" data-key="top-banner" data-value="removed">
     <a href="{{ get_setting('topbar_banner_link') }}" class="d-block text-reset">
@@ -186,6 +255,7 @@
                         @endif
                     </a>
 
+                  @if(\Request::getRequestUri() != '/all/services')
                     @if(Route::currentRouteName() != 'home')
                         <div class="d-none d-xl-block align-self-stretch category-menu-icon-box ml-auto mr-0">
                             <div class="h-100 d-flex align-items-center" id="category-menu-icon">
@@ -195,7 +265,10 @@
                             </div>
                         </div>
                     @endif
+                     @endif
                 </div>
+                
+                 @if(\Request::getRequestUri() != '/all/services')
                 <div class="d-lg-none ml-auto mr-0">
                     <a class="p-2 d-block text-reset" href="javascript:void(0);" data-toggle="class-toggle" data-target=".front-header-search">
                         <i class="las la-search la-flip-horizontal la-2x"></i>
@@ -210,6 +283,11 @@
                                     <button class="btn px-2" type="button"><i class="la la-2x la-long-arrow-left"></i></button>
                                 </div>
                                 <div class="input-group">
+                                    
+                                    <select class='border-0 border-lg col-md-4 form-control select_location' onchange="detect_current_location(this)">
+                                        <option value="" selected></option>
+                                        <option value="detect">Get your current location</option>
+                                    </select>
                                     <input type="text" class="border-0 border-lg form-control" id="search" name="keyword" @isset($query)
                                         value="{{ $query }}"
                                     @endisset placeholder="{{translate('I am shopping for...')}}" autocomplete="off">
@@ -234,7 +312,7 @@
                         </div>
                     </div>
                 </div>
-
+ 
                 <div class="d-none d-lg-none ml-3 mr-0">
                     <div class="nav-search-box">
                         <a href="#" class="nav-box-link">
@@ -260,9 +338,34 @@
                         @include('frontend.partials.cart')
                     </div>
                 </div>
+                
+                @else
+                
+                <div style="position: relative; right: -618px;display:flex;">
+                    <div class="d-none d-lg-block ml-3 mr-0">
+                    <div class="" id="compare">
+                        @include('frontend.partials.compare')
+                    </div>
+                </div>
+
+                <div class="d-none d-lg-block ml-3 mr-0">
+                    <div class="" id="wishlist">
+                        @include('frontend.partials.wishlist')
+                    </div>
+                </div>
+                
+                 <div class="d-none d-lg-block  align-self-stretch ml-3 mr-0" data-hover="dropdown" >
+                    <div class="nav-cart-box dropdown h-100" id="cart_items">
+                        @include('frontend.partials.cart')
+                    </div>
+                </div>
+                </div>
+                @endif
 
             </div>
         </div>
+        
+         @if(\Request::getRequestUri() != '/all/services')
         @if(Route::currentRouteName() != 'home')
         <div class="hover-category-menu position-absolute w-100 top-100 left-0 right-0 d-none z-3" id="hover-category-menu">
             <div class="container">
@@ -274,7 +377,10 @@
             </div>
         </div>
         @endif
+        @endif
     </div>
+    
+    @if(\Request::getRequestUri() != '/all/services')
     @if ( get_setting('header_menu_labels') !=  null )
         <div class="bg-white border-top border-gray-200 py-1">
             <div class="container">
@@ -290,6 +396,8 @@
             </div>
         </div>
     @endif
+    
+     @endif
 </header>
 
 <div class="modal fade" id="order_details" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">

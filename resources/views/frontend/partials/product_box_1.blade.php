@@ -34,34 +34,14 @@
             @if(home_base_price($product) != home_discounted_base_price($product))
                 <del class="fw-600 opacity-50 mr-1">{{ home_base_price($product) }}</del>
             @endif
-          <div class="d-flex justify-content-between"> <span class="fw-700 text-primary">{{ home_discounted_base_price($product) }}</span> <span class="fw-700">{{$product->unit}}</span>  </div>
+            <span class="fw-700 text-primary">{{ home_discounted_base_price($product) }}</span>
         </div>
-
         <div class="rating rating-sm mt-1">
             {{ renderStarRating($product->rating) }}
         </div>
         <h3 class="fw-600 fs-13 text-truncate-2 lh-1-4 mb-0 h-35px">
             <a href="{{ route('product', $product->slug) }}" class="d-block text-reset">{{  $product->getTranslation('name')  }}</a>
         </h3>
-        <div class="brand-and-quantity d-flex justify-content-between align-items-center">
-        <span class="brand-name fw-700 fs-12">
-        {{ $product->brand_id ? \App\Models\Brand::where('id', $product->brand_id)->first()->name : 'N/A'}}
-        </span>
-        <div>
-                                        <div class="product-quantity d-flex align-items-center">
-                                            <div class="row no-gutters align-items-center aiz-plus-minus m">
-                                                <button class="btn col-auto btn-icon btn-sm btn-circle btn-light" id="minus-btn" type="button" data-type="minus" data-field="quantity" disabled="">
-                                                    <i class="las la-minus"></i>
-                                                </button>
-                                                <input type="number" id="quantity" name="quantity" class="col border-0 text-center flex-grow-1 fs-12 input-number" placeholder="1" value="{{ $product->min_qty }}" min="{{ $product->min_qty }}" max="10" lang="en" />
-                                                <button class="btn col-auto btn-icon btn-sm btn-circle btn-light" id="plus-btn" type="button" data-type="plus" data-field="quantity">
-                                                    <i class="las la-plus"></i>
-                                                </button>
-                                            </div>
-
-                                        </div>
-                                    </div>
-        </div>
         @if (addon_is_activated('club_point'))
             <div class="rounded px-2 mt-2 bg-soft-primary border-soft-primary border">
                 {{ translate('Club Point') }}:
@@ -70,10 +50,3 @@
         @endif
     </div>
 </div>
-@section('script')
-<script type="text/javascript">
-$('#plus-btn').click(function(){
-    console.log('clicked')
-});
-</script>
-@endsection

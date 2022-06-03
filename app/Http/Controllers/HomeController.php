@@ -253,6 +253,38 @@ class HomeController extends Controller
         }
         abort(404);
     }
+    
+     public function services_cat(Request $request)
+    {
+                // return Category::with('products')->orderBy('id','desc')->get();
+                $producstList  = Product::with('brand','user','category')->where('auction_product', 0)->where('approved', 1)->get();
+                
+                foreach($producstList as $k=>$v){
+                    if($v->category->parent_id == 0){
+                        $id = $v->category->id;
+                    }else{
+                        $id = $v->category->parent_id;
+                    }
+                    $producstList[$k]['main_category'] = Category::where('id', $id)->value('name');
+                }
+                
+                // return $producstList;
+                // $productlist = [];
+                
+                // $producstList = Category::select('id','parent_id','name')->where('level', 0)->orderBy('order_level', 'desc')->get();
+                
+                //     foreach($producstList as $k=>$v){
+                //      $producstList[$k]['products'] = Product::with('brand')->where('auction_product', 0)->where('approved', 1)->where('category_id', $v->id)->get();
+                //     }
+                
+                
+                // return $producstList;
+                $categories = Category::where('level', 0)->orderBy('order_level', 'desc')->get();
+                return view('frontend.cat_services', compact('categories','producstList'));
+         
+         
+       // abort(404);
+    }
 
     public function shop($slug)
     {

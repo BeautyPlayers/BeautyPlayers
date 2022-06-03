@@ -57,8 +57,9 @@
     @endif
     <link rel="stylesheet" href="{{ static_asset('assets/css/aiz-core.css') }}">
     <link rel="stylesheet" href="{{ static_asset('assets/css/custom-style.css') }}">
+    
 
-
+  
     <script>
         var AIZ = AIZ || {};
         AIZ.local = {
@@ -106,6 +107,56 @@
         }
 
         .pac-container { z-index: 100000; }
+        
+        
+  .slider {
+      width: 53.5%;
+      /* margin: 100px auto; */
+      margin: 0px auto;
+  }
+
+  .slick-slide {
+    margin: 0px 20px;
+  }
+
+  .slick-slide img {
+    width: 100%;
+  }
+
+  .slick-prev:before,
+  .slick-next:before {
+    color: black;
+  }
+
+ 
+
+
+  .slick-slide {
+    transition: all ease-in-out .3s;
+    opacity: .2;
+  }
+  
+  .slick-active {
+    opacity: .5;
+  }
+
+  .slick-current {
+    opacity: 1;
+  }
+
+  .fixed-header{
+        width: 100%;
+        position: fixed;        
+        background: #333;
+        padding: 10px 0;
+        color: #fff;
+    }
+    .fixed-header{
+        top: 0;
+        height: 86px;
+    }
+  
+  
     </style>
 
 @if (get_setting('google_analytics') == 1)
@@ -225,7 +276,7 @@
     <!-- SCRIPTS -->
     <script src="{{ static_asset('assets/js/vendors.js') }}"></script>
     <script src="{{ static_asset('assets/js/aiz-core.js') }}"></script>
-
+    
 
 
     @if (get_setting('facebook_chat') == 1)

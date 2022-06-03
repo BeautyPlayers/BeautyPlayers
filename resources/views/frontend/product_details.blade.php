@@ -70,7 +70,7 @@
                                     @endforeach
                                 </div>
                             </div>
-                            <!-- <div class="col-12 col-md-auto w-md-80px order-2 order-md-1 mt-3 mt-md-0">
+                            <div class="col-12 col-md-auto w-md-80px order-2 order-md-1 mt-3 mt-md-0">
                                 <div class="aiz-carousel product-gallery-thumb" data-items='5' data-nav-for='.product-gallery' data-vertical='true' data-vertical-sm='false' data-focus-select='true' data-arrows='true'>
                                     @foreach ($photos as $key => $photo)
                                     <div class="carousel-box c-pointer border p-1 rounded">
@@ -95,7 +95,7 @@
                                         @endif
                                     @endforeach
                                 </div>
-                            </div> -->
+                            </div>
                         </div>
                     </div>
 
@@ -125,7 +125,7 @@
 
                             <hr>
 
-                            <!-- <div class="row align-items-center">
+                            <div class="row align-items-center">
                                 <div class="col-auto">
                                     <small class="mr-2 opacity-50">{{ translate('Sold by')}}: </small><br>
                                     @if ($detailedProduct->added_by == 'seller' && get_setting('vendor_system_activation') == 1)
@@ -147,9 +147,9 @@
                                         </a>
                                     </div>
                                 @endif
-                            </div> -->
+                            </div>
 
-                            <!-- <hr> -->
+                            <hr>
 
                             @if ($detailedProduct->wholesale_product)
                                 <table class="table mb-0">
@@ -180,9 +180,9 @@
                                             <div class="fs-20 opacity-60">
                                                 <del>
                                                     {{ home_price($detailedProduct) }}
-                                                    <!-- @if($detailedProduct->unit != null)
+                                                    @if($detailedProduct->unit != null)
                                                         <span>/{{ $detailedProduct->getTranslation('unit') }}</span>
-                                                    @endif -->
+                                                    @endif
                                                 </del>
                                             </div>
                                         </div>
@@ -197,9 +197,9 @@
                                                 <strong class="h2 fw-600 text-primary">
                                                     {{ home_discounted_price($detailedProduct) }}
                                                 </strong>
-                                                <!-- @if($detailedProduct->unit != null)
+                                                @if($detailedProduct->unit != null)
                                                     <span class="opacity-70">/{{ $detailedProduct->getTranslation('unit') }}</span>
-                                                @endif -->
+                                                @endif
                                             </div>
                                         </div>
                                     </div>
@@ -213,9 +213,9 @@
                                                 <strong class="h2 fw-600 text-primary">
                                                     {{ home_discounted_price($detailedProduct) }}
                                                 </strong>
-                                                <!-- @if($detailedProduct->unit != null)
+                                                @if($detailedProduct->unit != null)
                                                     <span class="opacity-70">/{{ $detailedProduct->getTranslation('unit') }}</span>
-                                                @endif -->
+                                                @endif
                                             </div>
                                         </div>
                                     </div>
@@ -309,7 +309,7 @@
                                                     <i class="las la-minus"></i>
                                                 </button>
                                                 <input type="number" name="quantity" class="col border-0 text-center flex-grow-1 fs-16 input-number" placeholder="1" value="{{ $detailedProduct->min_qty }}" min="{{ $detailedProduct->min_qty }}" max="10" lang="en">
-                                                <button class="btn col-auto btn-icon btn-sm btn-circle btn-light" type="button" data-type="plus" data-field="quantity">
+                                                <button class="btn  col-auto btn-icon btn-sm btn-circle btn-light" type="button" data-type="plus" data-field="quantity">
                                                     <i class="las la-plus"></i>
                                                 </button>
                                             </div>
@@ -332,7 +332,7 @@
 
                                 <hr>
 
-                                <!-- <div class="row no-gutters pb-3 d-none" id="chosen_price_div">
+                                <div class="row no-gutters pb-3 d-none" id="chosen_price_div">
                                     <div class="col-sm-2">
                                         <div class="opacity-50 my-2">{{ translate('Total Price')}}:</div>
                                     </div>
@@ -343,11 +343,11 @@
                                             </strong>
                                         </div>
                                     </div>
-                                </div> -->
+                                </div>
 
                             </form>
 
-                            <!-- <div class="mt-3">
+                            <div class="mt-3">
                                 @if ($detailedProduct->external_link != null)
                                     <a type="button" class="btn btn-primary buy-now fw-600" href="{{ $detailedProduct->external_link }}">
                                         <i class="la la-share"></i> {{ translate($detailedProduct->external_link_btn)}}
@@ -364,7 +364,7 @@
                                 <button type="button" class="btn btn-secondary out-of-stock fw-600 d-none" disabled>
                                     <i class="la la-cart-arrow-down"></i> {{ translate('Out of Stock')}}
                                 </button>
-                            </div> -->
+                            </div>
 
 
 
@@ -423,10 +423,6 @@
                                 <div class="col-sm-10">
                                     <div class="aiz-share"></div>
                                 </div>
-                            </div>
-                            <div class="mt-4 fs-16 fw-600 cursor-pointer" style="color:#c04678" id="view-product-details">
-                             <div id="view-details">  <span> View details </span> <i class="las la-caret-down"></i> </div>
-                             <div id="hide-details">  <span> Hide details </span> <i class="las la-caret-up"></i> </div>
                             </div>
                         </div>
                     </div>
@@ -505,7 +501,7 @@
                             </div>
                         </div>
                     @endif
-                    <!-- <div class="bg-white rounded shadow-sm mb-3">
+                    <div class="bg-white rounded shadow-sm mb-3">
                         <div class="p-3 border-bottom fs-16 fw-600">
                             {{ translate('Top Selling Products')}}
                         </div>
@@ -541,10 +537,10 @@
                                 @endforeach
                             </ul>
                         </div>
-                    </div> -->
+                    </div>
                 </div>
-                <div class="col-xl-12 order-0 order-xl-1">
-                    <div class="bg-white mb-3 shadow-sm rounded" id="dropdown-detail">
+                <div class="col-xl-9 order-0 order-xl-1">
+                    <div class="bg-white mb-3 shadow-sm rounded">
                         <div class="nav border-bottom aiz-nav-tabs">
                             <a href="#tab_default_1" data-toggle="tab" class="p-3 fs-16 fw-600 text-reset active show">{{ translate('Description')}}</a>
                             @if($detailedProduct->video_link != null)
@@ -632,9 +628,6 @@
                             </div>
                         </div>
                     </div>
-
-
-
                     <div class="bg-white rounded shadow-sm">
                         <div class="border-bottom p-3">
                             <h3 class="fs-16 fw-600 mb-0">
@@ -642,11 +635,11 @@
                             </h3>
                         </div>
                         <div class="p-3">
-                            <div class=" gutters-5 " data-items="1" data-xl-items="1" data-lg-items="1"  data-md-items="1" data-sm-items="1" data-xs-items="1" data-arrows='true' data-infinite='true'>
+                            <div class="aiz-carousel gutters-5 half-outside-arrow" data-items="5" data-xl-items="3" data-lg-items="4"  data-md-items="3" data-sm-items="2" data-xs-items="2" data-arrows='true' data-infinite='true'>
                                 @foreach (filter_products(\App\Models\Product::where('category_id', $detailedProduct->category_id)->where('id', '!=', $detailedProduct->id))->limit(10)->get() as $key => $related_product)
-                                <div class="">
-                                    <div class="border border-light rounded hov-shadow-md my-2 has-transition row">
-                                        <div class="col-xl-5">
+                                <div class="carousel-box">
+                                    <div class="aiz-card-box border border-light rounded hov-shadow-md my-2 has-transition">
+                                        <div class="">
                                             <a href="{{ route('product', $related_product->slug) }}" class="d-block">
                                                 <img
                                                     class="img-fit lazyload mx-auto h-140px h-md-210px"
@@ -657,76 +650,25 @@
                                                 >
                                             </a>
                                         </div>
-                                        <div class="p-md-3 p-2 text-left col-xl-7">
+                                        <div class="p-md-3 p-2 text-left">
                                             <div class="fs-15">
-                                         <div class="fs-18 fw-700"> {{  $related_product->getTranslation('name') }} </div>
-                                         <div class="rating rating-sm mt-1">
-                                                {{ renderStarRating($related_product->rating) }}
-                                        
-                                    @php
-                                        $total = 0;
-                                        $total += $related_product->reviews->count();
-                                    @endphp
-                                 
-                                    <span class="ml-1 opacity-50">({{ $total }} {{ translate('reviews')}})</span>
-                                    <hr>
-                                         </div>
                                                 @if(home_base_price($related_product) != home_discounted_base_price($related_product))
                                                     <del class="fw-600 opacity-50 mr-1">{{ home_base_price($related_product) }}</del>
                                                 @endif
-                                                <span class="fw-700 text-primary fs-20">{{ home_discounted_base_price($related_product) }}</span>
+                                                <span class="fw-700 text-primary">{{ home_discounted_base_price($related_product) }}</span>
                                             </div>
-                                           
+                                            <div class="rating rating-sm mt-1">
+                                                {{ renderStarRating($related_product->rating) }}
+                                            </div>
+                                            <h3 class="fw-600 fs-13 text-truncate-2 lh-1-4 mb-0 h-35px">
+                                                <a href="{{ route('product', $related_product->slug) }}" class="d-block text-reset">{{ $related_product->getTranslation('name') }}</a>
+                                            </h3>
                                             @if (addon_is_activated('club_point'))
                                                 <div class="rounded px-2 mt-2 bg-soft-primary border-soft-primary border">
                                                     {{ translate('Club Point') }}:
                                                     <span class="fw-700 float-right">{{ $related_product->earn_point }}</span>
                                                 </div>
                                             @endif
-                                <div class="d-flex justify-content-between width-100 mt-3">
-                                <div class="d-table-cell">
-                                    <!-- Add to wishlist button -->
-                                    <button type="button" class="btn pl-0 btn-link fw-600" onclick="addToWishList({{ $related_product->id }})">
-                                        {{ translate('Add to wishlist')}}
-                                    </button>
-                                    <!-- Add to compare button -->
-                                    <button type="button" class="btn btn-link btn-icon-left fw-600" onclick="addToCompare({{ $related_product->id }})">
-                                        {{ translate('Add to compare')}}
-                                    </button>
-                                    @if(Auth::check() && addon_is_activated('affiliate_system') && (\App\Models\AffiliateOption::where('type', 'product_sharing')->first()->status || \App\Models\AffiliateOption::where('type', 'category_wise_affiliate')->first()->status) && Auth::user()->affiliate_user != null && Auth::user()->affiliate_user->status)
-                                        @php
-                                            if(Auth::check()){
-                                                if(Auth::user()->referral_code == null){
-                                                    Auth::user()->referral_code = substr(Auth::user()->id.Str::random(10), 0, 10);
-                                                    Auth::user()->save();
-                                                }
-                                                $referral_code = Auth::user()->referral_code;
-                                                $referral_code_url = URL::to('/product').'/'.$related_product->slug."?product_referral_code=$referral_code";
-                                            }
-                                        @endphp
-                                        <div>
-                                            <button type=button id="ref-cpurl-btn" class="btn btn-sm btn-secondary" data-attrcpy="{{ translate('Copied')}}" onclick="CopyToClipboard(this)" data-url="{{$referral_code_url}}">{{ translate('Copy the Promote Link')}}</button>
-                                        </div>
-                                    @endif
-                                </div>
-
-                                <div class="row no-gutters">
-                                    <div class="col-sm-10">
-                                        <div class="product-quantity d-flex align-items-center">
-                                            <div class="row no-gutters align-items-center aiz-plus-minus mr-3" style="width: 130px;">
-                                                <button class="btn col-auto btn-icon btn-sm btn-circle btn-light" type="button" data-type="minus" data-field="quantity" disabled="">
-                                                    <i class="las la-minus"></i>
-                                                </button>
-                                                <input type="number" name="quantity" class="col border-0 text-center flex-grow-1 fs-16 input-number" placeholder="1" value="{{ $related_product->min_qty }}" min="{{ $related_product->min_qty }}" max="10" lang="en">
-                                                <button class="btn col-auto btn-icon btn-sm btn-circle btn-light" type="button" data-type="plus" data-field="quantity">
-                                                    <i class="las la-plus"></i>
-                                                </button>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-
-                            </div>
                                         </div>
                                     </div>
                                 </div>
@@ -863,28 +805,8 @@
     <script type="text/javascript">
         $(document).ready(function() {
             getVariantPrice();
-            $('#dropdown-detail').hide();
-            if($('#dropdown-detail').is(':visible')) {
-               $('#hide-details').show();
-               $('#view-details').hide();
-           }
-           else {
-               $('#view-details').show();
-               $('#hide-details').hide();
-           }
     	});
-       $('#view-product-details').click(function(){
-           $('#dropdown-detail').toggle();
-           if($('#dropdown-detail').is(':visible')) {
-               $('#hide-details').show();
-               $('#view-details').hide();
-           }
-           else {
-               $('#view-details').show();
-               $('#hide-details').hide();
-           }
-          
-       });
+
         function CopyToClipboard(e) {
             var url = $(e).data('url');
             var $temp = $("<input>");

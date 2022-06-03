@@ -1,0 +1,510 @@
+<!DOCTYPE html>
+<html lang="en" >
+<head>
+  <meta charset="UTF-8">
+  <title>BeautySalon</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1"><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/meyer-reset/2.0/reset.min.css">
+<link rel="stylesheet" href="./style.css">
+<link href="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+<script src="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.8/css/all.css" integrity="sha384-3AB7yXWz4OeoZcPbieVW64vVXEwADiYyAEhwilzWsLw+9FgqpyjjStpPnpBO8o8S" crossorigin="anonymous">
+
+<link rel="stylesheet" type="text/css" href="./slick/slick.css">
+<link rel="stylesheet" type="text/css" href="./slick/slick-theme.css">
+<style type="text/css">
+
+
+  .slider {
+      width: 53.5%;
+      /* margin: 100px auto; */
+      margin: 0px auto;
+  }
+
+  .slick-slide {
+    margin: 0px 20px;
+  }
+
+  .slick-slide img {
+    width: 100%;
+  }
+
+  .slick-prev:before,
+  .slick-next:before {
+    color: black;
+  }
+
+ 
+
+
+  .slick-slide {
+    transition: all ease-in-out .3s;
+    opacity: .2;
+  }
+  
+  .slick-active {
+    opacity: .5;
+  }
+
+  .slick-current {
+    opacity: 1;
+  }
+
+  .fixed-header{
+        width: 100%;
+        position: fixed;        
+        background: #333;
+        padding: 10px 0;
+        color: #fff;
+    }
+    .fixed-header{
+        top: 0;
+        height: 86px;
+    }
+  
+</style>
+
+</head>
+<body>
+  <!-- <header class="placeholder-section">
+    <h1>Horizontal Section Navigation</h1>
+  </header> -->
+
+  <div class="fixed-header">
+    <div class="container">
+        <nav>
+            <!-- <a href="#">Home</a>
+            <a href="#">About</a>
+            <a href="#">Products</a> -->
+           
+        </nav>
+    </div>
+</div>
+
+<!-- <nav class="nav-sections ">
+  <ul class="menu">
+    <li class="menu-item"><a class="menu-item-link active" href="#about">About</a></li>
+    <li class="menu-item"><a class="menu-item-link" href="#documentation">Documentation</a></li>
+    <li class="menu-item"><a class="menu-item-link" href="#showcase">Showcase</a></li>
+    <li class="menu-item"><a class="menu-item-link" href="#latest-news">Latest News</a></li>
+    <li class="menu-item"><a class="menu-item-link" href="#contact-us">Contact Us</a></li>
+    <div class="active-line"></div>
+  </ul>
+</nav> -->
+
+
+  <!-- display: flex;
+flex-wrap: wrap;
+position: relative;
+background: black;
+/* width: 622px; */
+margin-top: 69px;
+/* text-align: center; */
+overflow: auto;
+height: 507px; -->
+
+<nav class="nav-sections  slider">
+  <ul class="menu regular ">
+    <li class="menu-item"><a class="menu-item-link active" href="#p1">category one</a></li>
+    <li class="menu-item"><a class="menu-item-link" href="#p2">category two</a></li>
+    <li class="menu-item"><a class="menu-item-link" href="#p3">category three</a></li>
+    <li class="menu-item"><a class="menu-item-link" href="#p4">category four</a></li>
+    <li class="menu-item"><a class="menu-item-link" href="#p5">category five</a></li>
+    <li class="menu-item"><a class="menu-item-link" href="#p6">category six</a></li>
+   <div class="active-line"></div>
+  </ul>
+</nav>
+<!-- <nav class="nav-sections ">
+ <section class="regular slider">
+    <div>
+      <img src="https://via.placeholder.com/350x300?text=1">
+    </div>
+    <div>
+      <img src="https://via.placeholder.com/350x300?text=2">
+    </div>
+    <div>
+      <img src="https://via.placeholder.com/350x300?text=3">
+    </div>
+    <div>
+      <img src="https://via.placeholder.com/350x300?text=4">
+    </div>
+    <div>
+      <img src="https://via.placeholder.com/350x300?text=5">
+    </div>
+    <div>
+      <img src="https://via.placeholder.com/350x300?text=6">
+    </div>
+  </section>
+</nav> -->
+
+
+<main id="main-content" class="page-sections" style="z-index: -1;
+position: relative;top: 65px;">
+  <!-- <section class="page-section">
+    <h2 class="section-title" id="about">About</h2> -->
+  
+   
+
+      <section class="page-section ">
+        <div class="container">
+          <h2 class="section-title" id="p1" style="background: silver;
+          font-size: 20px;">category one</h2> 
+
+  
+          <div class="row mb-3">
+            <div class="col-md-12">
+              <div class="d-flex flex-row border rounded">
+                  <div class="p-0 w-25" style="width:16% !important">
+                      <img src="https://c1.staticflickr.com/3/2862/12328317524_18e52b5972_k.jpg" class="img-thumbnail border-0" />
+                    
+                  </div>
+                  <div class="pl-3 pt-2 pr-2 pb-2 w-75 border-left">
+                      <h4 class="text-primary" style="font-size: 17px;">Heena Application</h4>
+                      <h5 class="text-info" style="font-size: 15px;">Beauty</h5>
+                      <!-- <ul class="m-0 float-left" style="list-style: none; margin:0; padding: 0">
+                        <li><i class="fab fa-facebook-square"></i> Facebook</li>
+                        <li><i class="fab fa-twitter-square"></i> Twitter</li>
+                      </ul> -->
+                    <p class="text-right m-0">
+                      <a href="https://beautyplayers.com/auction-products" class="ml-auto mr-0 btn btn-primary btn-sm shadow-md" style="    background-color: #14a800;">Add to cart</a>
+                      </p>
+                </div>
+              </div>
+            </div>
+          </div>
+  
+          <div class="row mb-3">
+            <div class="col-md-12">
+              <div class="d-flex flex-row border rounded">
+                  <div class="p-0 w-25" style="width:16% !important">
+                      <img src="https://c1.staticflickr.com/3/2862/12328317524_18e52b5972_k.jpg" class="img-thumbnail border-0" />
+                    
+                  </div>
+                  <div class="pl-3 pt-2 pr-2 pb-2 w-75 border-left">
+                      <h4 class="text-primary" style="font-size: 17px;">Heena XYZ</h4>
+                      <h5 class="text-info" style="font-size: 15px;">Beauty</h5>
+                      <!-- <ul class="m-0 float-left" style="list-style: none; margin:0; padding: 0">
+                        <li><i class="fab fa-facebook-square"></i> Facebook</li>
+                        <li><i class="fab fa-twitter-square"></i> Twitter</li>
+                      </ul> -->
+                    <p class="text-right m-0">
+                      <a href="https://beautyplayers.com/auction-products" class="ml-auto mr-0 btn btn-primary btn-sm shadow-md" style="    background-color: #14a800;">Add to cart</a>
+                      </p>
+                </div>
+              </div>
+            </div>
+          </div>
+        
+        </div>
+        </section>
+
+        <section class="page-section ">
+          <div class="container">
+            <h2 class="section-title" id="p2" style="background: silver;
+            font-size: 20px;">category TWO</h2> 
+    
+            <div class="row mb-3">
+              <div class="col-md-12">
+                <div class="d-flex flex-row border rounded">
+                    <div class="p-0 w-25" style="width:16% !important">
+                        <img src="https://c1.staticflickr.com/3/2862/12328317524_18e52b5972_k.jpg" class="img-thumbnail border-0" />
+                      
+                    </div>
+                    <div class="pl-3 pt-2 pr-2 pb-2 w-75 border-left">
+                        <h4 class="text-primary" style="font-size: 17px;">Heena Application</h4>
+                        <h5 class="text-info" style="font-size: 15px;">Beauty</h5>
+                        <!-- <ul class="m-0 float-left" style="list-style: none; margin:0; padding: 0">
+                          <li><i class="fab fa-facebook-square"></i> Facebook</li>
+                          <li><i class="fab fa-twitter-square"></i> Twitter</li>
+                        </ul> -->
+                      <p class="text-right m-0">
+                        <a href="https://beautyplayers.com/auction-products" class="ml-auto mr-0 btn btn-primary btn-sm shadow-md" style="    background-color: #14a800;">Add to cart</a>
+                        </p>
+                  </div>
+                </div>
+              </div>
+            </div>
+    
+            <div class="row mb-3">
+              <div class="col-md-12">
+                <div class="d-flex flex-row border rounded">
+                    <div class="p-0 w-25" style="width:16% !important">
+                        <img src="https://c1.staticflickr.com/3/2862/12328317524_18e52b5972_k.jpg" class="img-thumbnail border-0" />
+                      
+                    </div>
+                    <div class="pl-3 pt-2 pr-2 pb-2 w-75 border-left">
+                        <h4 class="text-primary" style="font-size: 17px;">Heena XYZ</h4>
+                        <h5 class="text-info" style="font-size: 15px;">Beauty</h5>
+                        <!-- <ul class="m-0 float-left" style="list-style: none; margin:0; padding: 0">
+                          <li><i class="fab fa-facebook-square"></i> Facebook</li>
+                          <li><i class="fab fa-twitter-square"></i> Twitter</li>
+                        </ul> -->
+                      <p class="text-right m-0">
+                        <a href="https://beautyplayers.com/auction-products" class="ml-auto mr-0 btn btn-primary btn-sm shadow-md" style="    background-color: #14a800;">Add to cart</a>
+                        </p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          
+          </div>
+          </section>
+
+          <section class="page-section ">
+            <div class="container">
+              <h2 class="section-title" id="p3" style="background: silver;
+              font-size: 20px;">category three</h2> 
+      
+              <div class="row mb-3">
+                <div class="col-md-12">
+                  <div class="d-flex flex-row border rounded">
+                      <div class="p-0 w-25" style="width:16% !important">
+                          <img src="https://c1.staticflickr.com/3/2862/12328317524_18e52b5972_k.jpg" class="img-thumbnail border-0" />
+                        
+                      </div>
+                      <div class="pl-3 pt-2 pr-2 pb-2 w-75 border-left">
+                          <h4 class="text-primary" style="font-size: 17px;">Heena Application</h4>
+                          <h5 class="text-info" style="font-size: 15px;">Beauty</h5>
+                          <!-- <ul class="m-0 float-left" style="list-style: none; margin:0; padding: 0">
+                            <li><i class="fab fa-facebook-square"></i> Facebook</li>
+                            <li><i class="fab fa-twitter-square"></i> Twitter</li>
+                          </ul> -->
+                        <p class="text-right m-0">
+                          <a href="https://beautyplayers.com/auction-products" class="ml-auto mr-0 btn btn-primary btn-sm shadow-md" style="    background-color: #14a800;">Add to cart</a>
+                          </p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+      
+              <div class="row mb-3">
+                <div class="col-md-12">
+                  <div class="d-flex flex-row border rounded">
+                      <div class="p-0 w-25" style="width:16% !important">
+                          <img src="https://c1.staticflickr.com/3/2862/12328317524_18e52b5972_k.jpg" class="img-thumbnail border-0" />
+                        
+                      </div>
+                      <div class="pl-3 pt-2 pr-2 pb-2 w-75 border-left">
+                          <h4 class="text-primary" style="font-size: 17px;">Heena XYZ</h4>
+                          <h5 class="text-info" style="font-size: 15px;">Beauty</h5>
+                          <!-- <ul class="m-0 float-left" style="list-style: none; margin:0; padding: 0">
+                            <li><i class="fab fa-facebook-square"></i> Facebook</li>
+                            <li><i class="fab fa-twitter-square"></i> Twitter</li>
+                          </ul> -->
+                        <p class="text-right m-0">
+                          <a href="https://beautyplayers.com/auction-products" class="ml-auto mr-0 btn btn-primary btn-sm shadow-md" style="    background-color: #14a800;">Add to cart</a>
+                          </p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            
+            </div>
+            </section>
+
+            <section class="page-section ">
+              <div class="container">
+                <h2 class="section-title" id="p4" style="background: silver;
+                font-size: 20px;">category four</h2> 
+        
+                <div class="row mb-3">
+                  <div class="col-md-12">
+                    <div class="d-flex flex-row border rounded">
+                        <div class="p-0 w-25" style="width:16% !important">
+                            <img src="https://c1.staticflickr.com/3/2862/12328317524_18e52b5972_k.jpg" class="img-thumbnail border-0" />
+                          
+                        </div>
+                        <div class="pl-3 pt-2 pr-2 pb-2 w-75 border-left">
+                            <h4 class="text-primary" style="font-size: 17px;">Heena Application</h4>
+                            <h5 class="text-info" style="font-size: 15px;">Beauty</h5>
+                            <!-- <ul class="m-0 float-left" style="list-style: none; margin:0; padding: 0">
+                              <li><i class="fab fa-facebook-square"></i> Facebook</li>
+                              <li><i class="fab fa-twitter-square"></i> Twitter</li>
+                            </ul> -->
+                          <p class="text-right m-0">
+                            <a href="https://beautyplayers.com/auction-products" class="ml-auto mr-0 btn btn-primary btn-sm shadow-md" style="    background-color: #14a800;">Add to cart</a>
+                            </p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+        
+                <div class="row mb-3">
+                  <div class="col-md-12">
+                    <div class="d-flex flex-row border rounded">
+                        <div class="p-0 w-25" style="width:16% !important">
+                            <img src="https://c1.staticflickr.com/3/2862/12328317524_18e52b5972_k.jpg" class="img-thumbnail border-0" />
+                          
+                        </div>
+                        <div class="pl-3 pt-2 pr-2 pb-2 w-75 border-left">
+                            <h4 class="text-primary" style="font-size: 17px;">Heena XYZ</h4>
+                            <h5 class="text-info" style="font-size: 15px;">Beauty</h5>
+                            <!-- <ul class="m-0 float-left" style="list-style: none; margin:0; padding: 0">
+                              <li><i class="fab fa-facebook-square"></i> Facebook</li>
+                              <li><i class="fab fa-twitter-square"></i> Twitter</li>
+                            </ul> -->
+                          <p class="text-right m-0">
+                            <a href="https://beautyplayers.com/auction-products" class="ml-auto mr-0 btn btn-primary btn-sm shadow-md" style="    background-color: #14a800;">Add to cart</a>
+                            </p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              
+              </div>
+              </section>
+
+              <section class="page-section ">
+                <div class="container">
+                  <h2 class="section-title" id="p5" style="background: silver;
+                  font-size: 20px;">category five</h2> 
+          
+                  <div class="row mb-3">
+                    <div class="col-md-12">
+                      <div class="d-flex flex-row border rounded">
+                          <div class="p-0 w-25" style="width:16% !important">
+                              <img src="https://c1.staticflickr.com/3/2862/12328317524_18e52b5972_k.jpg" class="img-thumbnail border-0" />
+                            
+                          </div>
+                          <div class="pl-3 pt-2 pr-2 pb-2 w-75 border-left">
+                              <h4 class="text-primary" style="font-size: 17px;">Heena Application</h4>
+                              <h5 class="text-info" style="font-size: 15px;">Beauty</h5>
+                              <!-- <ul class="m-0 float-left" style="list-style: none; margin:0; padding: 0">
+                                <li><i class="fab fa-facebook-square"></i> Facebook</li>
+                                <li><i class="fab fa-twitter-square"></i> Twitter</li>
+                              </ul> -->
+                            <p class="text-right m-0">
+                              <a href="https://beautyplayers.com/auction-products" class="ml-auto mr-0 btn btn-primary btn-sm shadow-md" style="    background-color: #14a800;">Add to cart</a>
+                              </p>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+          
+                  <div class="row mb-3">
+                    <div class="col-md-12">
+                      <div class="d-flex flex-row border rounded">
+                          <div class="p-0 w-25" style="width:16% !important">
+                              <img src="https://c1.staticflickr.com/3/2862/12328317524_18e52b5972_k.jpg" class="img-thumbnail border-0" />
+                            
+                          </div>
+                          <div class="pl-3 pt-2 pr-2 pb-2 w-75 border-left">
+                              <h4 class="text-primary" style="font-size: 17px;">Heena XYZ</h4>
+                              <h5 class="text-info" style="font-size: 15px;">Beauty</h5>
+                              <!-- <ul class="m-0 float-left" style="list-style: none; margin:0; padding: 0">
+                                <li><i class="fab fa-facebook-square"></i> Facebook</li>
+                                <li><i class="fab fa-twitter-square"></i> Twitter</li>
+                              </ul> -->
+                            <p class="text-right m-0">
+                              <a href="https://beautyplayers.com/auction-products" class="ml-auto mr-0 btn btn-primary btn-sm shadow-md" style="    background-color: #14a800;">Add to cart</a>
+                              </p>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                
+                </div>
+                </section>
+
+
+              <section class="page-section ">
+                <div class="container">
+                  <h2 class="section-title" id="p6" style="background: silver;
+                  font-size: 20px;">category six</h2> 
+          
+                  <div class="row mb-3">
+                    <div class="col-md-12">
+                      <div class="d-flex flex-row border rounded">
+                          <div class="p-0 w-25" style="width:16% !important">
+                              <img src="https://c1.staticflickr.com/3/2862/12328317524_18e52b5972_k.jpg" class="img-thumbnail border-0" />
+                            
+                          </div>
+                          <div class="pl-3 pt-2 pr-2 pb-2 w-75 border-left">
+                              <h4 class="text-primary" style="font-size: 17px;">Heena Application</h4>
+                              <h5 class="text-info" style="font-size: 15px;">Beauty</h5>
+                              <!-- <ul class="m-0 float-left" style="list-style: none; margin:0; padding: 0">
+                                <li><i class="fab fa-facebook-square"></i> Facebook</li>
+                                <li><i class="fab fa-twitter-square"></i> Twitter</li>
+                              </ul> -->
+                            <p class="text-right m-0">
+                              <a href="https://beautyplayers.com/auction-products" class="ml-auto mr-0 btn btn-primary btn-sm shadow-md" style="    background-color: #14a800;">Add to cart</a>
+                              </p>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+          
+                  <div class="row mb-3">
+                    <div class="col-md-12">
+                      <div class="d-flex flex-row border rounded">
+                          <div class="p-0 w-25" style="width:16% !important">
+                              <img src="https://c1.staticflickr.com/3/2862/12328317524_18e52b5972_k.jpg" class="img-thumbnail border-0" />
+                            
+                          </div>
+                          <div class="pl-3 pt-2 pr-2 pb-2 w-75 border-left">
+                              <h4 class="text-primary" style="font-size: 17px;">Heena XYZ</h4>
+                              <h5 class="text-info" style="font-size: 15px;">Beauty</h5>
+                              <!-- <ul class="m-0 float-left" style="list-style: none; margin:0; padding: 0">
+                                <li><i class="fab fa-facebook-square"></i> Facebook</li>
+                                <li><i class="fab fa-twitter-square"></i> Twitter</li>
+                              </ul> -->
+                            <p class="text-right m-0">
+                              <a href="https://beautyplayers.com/auction-products" class="ml-auto mr-0 btn btn-primary btn-sm shadow-md" style="    background-color: #14a800;">Add to cart</a>
+                              </p>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                
+                </div>
+                </section>
+    
+ 
+</main>
+</div>
+<!-- partial -->
+  <script src='https://unpkg.com/smoothscroll-polyfill/dist/smoothscroll.min.js'></script>
+<script src='https://unpkg.com/smoothscroll-anchor-polyfill'></script><script  src="./script.js"></script>
+<script src="https://code.jquery.com/jquery-2.2.0.min.js" type="text/javascript"></script>
+<script src="./slick/slick.js" type="text/javascript" charset="utf-8"></script>
+<script type="text/javascript">
+  $(document).on('ready', function() {
+ 
+    $(".regular").slick({
+      dots: false,
+      infinite: true,
+      slidesToShow: 5,
+      slidesToScroll: 5
+    });
+    
+    $(".lazy").slick({
+      lazyLoad: 'ondemand', // ondemand progressive anticipated
+      infinite: true
+    });
+  });
+
+//   $('a.menu-item-link').click(function() { 
+//   var id = $(this).attr('href');
+//   console.log(id);
+
+//   setTimeout(function(){
+//     $(".page-sections").css({"top":"169px"});
+//     // $(id).css({"display":"none"});
+
+// }, 100);
+
+// });
+
+// $('a.menu-item-link').click(function() { 
+//   var id = $(this).attr('href');
+//   console.log(id);
+
+//   setTimeout(function(){
+//     $(id).css({"display":"none"});
+
+// }, 500);
+
+// });
+
+</script>
+</body>
+</html>

@@ -23,14 +23,17 @@ class ProductService
             }
         } else {
             $user_id = User::where('user_type', 'admin')->first()->id;
+            $parent_product_id = NULL;
         }
-//        $tags = array();
-//        if ($collection['tags'][0] != null) {
-//            foreach (json_decode($collection['tags'][0]) as $key => $tag) {
-//                array_push($tags, $tag->value);
-//            }
-//        }
-//        $collection['tags'] = implode(',', $tags);
+        if(empty($collection['id'])){
+            $tags = array();
+            if ($collection['tags'][0] != null) {
+                foreach (json_decode($collection['tags'][0]) as $key => $tag) {
+                    array_push($tags, $tag->value);
+                }
+            }
+            $collection['tags'] = implode(',', $tags);
+        }
         $discount_start_date = null;
         $discount_end_date   = null;
         if (!empty($collection['date_range']) && $collection['date_range'] != null) {

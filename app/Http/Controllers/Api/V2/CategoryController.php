@@ -15,7 +15,6 @@ class CategoryController extends Controller
         if(request()->has('parent_id') && is_numeric (request()->get('parent_id'))){
           $parent_id = request()->get('parent_id');
         }
-        
         return Cache::remember("app.categories-$parent_id", 86400, function() use ($parent_id){
             return new CategoryCollection(Category::where('parent_id', $parent_id)->get());
         });
@@ -36,7 +35,7 @@ class CategoryController extends Controller
     }
 
     public function top()
-    {   
+    {
         return Cache::remember('app.top_categories', 86400, function(){
             return new CategoryCollection(Category::whereIn('id', json_decode(get_setting('home_categories')))->limit(20)->get());
         });

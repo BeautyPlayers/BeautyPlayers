@@ -90,6 +90,47 @@
             </form>
         </div>
     </div>
+    <div class="card">
+            <div class="card-header">
+                <h5 class="mb-0 h6">{{ translate('Enter Custom Location') }}</h5>
+            </div>
+            <div class="card-body">
+                <form class="" action="{{ route('seller.shop.update') }}" method="POST" enctype="multipart/form-data">
+                    <input type="hidden" name="shop_id" value="{{ $shop->id }}">
+                    @csrf
+
+                        <div class="row mb-3">
+                            <input id="searchMap" class="form-control mb-3" type="text" placeholder="{{translate('Enter a location')}}">
+                            <br>
+                            <div style="margin-top:40px" id="map"></div>
+                        
+                            
+                        </div>
+                        <div class="row">
+                            <div class="col-md-2" id="">
+                                <label for="exampleInputuname">{{ translate('Longitude') }}</label>
+                            </div>
+                            <div class="col-md-10" id="">
+                                <input type="text" class="form-control mb-3" id="lng" name="delivery_pickup_longitude"  value="">
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-2" id="">
+                                <label for="exampleInputuname">{{ translate('Latitude') }}</label>
+                            </div>
+                            <div class="col-md-10" id="">
+                                <input 
+                                 type="text" class="form-control mb-3" id="lat" name="delivery_pickup_latitude"  value="">
+                            </div>
+                        </div>
+                   
+
+                    <div class="form-group mb-0 text-right">
+                        <button type="submit" class="btn btn-sm btn-primary">{{translate('Save')}}</button>
+                    </div>
+                </form>
+            </div>
+        </div>
 
     @if (addon_is_activated('delivery_boy'))
         <div class="card">
@@ -104,7 +145,7 @@
                     @if (get_setting('google_map') == 1)
                         <div class="row mb-3">
                             <input id="searchInput" class="controls" type="text" placeholder="{{translate('Enter a location')}}">
-                            <div id="map"></div>
+                            <div style="margin-top:40px; height:250px; width:600px;" id="map"></div>
                             <ul id="geoData">
                                 <li style="display: none;">{{ translate('Full Address') }}: <span id="location"></span></li>
                                 <li style="display: none;">{{ translate('Postal Code') }}: <span id="postal_code"></span></li>
@@ -245,6 +286,55 @@
 @endsection
 
 @section('script')
+<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+<script>
+function initMap()
+        {
+            var options ={
+                zoom:8,
+                center:{lat:28.6862738,lng:77.2217831}
+            }
+            var map =  new google.maps.Map(document.getElementById('map'),options);
+            
+           var marker = new google.maps.Marker({
+               position: {
+                lat:28.6862738,
+                lng:77.2217831
+               },
+               map: map,
+               draggable: false
+
+           });
+           var searchBox = new google.maps.places.SearchBox(document.getElementById('searchMap'));
+        google.maps.event.addListener(searchBox,'places_changed',function(){
+           var places = searchBox.getPlaces();
+           var bounds =  new google.maps.LatLngBounds();
+           var i,place;
+           for(i=0; place=places[i];i++){
+               bounds.extend(place.geometry.location);
+               marker.setPosition(place.geometry.location);
+           }
+           map.fitBounds(bounds);
+           map.setZoom(15);
+        
+    });
+    google.maps.event.addListener(marker,'position_changed',function(){
+     var lat = marker.getPosition().lat();
+     var lng = marker.getPosition().lng();
+    
+        $('#lat').val(lat);
+        $('#lng').val(lng);
+
+    });
+}
+
+</script>
+<script  async defer
+ src="https://maps.googleapis.com/maps/api/js?key={{ config("app.google_api_key") }}&libraries=places&callback=initMap">
+</script>
+
 
     @if (get_setting('google_map') == 1)
         

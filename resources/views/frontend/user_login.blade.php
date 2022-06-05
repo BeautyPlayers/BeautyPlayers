@@ -154,7 +154,7 @@
         var iti = intlTelInput(input, {
             separateDialCode: true,
             utilsScript: "{{ static_asset('assets/js/intlTelutils.js') }}?1590403638580",
-            onlyCountries: @php echo json_encode(\App\Models\Country::where('status', 1)->pluck('code')->toArray()) @endphp,
+            onlyCountries: @php echo json_encode(\App\Models\Country::where('id', 101)->pluck('code')->toArray()) @endphp,
             customPlaceholder: function(selectedCountryPlaceholder, selectedCountryData) {
                 if(selectedCountryData.iso2 == 'bd'){
                     return "01xxxxxxxxx";
@@ -173,8 +173,8 @@
             $('input[name=country_code]').val(country.dialCode);
 
         });
-
-        function toggleEmailPhone(el){
+-
+ function toggleEmailPhone(el){
             if(isPhoneShown){
                 $('.phone-form-group').addClass('d-none');
                 $('.email-form-group').removeClass('d-none');

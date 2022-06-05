@@ -75,6 +75,8 @@ return [
     */
 
     'url' => env('APP_URL', 'http://localhost'),
+    
+    'google_api_key' => env('GOOGLE_MAP_KEY', null),
 
     /*
     |--------------------------------------------------------------------------

@@ -55,7 +55,7 @@
                         <input type="text" class="form-control mb-3" placeholder="{{ translate('Address')}}" name="address" value="{{ $shop->address }}" required>
                     </div>
                 </div>
-                
+
                 <div class="row">
                     <label class="col-md-2 col-form-label">{{ translate('Live Location') }} <span class="text-danger text-danger">*</span></label>
                     <div class="col-md-10">
@@ -71,7 +71,7 @@
                             <input type="number" lang="en" min="0" class="form-control mb-3" placeholder="{{ translate('Shipping Cost')}}" name="shipping_cost" value="{{ $shop->shipping_cost }}" required>
                         </div>
                     </div>
-                @endif 
+                @endif
                 <div class="row">
                     <label class="col-md-2 col-form-label">{{ translate('Meta Title') }}<span class="text-danger text-danger">*</span></label>
                     <div class="col-md-10">
@@ -102,16 +102,14 @@
                         <div class="row mb-3">
                             <input id="searchMap" class="form-control mb-3" type="text" placeholder="{{translate('Enter a location')}}">
                             <br>
-                            <div style="margin-top:40px" id="map"></div>
-                        
-                            
+                            <div style="margin-top:40px;display: none;" id="map"></div>
                         </div>
                         <div class="row">
                             <div class="col-md-2" id="">
                                 <label for="exampleInputuname">{{ translate('Longitude') }}</label>
                             </div>
                             <div class="col-md-10" id="">
-                                <input type="text" class="form-control mb-3" id="lng" name="delivery_pickup_longitude"  value="">
+                                <input type="text" class="form-control mb-3" id="lng" name="delivery_pickup_longitude"  value="{{ $shop->delivery_pickup_longitude }}">
                             </div>
                         </div>
                         <div class="row">
@@ -119,11 +117,11 @@
                                 <label for="exampleInputuname">{{ translate('Latitude') }}</label>
                             </div>
                             <div class="col-md-10" id="">
-                                <input 
-                                 type="text" class="form-control mb-3" id="lat" name="delivery_pickup_latitude"  value="">
+                                <input
+                                 type="text" class="form-control mb-3" id="lat" name="delivery_pickup_latitude"  value="{{ $shop->delivery_pickup_latitude }}">
                             </div>
                         </div>
-                   
+
 
                     <div class="form-group mb-0 text-right">
                         <button type="submit" class="btn btn-sm btn-primary">{{translate('Save')}}</button>
@@ -297,7 +295,7 @@ function initMap()
                 center:{lat:28.6862738,lng:77.2217831}
             }
             var map =  new google.maps.Map(document.getElementById('map'),options);
-            
+
            var marker = new google.maps.Marker({
                position: {
                 lat:28.6862738,
@@ -318,12 +316,12 @@ function initMap()
            }
            map.fitBounds(bounds);
            map.setZoom(15);
-        
+
     });
     google.maps.event.addListener(marker,'position_changed',function(){
      var lat = marker.getPosition().lat();
      var lng = marker.getPosition().lng();
-    
+
         $('#lat').val(lat);
         $('#lng').val(lng);
 
@@ -332,14 +330,14 @@ function initMap()
 
 </script>
 <script  async defer
- src="https://maps.googleapis.com/maps/api/js?key={{ config("app.google_api_key") }}&libraries=places&callback=initMap">
+ src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDpgVwmJo0oG5ZfGKnkdiDCy75ELgptvC8&libraries=places&callback=initMap">
 </script>
 
 
     @if (get_setting('google_map') == 1)
-        
+
         @include('frontend.partials.google_map')
-        
+
     @endif
 
 @endsection

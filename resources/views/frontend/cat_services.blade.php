@@ -14,6 +14,12 @@
             color: orange;
             font-size: 16px;
         }
+        .col-xs-4{
+            width: 40% !important;
+        }
+        .col-xs-8{
+            width: 60% !important;
+        }
     </style>
 
 @endsection
@@ -44,12 +50,12 @@
                         <div class="row mb-3" id="p{{ $v->category ? (($v->category->parent_id !== 0)? $v->category->parent_id: $v->category->id) : 0 }}">
                             <div class="col-md-12">
                                 <div class="row border rounded">
-                                    <div class="p-0 col-md-3 col-sm-12" >
+                                    <div class="p-0 col-md-3 col-xs-4" >
                                         <span class="badge-custom">OFF<span class="box ml-1 mr-0">&nbsp;{{ $v->unit_price > 0 ? floor(($v->discount/$v->unit_price)*100) : '0.0' }}%</span></span>
                                         <img src="{{ uploaded_asset($v->thumbnail_img) }}" class="img-thumbnail border-0" style="height: 185px;width: 100%;object-fit: cover;"/>
                                         <div class="rounded px-2 mt-2 bg-soft-primary border-soft-primary border">Club Point: <span class="fw-700 float-right">0</span></div>
                                     </div>
-                                    <div class="pl-3 pt-2 pr-2 pb-2 col-md-9 border-left col-sm-12">
+                                    <div class="pl-3 pt-2 pr-2 pb-2 col-md-9 border-left col-xs-8">
                                         <div class="row">
                                             <div class="col-md-5 col-sm-12">
                                                 <h4 class="text-primary" style="font-size: 16px;">{{ substr($v->name, 0, 20) }} &nbsp;&nbsp;<span style="font-size:12px;">{{ $v->brand->name ?? '' }}</span></h4>

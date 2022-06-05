@@ -34,78 +34,80 @@
         </ul>
     </nav>
 
-
+{{--    {{ dd($producstList) }}--}}
     <main id="main-content" class="page-sections" style="z-index: 0; position: relative;top: -25px;width:100%;">
-        @foreach($producstList as $k=>$v)
-            <section class="page-section ">
-                <div class="container" style="background-color: #ffffff;">
-                    <h2 class="section-title" style="display: none;" id="p{{ ($v->category->parent_id !== 0)? $v->category->parent_id: $v->category->id }}"></h2>
-                    <div class="row mb-3">
-                        <div class="col-md-12">
-                            <div class="row border rounded">
-                                <div class="p-0 col-md-3 col-sm-12" >
-                                    <span class="badge-custom">OFF<span class="box ml-1 mr-0">&nbsp;{{ floor(($v->discount/$v->unit_price)*100) }}%</span></span>
-                                    <img src="{{ uploaded_asset($v->thumbnail_img) }}" class="img-thumbnail border-0" style="height: 185px;width: 100%;object-fit: cover;"/>
-                                    <div class="rounded px-2 mt-2 bg-soft-primary border-soft-primary border">Club Point: <span class="fw-700 float-right">0</span></div>
-                                </div>
-                                <div class="pl-3 pt-2 pr-2 pb-2 col-md-9 border-left col-sm-12">
-                                    <div class="row">
-                                        <div class="col-md-5 col-sm-12">
-                                            <h4 class="text-primary" style="font-size: 16px;">{{ substr($v->name, 0, 20) }} &nbsp;&nbsp;<span style="font-size:12px;">{{ $v->brand->name ?? '' }}</span></h4>
-                                            <h5 class="text-primary" style="font-size: 20px;">
-                                                <span class="fa fa-star checked"></span>
-                                                <span class="fa fa-star checked"></span>
-                                                <span class="fa fa-star checked"></span>
-                                                <span class="fa fa-star checked" ></span>
-                                                <span class="fa fa-star checked"></span>
-                                            </h5>
-                                            <h5 class="text-primary" style="font-size: 11px;">
-{{--                                                {!! $v->description !!}--}}
-                                                {{ substr((strip_tags($v->description) ?? 'N/A'), 0, 80) }}
-                                            </h5>
-                                            <div class="fs-15">
-                                                <del class="fw-600 opacity-50 mr-1">Rs{{ $v->unit_price }}</del>
-                                                <span class="fw-700 text-primary">Rs{{ $v->unit_price - $v->discount }}</span>
+        @foreach($producstList as $key => $prod_list)
+            @foreach($prod_list['products'] as $k=>$v)
+                <section class="page-section ">
+                    <div class="container" style="background-color: #ffffff;">
+                        <h2 class="section-title"  id="p{{ $v->category ? (($v->category->parent_id !== 0)? $v->category->parent_id: $v->category->id) : 0 }}"></h2>
+                        <div class="row mb-3" id="p{{ $v->category ? (($v->category->parent_id !== 0)? $v->category->parent_id: $v->category->id) : 0 }}">
+                            <div class="col-md-12">
+                                <div class="row border rounded">
+                                    <div class="p-0 col-md-3 col-sm-12" >
+                                        <span class="badge-custom">OFF<span class="box ml-1 mr-0">&nbsp;{{ $v->unit_price > 0 ? floor(($v->discount/$v->unit_price)*100) : '0.0' }}%</span></span>
+                                        <img src="{{ uploaded_asset($v->thumbnail_img) }}" class="img-thumbnail border-0" style="height: 185px;width: 100%;object-fit: cover;"/>
+                                        <div class="rounded px-2 mt-2 bg-soft-primary border-soft-primary border">Club Point: <span class="fw-700 float-right">0</span></div>
+                                    </div>
+                                    <div class="pl-3 pt-2 pr-2 pb-2 col-md-9 border-left col-sm-12">
+                                        <div class="row">
+                                            <div class="col-md-5 col-sm-12">
+                                                <h4 class="text-primary" style="font-size: 16px;">{{ substr($v->name, 0, 20) }} &nbsp;&nbsp;<span style="font-size:12px;">{{ $v->brand->name ?? '' }}</span></h4>
+                                                <h5 class="text-primary" style="font-size: 20px;">
+                                                    <span class="fa fa-star checked"></span>
+                                                    <span class="fa fa-star checked"></span>
+                                                    <span class="fa fa-star checked"></span>
+                                                    <span class="fa fa-star checked" ></span>
+                                                    <span class="fa fa-star checked"></span>
+                                                </h5>
+                                                <h5 class="text-primary" style="font-size: 11px;">
+    {{--                                                {!! $v->description !!}--}}
+                                                    {{ substr((strip_tags($v->description) ?? 'N/A'), 0, 80) }}
+                                                </h5>
+                                                <div class="fs-15">
+                                                    <del class="fw-600 opacity-50 mr-1">Rs{{ $v->unit_price }}</del>
+                                                    <span class="fw-700 text-primary">Rs{{ $v->unit_price - $v->discount }}</span>
+                                                </div>
                                             </div>
-                                        </div>
-                                        <div class="col-md-7 col-sm-12">
-                                            <div class="text-right m-0" >
-                                                <div class="row">
-                                                    <div class="col-sm-2">
-                                                        <div class="opacity-50 my-2">{{ translate('Share') }}:</div>
-                                                    </div>
-                                                    <div class="col-sm-10">
-                                                        <div class="aiz-share"></div>
+                                            <div class="col-md-7 col-sm-12">
+                                                <div class="text-right m-0" >
+                                                    <div class="row">
+                                                        <div class="col-sm-2">
+                                                            <div class="opacity-50 my-2">{{ translate('Share') }}:</div>
+                                                        </div>
+                                                        <div class="col-sm-10">
+                                                            <div class="aiz-share"></div>
+                                                        </div>
                                                     </div>
                                                 </div>
                                             </div>
                                         </div>
-                                    </div>
-                                    <div class="row">
-                                        <div class="col-sm-12">
-                                            <p class="text-right m-2">
-                                                <a href="javascript:void(0)" style="position: relative;right: 22px;" onclick="addToWishList({{ $v->id }})" data-toggle="tooltip" data-title="Add to wishlist" data-placement="left" tabindex="0" data-original-title="" title="">
-                                                    <i class="la la-heart-o" style="font-size: 21px;"></i>
-                                                </a>
-                                                <a href="javascript:void(0)" style="position: relative;right: 12px;" onclick="addToCompare({{ $v->id }})" data-toggle="tooltip" data-title="Add to compare" data-placement="left" tabindex="0" data-original-title="" title="">
-                                                    <i class="las la-sync"  style="font-size: 21px;"></i>
-                                                </a>
-                                                <a href="javascript:void(0)" class="ml-auto mr-0 btn btn-primary btn-sm shadow-md" style="background-color: #14a800;" onclick="showAddToCartModal({{ $v->id }})" data-toggle="tooltip"  data-placement="left" tabindex="0" data-original-title="" title="">
-                                                    Add to cart
-                                                </a>
-                                            </p>
+                                        <div class="row">
+                                            <div class="col-sm-12">
+                                                <p class="text-right m-2">
+                                                    <a href="javascript:void(0)" style="position: relative;right: 22px;" onclick="addToWishList({{ $v->id }})" data-toggle="tooltip" data-title="Add to wishlist" data-placement="left" tabindex="0" data-original-title="" title="">
+                                                        <i class="la la-heart-o" style="font-size: 21px;"></i>
+                                                    </a>
+                                                    <a href="javascript:void(0)" style="position: relative;right: 12px;" onclick="addToCompare({{ $v->id }})" data-toggle="tooltip" data-title="Add to compare" data-placement="left" tabindex="0" data-original-title="" title="">
+                                                        <i class="las la-sync"  style="font-size: 21px;"></i>
+                                                    </a>
+                                                    <a href="javascript:void(0)" class="ml-auto mr-0 btn btn-primary btn-sm shadow-md" style="background-color: #14a800;" onclick="showAddToCartModal({{ $v->id }})" data-toggle="tooltip"  data-placement="left" tabindex="0" data-original-title="" title="">
+                                                        Add to cart
+                                                    </a>
+                                                </p>
+                                            </div>
                                         </div>
+
+
+
+
                                     </div>
-
-
-
-
                                 </div>
                             </div>
                         </div>
                     </div>
-                </div>
-            </section>
+                </section>
+            @endforeach
         @endforeach
     </main>
     <br/>

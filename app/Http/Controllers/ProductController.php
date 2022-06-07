@@ -42,6 +42,8 @@ use App\Services\ProductFlashDealService;
 
 use App\Services\ProductStockService;
 
+use App\Models\ServicePackage;
+use App\Models\ServicePackageProduct;
 
 
 class ProductController extends Controller
@@ -289,6 +291,58 @@ class ProductController extends Controller
     }
 
 
+    public function all_packages(Request $request)
+
+    {
+
+        $col_name = null;
+
+        $query = null;
+
+        $sort_search = null;
+
+        $packages = ServicePackage::orderBy('id', 'desc');
+
+        if ($request->search != null) {
+
+            $sort_search = $request->search;
+
+            $packages = $packages->where(function ($q) use ($sort_search) {
+                         $q->where('name', 'like', '%' . $sort_search . '%')
+                            ->orWhere('cost_price', 'like', '%' . $sort_search . '%')
+                            ->orWhere('special_price', 'like', '%' . $sort_search . '%')
+                            ->orWhere('validity', 'like', '%' . $sort_search . '%');
+                     });
+
+        }
+
+        if ($request->type != null) {
+
+            $var = explode(",", $request->type);
+
+            $col_name = $var[0];
+
+            $query = $var[1];
+
+            $packages = $packages->orderBy($col_name, $query);
+
+            $sort_type = $request->type;
+
+        }
+
+
+
+        $packages = $packages->paginate(15);
+
+        $type = 'All';
+
+
+
+        return view('backend.product.packages.index', compact('packages', 'type', 'col_name', 'query', 'sort_search'));
+
+    }
+
+
 
 
 
@@ -324,7 +378,310 @@ class ProductController extends Controller
 
     }
 
+    public function create_packages()
 
+    {
+
+        CoreComponentRepository::initializeCache();
+
+
+
+        $products =Product::with('brand')->orderBy('id', 'desc')
+                ->where('auction_product', 0)
+                ->where('wholesale_product', 0)->get();
+        //return $products;
+
+
+        return view('backend.product.packages.create', compact('products'));
+
+    }
+
+
+
+    public function choose_products(Request $request)
+
+    {
+        //return $request;
+        
+        $select_products = [];
+        if($request->select_products){
+            $select_products = Product::with('brand')->orderBy('id', 'desc')->whereIn('id', $request->select_products)->get()->toArray();
+        }
+        $cost_price = 0;
+        $htm = '';
+        $flag = false;
+        $special_price = $request->special_price;
+        
+        $exist_select_products = [];
+        if(count($select_products)){
+            
+            if(isset($request->id)){
+                $exist_select_products = ServicePackageProduct::where('service_package_id',$request->id)->get()->toArray();
+            }
+            $cost_price = Product::whereIn('id', $request->select_products)->sum('unit_price');
+            $htm = view('backend.product.packages.productsList', compact('select_products','exist_select_products'))->render();
+            $flag = true;
+            
+        }else{
+//            if(isset($request->id)){
+//                $exist_select_products = ServicePackageProduct::where('service_package_id',$request->id)->pluck('product_id')->toArray();
+//                if($exist_select_products){
+//                    $select_products = Product::orderBy('id', 'desc')->whereIn('id', $exist_select_products)->get()->toArray();
+//                    if(count($select_products)){
+//                        $cost_price = Product::whereIn('id', $exist_select_products)->sum('unit_price');
+//                        $htm = view('backend.product.packages.productsList', compact('select_products','exist_select_products'))->render();
+//                        $flag = true;
+//                    }
+//                }
+//            }
+        }
+        
+        if($cost_price < $special_price){
+            $special_price = $cost_price;
+        }
+        $result = array();
+        $result['cost_price'] = $cost_price;
+        $result['special_price'] = $special_price;
+        $result['htm'] = $htm;
+       
+        $data = array();
+        $data['data'] = $result;
+        $data['flag'] = $flag;
+        return Response()->json($data);
+    }
+    
+    
+    public function store_package(Request $request)
+
+    {
+        $input = \Illuminate\Support\Facades\Request::all();
+        
+        
+        $rule = array(
+            'name' => 'required|max:255',
+            'select_products' => 'required',
+            'quantity' => 'required',
+            //'special_price' => 'required|numeric',
+            'cost_price' => 'required|numeric',
+            'validity' => 'required|numeric',
+        );
+        
+         $messages = array(
+            'name.required' => 'Package name is required',
+            'quantity.required' => 'Quantity is required',
+            'select_products.required' => 'Choose at least one service',
+            'special_price.required' => 'Special price is required',
+            'special_price.numeric' => 'Special price must be numeric',
+            'cost_price.required' => 'Cost price is required',
+            'cost_price.numeric' => 'Cost price must be numeric',
+            'validity.required' => 'Validity is required',
+            'validity.numeric' => 'Validity must be numeric',
+        );
+         
+         $validation = \Illuminate\Support\Facades\Validator::make($input, $rule, $messages);
+        if ($validation->fails()) {
+            $message = $validation->messages()->first();
+            $data = array();
+            $data['flag'] = false;
+            $data['message'] = $message;
+            return Response()->json($data);
+        }
+        
+        $cost_price = Product::whereIn('id', $input['select_products'])->sum('unit_price');
+        
+        $pkgArr = array();
+        $pkgArr['name'] = $input['name'];
+        $pkgArr['type'] = $input['type'];
+        $pkgArr['validity'] = $input['validity'];
+        $pkgArr['cost_price'] = $cost_price;
+        $pkgArr['special_price'] = $input['special_price'];
+        $pkgArr['status'] = isset($input['status']) ? 1 : 0;
+        //return $pkgArr;
+        
+        $package = ServicePackage::create($pkgArr);
+        if($package){
+            if(count($input['select_products'])){
+                foreach($input['select_products'] as $key => $select_product){
+                    $servicePkgArr = array();
+                    $servicePkgArr['service_package_id'] = $package->id;
+                    $servicePkgArr['product_id'] = $select_product;
+                    $servicePkgArr['min_qty'] = $input['quantity'][$key];
+                    $servicePkgRes = ServicePackageProduct::create($servicePkgArr);
+                }
+            }
+            
+            $data = array();
+            $data['flag'] = true;
+            $data['message'] = 'Package has been inserted successfully';
+            return Response()->json($data);
+        }else{
+            $data = array();
+            $data['flag'] = false;
+            $data['message'] = 'Operation error. Please try later';
+            return Response()->json($data);
+        }
+    }
+    
+    
+    public function edit_package(Request $request, $id)
+
+    {
+
+        CoreComponentRepository::initializeCache();
+
+        $package = ServicePackage::where('id',$id)->first();
+        if($package){
+            $products =Product::with('brand')->orderBy('id', 'desc')
+                    ->where('auction_product', 0)
+                    ->where('wholesale_product', 0)->get();
+
+            $select_products = ServicePackageProduct::where('service_package_id',$id)->pluck('product_id')->toArray();
+            return view('backend.product.packages.edit', compact('package', 'products','select_products'));
+
+        } else {
+
+            flash(translate('Package not found'))->error();
+
+            return back();
+
+        }
+
+    }
+    
+    public function update_package(Request $request, $id)
+
+    {
+        $package = ServicePackage::where('id',$id)->first();
+        if(!$package){
+            $data = array();
+            $data['flag'] = false;
+            $data['message'] = 'Package not found';
+            return Response()->json($data);
+        }
+        
+        $input = \Illuminate\Support\Facades\Request::all();
+        //return $input;
+        
+        $rule = array(
+            'name' => 'required|max:255',
+            'select_products' => 'required',
+            'quantity' => 'required',
+            //'special_price' => 'required|numeric',
+            'cost_price' => 'required|numeric',
+            'validity' => 'required|numeric',
+        );
+        
+         $messages = array(
+            'name.required' => 'Package name is required',
+            'quantity.required' => 'Quantity is required',
+            'select_products.required' => 'Choose at least one service',
+            'special_price.required' => 'Special price is required',
+            'special_price.numeric' => 'Special price must be numeric',
+            'cost_price.required' => 'Cost price is required',
+            'cost_price.numeric' => 'Cost price must be numeric',
+            'validity.required' => 'Validity is required',
+            'validity.numeric' => 'Validity must be numeric',
+        );
+         
+         $validation = \Illuminate\Support\Facades\Validator::make($input, $rule, $messages);
+        if ($validation->fails()) {
+            $message = $validation->messages()->first();
+            $data = array();
+            $data['flag'] = false;
+            $data['message'] = $message;
+            return Response()->json($data);
+        }
+        
+        $cost_price = Product::whereIn('id', $input['select_products'])->sum('unit_price');
+        
+        $pkgArr = array();
+        $pkgArr['name'] = $input['name'];
+        $pkgArr['type'] = $input['type'];
+        $pkgArr['validity'] = $input['validity'];
+        $pkgArr['cost_price'] = $cost_price;
+        $pkgArr['special_price'] = $input['special_price'];
+        $pkgArr['status'] = isset($input['status']) ? 1 : 0;
+        $package = ServicePackage::where('id',$id)->update($pkgArr);
+        if($package){
+            if(count($input['select_products'])){
+                $exist_select_products = [];
+                $delete_exist = [];
+                if(isset($input['id'])){
+                    $exist_select_products = ServicePackageProduct::where('service_package_id',$input['id'])->pluck('product_id')->toArray();
+                    foreach($exist_select_products as $exist_select_product){
+                        if(!in_array($exist_select_product,$input['select_products'])){
+                            $delete_exist[] = $exist_select_product;
+                        }
+                    }
+                }
+            
+                foreach($input['select_products'] as $key => $select_product){
+                    $servicePkgArr = array();
+                    $servicePkgArr['service_package_id'] = $id;
+                    $servicePkgArr['product_id'] = $select_product;
+                    $servicePkgArr['min_qty'] = $input['quantity'][$key];
+                    if(count($exist_select_products) && in_array($select_product,$exist_select_products)){
+                         $servicePkgRes = ServicePackageProduct::where('service_package_id',$id)->where('product_id',$select_product)->update($servicePkgArr);
+                    }else{
+                         $servicePkgRes = ServicePackageProduct::create($servicePkgArr);
+                    }
+                   
+                }
+                if(count($delete_exist)){
+                    ServicePackageProduct::where('service_package_id',$id)->whereIn('product_id',$delete_exist)->delete();
+                }
+            }
+            
+            $data = array();
+            $data['flag'] = true;
+            $data['message'] = 'Package has been updated successfully';
+            return Response()->json($data);
+        }else{
+            $data = array();
+            $data['flag'] = false;
+            $data['message'] = 'Operation error. Please try later';
+            return Response()->json($data);
+        }
+    }
+    
+    
+    public function destroy_package($id)
+    {
+        $package = ServicePackage::where('id',$id)->first();
+        if($package){
+           
+            $delete_package = ServicePackage::where('id',$id)->delete();
+            if($delete_package){
+                ServicePackageProduct::where('service_package_id',$id)->delete();
+                flash(translate('Package has been deleted successfully'))->success();
+
+                Artisan::call('view:clear');
+                Artisan::call('cache:clear');
+                return back();
+            }else{
+                flash(translate('Something went wrong'))->error();
+                return back();
+            }
+        } else {
+            flash(translate('Package not found'))->error();
+            return back();
+
+        }
+    }
+    
+    public function update_package_status(Request $request)
+
+    {
+
+        $package = ServicePackage::findOrFail($request->id);
+
+        $package->status = $request->status;
+
+        $package->save();
+
+        return 1;
+
+    }
 
     public function add_more_choice_option(Request $request)
 

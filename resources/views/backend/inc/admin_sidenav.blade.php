@@ -76,6 +76,17 @@
                                     <span class="aiz-side-nav-text">{{ translate('In House Products') }}</span>
                                 </a>
                             </li>
+                            
+                            <li class="aiz-side-nav-item">
+                                <a href="{{route('packages.create')}}" class="aiz-side-nav-link  {{ areActiveRoutes(['packages.create']) }}">
+                                    <span class="aiz-side-nav-text">{{translate('Add new package')}}</span>
+                                </a>
+                            </li>
+                             <li class="aiz-side-nav-item">
+                                <a href="{{route('packages.all')}}" class="aiz-side-nav-link  {{ areActiveRoutes(['packages', 'packages.edit']) }}">
+                                    <span class="aiz-side-nav-text">{{ translate('All Packages') }}</span>
+                                </a>
+                            </li>
                             @if(get_setting('vendor_system_activation') == 1)
                                 <li class="aiz-side-nav-item">
                                     <a href="{{route('products.seller')}}" class="aiz-side-nav-link {{ areActiveRoutes(['products.seller', 'products.seller.edit']) }}">

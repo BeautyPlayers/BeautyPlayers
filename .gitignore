@@ -1,3 +1,5 @@
+error_log
+tests
 /bootstrap/compiled.php
 .env.*.php
 .env.php

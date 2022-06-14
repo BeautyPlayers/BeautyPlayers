@@ -55,9 +55,9 @@
                             </div>
                         </div>
                         <div class="form-group row">
-                            <label class="col-lg-3 col-from-label">{{translate('Unit')}} <i class="las la-language text-danger" title="{{translate('Translatable')}}"></i> </label>
+                            <label class="col-lg-3 col-from-label">{{translate('Unit (number of minutes)')}} <i class="las la-language text-danger" title="{{translate('Translatable')}}"></i> </label>
                             <div class="col-lg-8">
-                                <input type="text" class="form-control" name="unit" placeholder="{{ translate('Unit (e.g. KG, Pc etc)') }}" value="{{$product->getTranslation('unit', $lang)}}" required>
+                                <input type="text" class="form-control" name="unit" placeholder="{{ translate('Unit (Enter number of minutes)') }}" value="{{$product->getTranslation('unit', $lang)}}" required>
                             </div>
                         </div>
                         <div class="form-group row">

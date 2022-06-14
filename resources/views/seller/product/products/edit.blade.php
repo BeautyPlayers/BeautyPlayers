@@ -68,10 +68,10 @@
                         </div>
                     </div>
                     <div class="form-group row">
-                        <label class="col-lg-3 col-from-label">{{translate('Unit')}}</label>
+                        <label class="col-lg-3 col-from-label">{{translate('Unit (number of minutes)')}}</label>
                         <div class="col-lg-8">
                             <input type="text" class="form-control" name="unit"
-                                placeholder="{{ translate('Unit (e.g. KG, Pc etc)') }}"
+                                placeholder="{{ translate('Unit (Enter number of minutes)') }}"
                                 value="{{$product->getTranslation('unit')}}" required>
                         </div>
                     </div>

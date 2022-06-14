@@ -453,64 +453,38 @@ class HomeController extends Controller
     public function product(Request $request, $slug)
 
     {
-
         $detailedProduct  = Product::with('reviews', 'brand', 'stocks', 'user', 'user.shop')->where('auction_product', 0)->where('slug', $slug)->where('approved', 1)->first();
 
-
-
         if($detailedProduct != null && $detailedProduct->published){
-
             if($request->has('product_referral_code') && addon_is_activated('affiliate_system')) {
 
-
-
                 $affiliate_validation_time = AffiliateConfig::where('type', 'validation_time')->first();
-
                 $cookie_minute = 30 * 24;
-
                 if($affiliate_validation_time) {
-
                     $cookie_minute = $affiliate_validation_time->value * 60;
-
                 }
-
                 Cookie::queue('product_referral_code', $request->product_referral_code, $cookie_minute);
-
                 Cookie::queue('referred_product_id', $detailedProduct->id, $cookie_minute);
-
-
 
                 $referred_by_user = User::where('referral_code', $request->product_referral_code)->first();
 
-
-
                 $affiliateController = new AffiliateController;
-
                 $affiliateController->processAffiliateStats($referred_by_user->id, 1, 0, 0, 0);
-
             }
-
+            return redirect('all/services#pr' . $detailedProduct->id);
             if($detailedProduct->digital == 1){
-
                 return view('frontend.digital_product_details', compact('detailedProduct'));
-
             }
-
             else {
-
                 return view('frontend.product_details', compact('detailedProduct'));
-
             }
-
         }
-
         abort(404);
-
     }
 
 
 
-    public function services_cat(Request $request)
+    public function services_cat111(Request $request)
 
     {
 
@@ -601,6 +575,153 @@ class HomeController extends Controller
     }
 
 
+    
+
+    public function services_cat(Request $request)
+    {
+                // return Category::with('products')->orderBy('id','desc')->get();
+               /* $producstList  = Product::with('brand','user','category')->where('auction_product', 0)->where('approved', 1)->get();
+                foreach($producstList as $k=>$v){
+                    if($v->category->parent_id == 0){
+                        $id = $v->category->id;
+                    }else{
+                        $id = $v->category->parent_id;
+                    }
+                    $producstList[$k]['main_category'] = Category::where('id', $id)->value('name');
+                }*/
+
+                //$productlist = [];
+
+                $dataCatIds = [];
+                
+                $categories = [];
+                $catIds = Product::where('auction_product', 0)->where('approved', 1)->groupBy('category_id')->pluck('category_id')->toArray();
+                
+                
+                /*=================*/
+                $geParentIds = Category::whereIn('id',$catIds)->where('parent_id', '!=', 0)->groupBy('parent_id')->pluck('parent_id')->toArray();
+                //return $geParentIds;
+                
+                //$whereInCat['catIds'] = $catIds;
+                //$whereInCat['geParentIds'] = $geParentIds;
+                $getParentCategory = Category::select('id','parent_id','name','icon')
+                        ->whereIn('id',$geParentIds)
+                        ->orderBy('order_level', 'desc')->get();
+                //return $getParentCategory;
+                
+                if(count($getParentCategory)){
+                    foreach($getParentCategory as $k=>$v){
+                        $subCategories = Category::with('categories')->whereIn('id',$catIds)->where('parent_id',$v->id)->get();
+                        $getParentCategory[$k]['childrenCategories'] = $subCategories;
+
+                        $resproducts = Product::with('brand','user','category')->where('auction_product', 0)->where('approved', 1)->where('category_id', $v->id)->orderBy('id', 'desc')->get();
+                        $subCategoryIds = Category::with('categories')->whereIn('id',$catIds)->where('parent_id',$v->id)->pluck('id')->toArray();
+                        $resSubCatproducts = Product::with('brand','user','category')->where('auction_product', 0)->where('approved', 1)->whereIn('category_id', $subCategoryIds)->orderBy('id', 'desc')->get();
+                        if(count($resSubCatproducts)){
+                            $resproducts = $resproducts->merge($resSubCatproducts);
+                        }
+                        
+                        if (Auth::check() && addon_is_activated('affiliate_system') && (\App\Models\AffiliateOption::where('type', 'product_sharing')->first()->status || \App\Models\AffiliateOption::where('type', 'category_wise_affiliate')->first()->status) && Auth::user()->affiliate_user != null && Auth::user()->affiliate_user->status) {
+                            if (Auth::check()) {
+                                if (count($resproducts)) {
+                                    if (Auth::user()->referral_code == null) {
+                                        Auth::user()->referral_code = substr(Auth::user()->id . Str::random(10), 0, 10);
+                                        Auth::user()->save();
+                                    }
+                                    $referral_code = Auth::user()->referral_code;
+
+                                    $commissionArr = [];
+                                    $category_wise_affiliate = \App\Models\AffiliateOption::where('type', 'category_wise_affiliate')->first();
+                                    if ($category_wise_affiliate && !empty($category_wise_affiliate->details)) {
+                                        $commissionArr = json_decode($category_wise_affiliate->details, true);
+                                    }
+                                    foreach ($resproducts as $key => $detailedProduct) {
+                                        $resproducts[$key]->referral_code_url = \Illuminate\Support\Facades\URL::to('/product') . '/' . $detailedProduct->slug . "?product_referral_code=$referral_code";
+                                        if (count($commissionArr)) {
+                                            foreach ($commissionArr as $cKey => $commission) {
+                                                if ($detailedProduct->category_id == $commission['category_id'] && $commission['commission'] > 0) {
+                                                    if($commission['commission_type'] == 'amount'){
+                                                        $resproducts[$key]->referral_commission = '₹' . $commission['commission'] . ' commission';
+                                                    }else{
+                                                        $resproducts[$key]->referral_commission = $commission['commission'] . '% commission';                                                        
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                        $getParentCategory[$k]['products'] = $resproducts;
+                    }
+                }
+                $producstList = $getParentCategory;
+                $categories = $getParentCategory;
+                
+                //return $getParentCategory;
+                /*=================*/
+                /*=================*/
+                $todays_deal_products = Cache::rememberForever('todays_deal_products', function () {
+
+                    return filter_products(Product::with('brand', 'user', 'category')->where('published', 1)->where('todays_deal', '1'))->get();
+
+                });
+                /*=================*/
+                
+                
+                /*=================*/
+                /*$producstList = Category::select('id','parent_id','name')
+                        //->where('level', 0)
+                        //->where('parent_id', '<=', 0)
+                        ->where(function ($q) use ($catIds){
+                            $q->whereIn('id',$catIds)->orWhereIn('parent_id',$catIds);
+                        })
+                        ->groupBy('id')
+                        ->orderBy('order_level', 'desc')->get();
+                        return $producstList;
+                if(count($producstList)){
+                    foreach($producstList as $k=>$v){
+                      $resproducts = Product::with('brand','user','category')->where('auction_product', 0)->where('approved', 1)->where('category_id', $v->id)->get();
+                       
+                      if(count($resproducts)){
+                          if($v->parent_id == 0){
+                                $appendCat = $v;
+                                $appendCat = Category::with('categories')->whereIn('id',$catIds)->where('parent_id',$v->id)->get();
+                                $categories[$v->id]['childrenCategories'] = $appendCat;
+                                //$dataCatIds[] = $v->id;
+                          }else{
+                                $appendCat = $v;
+                                $appendCat['childrenCategories'] = Category::with('categories')->whereIn('id',$catIds)->where('id',$v->id)->get();
+                                $categories[$v->id][] = $appendCat;
+                                //$dataCatIds[] = $v->parent_id;  
+                          }
+                      }
+                      $producstList[$k]['products'] = $resproducts;
+                    }
+                }
+                 return $categories;*/
+
+
+                
+                /*$categories = Category::where('level', 0)
+                        ->where(function ($q) use ($dataCatIds){
+                            $q->whereIn('id',$dataCatIds)->orWhereIn('parent_id',$dataCatIds);
+                        })
+                        ->groupBy('id')
+                        ->orderBy('order_level', 'desc')->get();
+                        
+                if(count($categories)){
+                    foreach($categories as $k=>$v){
+                        $categories[$k]['childrenCategories'] = Category::with('categories')->where('parent_id',$v->id)->get();
+                    }
+                }*/
+                //return $categories;
+                //return $categories;
+                return view('frontend.cat_services', compact('categories','producstList','todays_deal_products'));
+
+
+       // abort(404);
+    }
 
     public function shop($slug)
 

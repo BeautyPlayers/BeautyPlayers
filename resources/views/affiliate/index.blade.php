@@ -79,7 +79,7 @@
                         </div>
                         <div class="col-md-3">
                             <select class="form-control aiz-selectpicker" name="amount_type">
-                                <option value="amount" @if ($commission_type_product_sharing == "amount") selected @endif>$</option>
+                                <option value="amount" @if ($commission_type_product_sharing == "amount") selected @endif>₹</option>
                                 <option value="percent" @if ($commission_type_product_sharing == "percent") selected @endif>%</option>
                             </select>
                         </div>
@@ -155,7 +155,7 @@
                                     </div>
                                     <div class="col-md-3">
                                         <select class="form-control aiz-selectpicker" name="commison_types_{{ $value->category_id }}">
-                                            <option value="amount" @if($value->commission_type == 'amount') selected @endif>$</option>
+                                            <option value="amount" @if($value->commission_type == 'amount') selected @endif>₹</option>
                                             <option value="percent" @if($value->commission_type == 'percent') selected @endif>%</option>
                                         </select>
                                     </div>
@@ -171,7 +171,7 @@
                                     </div>
                                     <div class="col-md-3">
                                         <select class="form-control aiz-selectpicker" name="commison_types_{{ $category->id }}">
-                                            <option value="amount">$</option>
+                                            <option value="amount">₹</option>
                                             <option value="percent">%</option>
                                         </select>
                                     </div>

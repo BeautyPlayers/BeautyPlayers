@@ -1,4 +1,5 @@
-<section class="bg-white border-top mt-auto">
+<?php 
+/*<section class="bg-white border-top mt-auto">
     <div class="container">
         <div class="row no-gutters">
             <div class="col-lg-3 col-md-6">
@@ -27,7 +28,8 @@
             </div>
         </div>
     </div>
-</section>
+</section>*/
+?>
 
 <section class="bg-dark py-5 text-light footer-widget">
     <div class="container">

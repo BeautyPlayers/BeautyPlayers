@@ -69,6 +69,89 @@
         </div>
 
         <div class="col-lg-6">
+            @if($product->auction_product == 1)
+
+            <div class="text-left">
+                <h1 class="mb-2 fs-20 fw-600">
+                    {{ $product->getTranslation('name') }}
+                </h1>
+
+                <div class="row align-items-center">
+                    @if ($product->est_shipping_days)
+                    <div class="col-auto ml">
+                        <small class="mr-2 opacity-50">{{ translate('Estimate Shipping Time')}}: </small>{{ $product->est_shipping_days }} {{  translate('Days') }}
+                    </div>
+                    @endif
+                </div>
+
+                <hr>
+
+                <div class="row align-items-center">
+                    <div class="col-auto">
+                        <small class="mr-2 opacity-50">{{ translate('Sold by')}}: </small><br>
+                        @if ($product->added_by == 'seller' && get_setting('vendor_system_activation') == 1)
+                        <a href="{{ route('shop.visit', $product->user->shop->slug) }}" class="text-reset">{{ $product->user->shop->name }}</a>
+                        @else
+                        {{  translate('Inhouse product') }}
+                        @endif
+                    </div>
+
+                    @if ($product->brand != null)
+                    <div class="col-auto">
+                        <a href="{{ route('products.brand',$product->brand->slug) }}">
+                            <img src="{{ uploaded_asset($product->brand->logo) }}" alt="{{ $product->brand->getTranslation('name') }}" height="30">
+                        </a>
+                    </div>
+                    @endif
+                </div>
+
+                <hr>
+
+                <div class="row no-gutters mt-3">
+                    <div class="col-sm-2">
+                        <div class="opacity-50 my-2">{{ translate('Starting Bid')}}:</div>
+                    </div>
+                    <div class="col-sm-10">
+                        <span class="opacity-50 fs-20">
+                            {{ single_price($product->starting_bid) }}
+                        </span>
+                        @if($product->unit != null)
+                        <span class="opacity-70"> 🕒 {{ $product->getTranslation('unit') }} mins</span>
+                        @endif
+                    </div>
+                </div>
+                <hr>
+
+                @if(Auth::check() && Auth::user()->product_bids->where('product_id',$product->id)->first() != null)
+                <div class="row no-gutters">
+                    <div class="col-sm-2">
+                        <div class="opacity-50">{{ translate('My Bidded Amount')}}:</div>
+                    </div>
+                    <div class="col-sm-10">
+                        <span class="opacity-50 fs-20">
+                            {{ single_price(Auth::user()->product_bids->where('product_id',$product->id)->first()->amount) }}
+                        </span>
+                    </div>
+                </div>
+                <hr>
+                @endif
+
+                @php $highest_bid = $product->bids->max('amount'); @endphp
+                @if($highest_bid != null)
+                <div class="row no-gutters my-2">
+                    <div class="col-sm-2">
+                        <div class="opacity-50">{{ translate('Highest Bid')}}:</div>
+                    </div>
+                    <div class="col-sm-10">
+                        <strong class="h3 fw-600 text-primary">
+                            {{ single_price($highest_bid) }}
+                        </strong>
+                    </div>
+                </div>
+                @endif
+            </div>
+
+            @else
             <div class="text-left">
                 <h2 class="mb-2 fs-20 fw-600">
                     {{  $product->getTranslation('name')  }}
@@ -289,6 +372,7 @@
                 </div>
 
             </div>
+            @endif
         </div>
 
     </div>

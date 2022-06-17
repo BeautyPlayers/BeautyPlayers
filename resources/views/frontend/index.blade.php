@@ -11,11 +11,14 @@
                 </div>*/
                 ?>
 
-                @php
+                <?php
+                /*@php
                     $num_todays_deal = count($todays_deal_products);
                 @endphp
 
-                <div class="@if($num_todays_deal > 0) col-lg-10 @else col-lg-12 @endif">
+                <div class="@if($num_todays_deal > 0) col-lg-10 @else col-lg-12 @endif">*/
+                ?>
+                <div class="col-lg-12">
                     @if (get_setting('home_slider_images') != null)
                         <div class="aiz-carousel dots-inside-bottom mobile-img-auto-height" data-arrows="true" data-dots="true" data-autoplay="true" data-infinite="true">
                             @php $slider_images = json_decode(get_setting('home_slider_images'), true);  @endphp
@@ -59,7 +62,8 @@
                     @endif
                 </div>
 
-                @if($num_todays_deal > 0)
+               <?php 
+               /* @if($num_todays_deal > 0)
                 <div class="col-lg-2 order-3 mt-3 mt-lg-0">
                     <div class="bg-white rounded shadow-sm">
                         <div class="bg-soft-primary rounded-top p-3 d-flex align-items-center justify-content-center">
@@ -103,7 +107,8 @@
                         </div>
                     </div>
                 </div>
-                @endif
+                @endif*/
+               ?>
 
             </div>
         </div>

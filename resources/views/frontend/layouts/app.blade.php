@@ -519,10 +519,15 @@
                 success: function(data){
 
                    $('.c-preloader').hide();
-                   if(data){
+                   if(data.status == 1){
+                       $('.addcart-btn' + id).attr('data-title', 'Added to cart');
+                       $('.addcart-btn' + id).attr('data-original-title', 'Added to cart');
+                       $('.addcart-btn' + id).removeAttr('onclick');
+                       $('.addcart-btn' + id + ' i').removeClass('la-shopping-cart').addClass('la-shopping-bag');
+                       updateNavCart(data.nav_cart_view,data.cart_count);
                         AIZ.plugins.notify('success', "{{ translate('Item has been added to cart') }}");
                         setTimeout(function () {
-                             window.location.href = '{{ route('cart') }}';
+                             //window.location.href = '{{ route('cart') }}';
                          }, 1000);
                    }else{
                        AIZ.plugins.notify('warning', "{{ translate('Something went wrong. Please try later') }}");
@@ -541,10 +546,12 @@
                     data: $('#option-choice-form').serializeArray(),
                     success: function(data){
 
-                       $('#addToCart-modal-body').html(null);
+                       //$('#addToCart-modal-body').html(null);
                        $('.c-preloader').hide();
-                       $('#modal-size').removeClass('modal-lg');
-                       $('#addToCart-modal-body').html(data.modal_view);
+                       //$('#modal-size').removeClass('modal-lg');
+                       //$('#addToCart-modal-body').html(data.modal_view);
+                       $('#addToCart-modal-body button.add-to-cart span').text('Added to cart').removeAttr('onclick');
+                       $('#addToCart-modal-body button.add-to-cart').removeAttr('onclick');
                        AIZ.extra.plusMinus();
                        AIZ.plugins.slickCarousel();
                        updateNavCart(data.nav_cart_view,data.cart_count);

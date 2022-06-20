@@ -471,7 +471,7 @@ class HomeController extends Controller
                 $affiliateController = new AffiliateController;
                 $affiliateController->processAffiliateStats($referred_by_user->id, 1, 0, 0, 0);
             }
-            return redirect('all/services#pr' . $detailedProduct->id);
+            //return redirect('all/services#pr' . $detailedProduct->id);
             if($detailedProduct->digital == 1){
                 return view('frontend.digital_product_details', compact('detailedProduct'));
             }
@@ -604,7 +604,7 @@ class HomeController extends Controller
                 
                 //$whereInCat['catIds'] = $catIds;
                 //$whereInCat['geParentIds'] = $geParentIds;
-                $getParentCategory = Category::select('id','parent_id','name','icon')
+                $getParentCategory = Category::select('id','parent_id','name','icon','banner')
                         ->whereIn('id',$geParentIds)
                         ->orderBy('order_level', 'desc')->get();
                 //return $getParentCategory;

@@ -14,6 +14,22 @@
 <link rel="stylesheet" href="{{ static_asset('assets/owlcarousel/assets/owl.theme.default.min.css') }}">
 
 <style>
+    #main-content .text-primary{
+        color: #B5245F !important;
+    }
+    #main-content .theme-btn-pink{
+        background-color: #B5245F !important;
+        border-color: #B5245F !important;
+    }
+    #main-content .theme-btn-pink:hover{
+        background-color: #14A800 !important;
+        border-color: #14A800 !important;
+    }
+    #main-content .rating-list{
+        color: #000 !important;
+    }
+</style>
+<style>
     .checked {
         color: orange;
         font-size: 16px;
@@ -45,17 +61,37 @@
         /* text-transform: uppercase; */
         color: rgb(181 36 95) !important;
     }
-    .cat-title h6 { color: #b62661; font-size: 1.2rem !important; margin-bottom: 8px; font-weight: 700 !important; }
-    .cat-sub { color: #000 !important; font-size: 0.89rem; font-weight: 600;margin-bottom: 2px; }
+    .cat-title h6 { /*color: #b62661;*/ font-size: 1.2rem !important; margin-bottom: 8px; font-weight: 700 !important; }
+    #main-content .cat-sub { color: #504a4a !important; font-size: 0.89rem; font-weight: 600;margin-bottom: 2px; }
     .catbtnList a.cat-button:hover { background: #af084b !important; border-color: #af084b; }
     .catbtnList a.cat-button { color: #fff; background: #b62661 !important; border-color: #b62661; }
     .catbtnList a {color: #000;}
     .cat-club { background: #f3f0f0; padding: 4px; margin-left: 4px; margin-right: 4px; font-size: 13px;margin-bottom: 2px; }
     .top-catTitle { color: #b83061 !important; font-size: 28px !important; }
-    .cat-sub span { font-size: 12px; color: #8f8f8f; }
+    #main-content .cat-sub span { font-size: 12px; color: #8f8f8f; }
 
     ul li{
         list-style: none;
+    }
+    .services-share-icons{
+        display: none;
+        position: absolute;
+        left: -40px;
+        bottom: 0px;
+    }
+    .services-share-icons .jssocials-share{
+        display: block;
+    }
+    .services-share-icons .jssocials-share-link{
+        border-radius: 5px;
+    }
+</style>
+<style>
+    .page-section .container,
+    .page-section .container .row.shadow,
+    .page-section .container .img-thumbnail,
+    .page-section .container .cat-club{
+        border-radius: 10px !important;
     }
 </style>
 <style>
@@ -121,6 +157,35 @@
 
     .no-js .owl-carousel, .owl-carousel.owl-loaded{
         padding: 0;
+    }
+
+    .view-detail-btn-i{
+        display: none;
+        color: #B5245F !important;
+        /*        padding: 1px 9px 1px 9px !important;
+                border-radius: 50% !important;
+                margin-left: 5px !important;*/
+    }
+    .brand-img-section{
+        text-align: right;
+    }
+    @media (max-width: 768px){
+        .nav-sections{
+            width: 100% !important;
+        }
+        .ref-cpurl-btn{
+            float: left;
+            margin-top: 7px;
+        }
+        .brand-img-section{
+            text-align: left !important;
+        }
+        .view-detail-btn-i{
+            display: contents;
+        }
+        .view-detail-btn-section{
+            display: none !important;
+        }
     }
 </style>
 @endsection
@@ -231,12 +296,18 @@
 
 <main id="main-content" class="page-sections pt-4" style="z-index: 0; position: relative;top: -25px;width:100%;">
     @if(isset($todays_deal_products) && count($todays_deal_products))
+    @if(file_exists('public/assets/img/today-deal-banner.jpeg'))
+    <h2 class="mt-3 pt-3 p-0 top-catTitle container" id="todeal" style="/* background: rgb(37, 211, 102); *//* padding: 15px; */font-size: 30px;font-weight: 700;text-transform: uppercase;color: rgb(37, 211, 102);">
+        <img class="cat-image lazyload mr-2 w-100" src="{{ static_asset('assets/img/today-deal-banner.jpeg') }}">
+    </h2>
+    @else
     <h2 class="mt-3 pt-3 pl-0 top-catTitle container" id="todeal" style="/* background: rgb(37, 211, 102); *//* padding: 15px; */font-size: 30px;font-weight: 700;text-transform: uppercase;color: rgb(37, 211, 102);">
         <img class="cat-image lazyload mr-2"
-             src="{{ static_asset('assets/img/today_deal.png') }}"
+             src="{{ static_asset('assets/img/today-deal-banner.jpeg') }}"
              width="60">
         <span>{{ translate('Todays Deal') }}</span>
     </h2>
+    @endif
     @foreach($todays_deal_products as $k=>$v)
     @if ($v != null)
     <section class="page-section my-3 pr{{ $v->id }}" id="todeal{{ $v->id }}">
@@ -248,19 +319,26 @@
                         <div class="p-0 col-md-3 col-xs-4" >
                             <span class="badge-custom">OFF<span class="box ml-1 mr-0">&nbsp;{{ $v->unit_price > 0 ? floor(($v->discount/$v->unit_price)*100) : '0.0' }}%</span></span>
                             <img src="{{ uploaded_asset($v->thumbnail_img) }}" class="img-thumbnail border-0" style="height: 185px;width: 100%;object-fit: cover;"/>
-                            @if (addon_is_activated('club_point') && $v->earn_point > 0)
+
+                            @if(isset($v->referral_code_url))
+                            <button type=button id="ref-cpurl-btn" class="btn btn-sm btn-secondary ref-cpurl-btn px-2 mt-0 cat-club w-100 p-1" data-attrcpy="{{ translate('Copied')}}" onclick="CopyToClipboard(this)" data-id="{{ $v->id }}" data-name="{{ $v->name }}" data-url="{{$v->referral_code_url}}">{{ isset($v->referral_commission) ? $v->referral_commission : translate('Copy the Promote Link')}}</button>
+                            <div class="aiz-share services-share-icons sh-pr{{ $v->id }}"></div>
+                            @elseif (addon_is_activated('club_point') && $v->earn_point > 0)s
                             <div class="px-2 mt-0 cat-club">{{  translate('Club Point') }}:<span class="fw-700 float-right">{{ $v->earn_point }}</span></div>
                             @else
                             <div class="px-2 mt-0 cat-club">{{  translate('Club Point') }}:<span class="fw-700 float-right">0</span></div>
                             @endif
                         </div>
-                        <div class="pl-3 pt-3 pr-2 pb-2 col-md-9 border-left col-xs-8">
+                        <div class="pl-3 pt-3 pr-2 pb-2 col-md-9 col-xs-8">
                             <div class="row">
                                 <div class="col-md-7 col-sm-12 cat-title">
+                                    <h6 style="font-size: 15px;font-weight: 600;">{{ substr($v->name, 0, 20) }} 
+                                        <?php /* &nbsp;<span style="font-size:12px;">{{ $v->brand->name ?? '' }}</span> */ ?>
+                                        <i class="fa fa-info-circle view-detail-btn-i" onclick="showAddToCartModal(<?= $v->id ?>)" data-toggle="tooltip"  data-placement="left" tabindex="0" data-original-title="" title=""></i>
+                                    </h6>
                                     @if($v->category)
-                                    <h6 style="font-size: 15px;font-weight: 600;">{{ substr($v->category->name, 0, 20) }}</h6>
+                                    <h4 class="text-primary cat-sub">{{ substr($v->category->name, 0, 20) }}</h4>
                                     @endif
-                                    <h4 class="text-primary cat-sub">{{ substr($v->name, 0, 20) }} &nbsp;&nbsp;<span style="font-size:12px;">{{ $v->brand->name ?? '' }}</span></h4>
                                     <h5 class="text-primary rating-list">
                                         @php
                                         $total = 0;
@@ -293,35 +371,34 @@
                                     </div>
                                 </div>
                                 <div class="col-md-5 col-sm-12">
+                                    @if ($v->brand != null)
+                                    <div class="col-auto mt-1 mb-1 p-0 brand-img-section">
+                                        <a href="{{ route('products.brand',$v->brand->slug) }}" target="_blank">
+                                            <img src="{{ uploaded_asset($v->brand->logo) }}" alt="{{ $v->brand->getTranslation('name') }}" height="50" class="shadow p-2 rounded">
+                                        </a>
+                                    </div>
+                                    @endif
                                     <div class="text-right m-0" >
-                                        <!--                                                    <div class="row">
-                                                                                                <div class="col-sm-2">
-                                                                                                    <div class="opacity-50 my-2">{{ translate('Share') }}:</div>
-                                                                                                </div>
-                                                                                                <div class="col-sm-10">
-                                                                                                    <div class="aiz-share"></div>
-                                                                                                </div>
-                                                                                            </div>-->
-                                        <div class="row">
-                                            <div class="col-sm-12">
-                                                @if(isset($v->referral_code_url))
-                                                <div>
-                                                    <button type=button id="ref-cpurl-btn" class="btn btn-sm btn-secondary" data-attrcpy="{{ translate('Copied')}}" onclick="CopyToClipboard(this)" data-url="{{$v->referral_code_url}}">{{ isset($v->referral_commission) ? $v->referral_commission : translate('Copy the Promote Link')}}</button>
-                                                </div>
-                                                @endif
-                                            </div>
-                                        </div>
+                                        <!--                                                                                            <div class="row">
+                                                                                                                                        <div class="col-sm-2">
+                                                                                                                                            <div class="opacity-50 my-2">{{ translate('Share') }}:</div>
+                                                                                                                                        </div>
+                                                                                                                                        <div class="col-sm-10">
+                                                                                                                                            <div class="aiz-share"></div>
+                                                                                                                                        </div>
+                                                                                                                                    </div>-->
+
                                     </div>
                                 </div>
                             </div>
                             <div class="row">
-                                <div class="col-sm-12 mt-3">
+                                <div class="col-sm-12">
                                     <?php
                                     /* <h5 class="text-primary" style="font-size: 14px;color: #000 !important;">
                                       {!! substr((strip_tags($v->description) ?? 'N/A'), 0, 80) !!}
                                       </h5> */
                                     ?>
-                                    <a href="javascript:void(0)" class="ml-auto mr-0 btn btn-primary btn-sm shadow-md" style="background-color: #14a800;" onclick="showAddToCartModal(<?= $v->id ?>)" data-toggle="tooltip"  data-placement="left" tabindex="0" data-original-title="" title="">
+                                    <a href="javascript:void(0)" class="ml-auto mr-0 mt-3 btn btn-primary btn-sm shadow-md theme-btn-pink view-detail-btn-section" onclick="showAddToCartModal(<?= $v->id ?>)" data-toggle="tooltip"  data-placement="left" tabindex="0" data-original-title="" title="">
                                         View Details
                                     </a>
                                 </div>
@@ -352,12 +429,18 @@
     @endif
     <!-- =============================-->
     @if(isset($featured_products) && count($featured_products))
+    @if(file_exists('public/assets/img/featured-banner.jpeg'))
+    <h2 class="mt-3 pt-3 p-0 top-catTitle container" id="featuredPr" style="/* background: rgb(37, 211, 102); *//* padding: 15px; */font-size: 30px;font-weight: 700;text-transform: uppercase;color: rgb(37, 211, 102);">
+        <img class="cat-image lazyload mr-2 w-100" src="{{ static_asset('assets/img/featured-banner.jpeg') }}">
+    </h2>
+    @else
     <h2 class="mt-3 pt-3 pl-0 top-catTitle container" id="featuredPr" style="/* background: rgb(37, 211, 102); *//* padding: 15px; */font-size: 30px;font-weight: 700;text-transform: uppercase;color: rgb(37, 211, 102);">
         <img class="cat-image lazyload mr-2"
-             src="{{ static_asset('assets/img/featured.png') }}"
+             src="{{ static_asset('assets/img/featured-banner.jpeg') }}"
              width="60">
         <span>{{ translate('Featured Products') }}</span>
     </h2>
+    @endif
     @foreach($featured_products as $k=>$v)
     <section class="page-section my-3 pr{{ $v->id }}" id="featuredPr{{ $v->id }}">
         <div class="container" style="background-color: #ffffff;">
@@ -368,19 +451,25 @@
                         <div class="p-0 col-md-3 col-xs-4" >
                             <span class="badge-custom">OFF<span class="box ml-1 mr-0">&nbsp;{{ $v->unit_price > 0 ? floor(($v->discount/$v->unit_price)*100) : '0.0' }}%</span></span>
                             <img src="{{ uploaded_asset($v->thumbnail_img) }}" class="img-thumbnail border-0" style="height: 185px;width: 100%;object-fit: cover;"/>
-                            @if (addon_is_activated('club_point') && $v->earn_point > 0)
+                            @if(isset($v->referral_code_url))
+                            <button type=button id="ref-cpurl-btn" class="btn btn-sm btn-secondary ref-cpurl-btn px-2 mt-0 cat-club w-100 p-1" data-attrcpy="{{ translate('Copied')}}" onclick="CopyToClipboard(this)" data-id="{{ $v->id }}" data-name="{{ $v->name }}" data-url="{{$v->referral_code_url}}">{{ isset($v->referral_commission) ? $v->referral_commission : translate('Copy the Promote Link')}}</button>
+                            <div class="aiz-share services-share-icons sh-pr{{ $v->id }}"></div>
+                            @elseif (addon_is_activated('club_point') && $v->earn_point > 0)
                             <div class="px-2 mt-0 cat-club">{{  translate('Club Point') }}:<span class="fw-700 float-right">{{ $v->earn_point }}</span></div>
                             @else
                             <div class="px-2 mt-0 cat-club">{{  translate('Club Point') }}:<span class="fw-700 float-right">0</span></div>
                             @endif
                         </div>
-                        <div class="pl-3 pt-3 pr-2 pb-2 col-md-9 border-left col-xs-8">
+                        <div class="pl-3 pt-3 pr-2 pb-2 col-md-9 col-xs-8">
                             <div class="row">
                                 <div class="col-md-7 col-sm-12 cat-title">
+                                    <h6 style="font-size: 15px;font-weight: 600;">{{ substr($v->name, 0, 20) }} 
+                                        <?php /* &nbsp;<span style="font-size:12px;">{{ $v->brand->name ?? '' }}</span> */ ?>
+                                        <i class="fa fa-info-circle view-detail-btn-i" onclick="showAddToCartModal(<?= $v->id ?>)" data-toggle="tooltip"  data-placement="left" tabindex="0" data-original-title="" title=""></i>
+                                    </h6>
                                     @if($v->category)
-                                    <h6 style="font-size: 15px;font-weight: 600;">{{ substr($v->category->name, 0, 20) }}</h6>
+                                    <h4 class="text-primary cat-sub">{{ substr($v->category->name, 0, 20) }}</h4>
                                     @endif
-                                    <h4 class="text-primary cat-sub">{{ substr($v->name, 0, 20) }} &nbsp;&nbsp;<span style="font-size:12px;">{{ $v->brand->name ?? '' }}</span></h4>
                                     <h5 class="text-primary rating-list">
                                         @php
                                         $total = 0;
@@ -413,6 +502,13 @@
                                     </div>
                                 </div>
                                 <div class="col-md-5 col-sm-12">
+                                    @if ($v->brand != null)
+                                    <div class="col-auto mt-1 mb-1 p-0 brand-img-section">
+                                        <a href="{{ route('products.brand',$v->brand->slug) }}" target="_blank">
+                                            <img src="{{ uploaded_asset($v->brand->logo) }}" alt="{{ $v->brand->getTranslation('name') }}" height="50" class="shadow p-2 rounded">
+                                        </a>
+                                    </div>
+                                    @endif
                                     <div class="text-right m-0" >
                                         <!--                                                    <div class="row">
                                                                                                 <div class="col-sm-2">
@@ -422,26 +518,18 @@
                                                                                                     <div class="aiz-share"></div>
                                                                                                 </div>
                                                                                             </div>-->
-                                        <div class="row">
-                                            <div class="col-sm-12">
-                                                @if(isset($v->referral_code_url))
-                                                <div>
-                                                    <button type=button id="ref-cpurl-btn" class="btn btn-sm btn-secondary" data-attrcpy="{{ translate('Copied')}}" onclick="CopyToClipboard(this)" data-url="{{$v->referral_code_url}}">{{ isset($v->referral_commission) ? $v->referral_commission : translate('Copy the Promote Link')}}</button>
-                                                </div>
-                                                @endif
-                                            </div>
-                                        </div>
+
                                     </div>
                                 </div>
                             </div>
                             <div class="row">
-                                <div class="col-sm-12 mt-3">
+                                <div class="col-sm-12">
                                     <?php
                                     /* <h5 class="text-primary" style="font-size: 14px;color: #000 !important;">
                                       {!! substr((strip_tags($v->description) ?? 'N/A'), 0, 80) !!}
                                       </h5> */
                                     ?>
-                                    <a href="javascript:void(0)" class="ml-auto mr-0 btn btn-primary btn-sm shadow-md" style="background-color: #14a800;" onclick="showAddToCartModal(<?= $v->id ?>)" data-toggle="tooltip"  data-placement="left" tabindex="0" data-original-title="" title="">
+                                    <a href="javascript:void(0)" class="ml-auto mr-0 mt-3 btn btn-primary btn-sm shadow-md theme-btn-pink view-detail-btn-section" onclick="showAddToCartModal(<?= $v->id ?>)" data-toggle="tooltip"  data-placement="left" tabindex="0" data-original-title="" title="">
                                         View Details
                                     </a>
                                 </div>
@@ -471,12 +559,21 @@
     @endif
     <!-- =============================-->
     @if(isset($auction_products) && count($auction_products))
+
+    @if(file_exists('public/assets/img/auction-banner.jpeg'))
+    <h2 class="mt-3 pt-3 p-0 top-catTitle container" id="aucp" style="/* background: rgb(37, 211, 102); *//* padding: 15px; */font-size: 30px;font-weight: 700;text-transform: uppercase;color: rgb(37, 211, 102);">
+        <img class="cat-image lazyload mr-2 w-100" src="{{ static_asset('assets/img/auction-banner.jpeg') }}">
+    </h2>
+    @else
     <h2 class="mt-3 pt-3 pl-0 top-catTitle container" id="aucp" style="/* background: rgb(37, 211, 102); *//* padding: 15px; */font-size: 30px;font-weight: 700;text-transform: uppercase;color: rgb(37, 211, 102);">
         <img class="cat-image lazyload mr-2"
-             src="{{ static_asset('assets/img/auctions.png') }}"
+             src="{{ static_asset('assets/img/auction-banner.jpeg') }}"
              width="60">
         <span>{{ translate('Auction Products') }}</span>
     </h2>
+    @endif
+
+
     @foreach($auction_products as $k=>$v)
     <section class="page-section my-3 pr{{ $v->id }}" id="aucp{{ $v->id }}">
         <div class="container" style="background-color: #ffffff;">
@@ -487,19 +584,25 @@
                         <div class="p-0 col-md-3 col-xs-4" >
                             <span class="badge-custom">OFF<span class="box ml-1 mr-0">&nbsp;{{ $v->unit_price > 0 ? floor(($v->discount/$v->unit_price)*100) : '0.0' }}%</span></span>
                             <img src="{{ uploaded_asset($v->thumbnail_img) }}" class="img-thumbnail border-0" style="height: 185px;width: 100%;object-fit: cover;"/>
-                            @if (addon_is_activated('club_point') && $v->earn_point > 0)
+                            @if(isset($v->referral_code_url))
+                            <button type=button id="ref-cpurl-btn" class="btn btn-sm btn-secondary ref-cpurl-btn px-2 mt-0 cat-club w-100 p-1" data-attrcpy="{{ translate('Copied')}}" onclick="CopyToClipboard(this)" data-id="{{ $v->id }}" data-name="{{ $v->name }}" data-url="{{$v->referral_code_url}}">{{ isset($v->referral_commission) ? $v->referral_commission : translate('Copy the Promote Link')}}</button>
+                            <div class="aiz-share services-share-icons sh-pr{{ $v->id }}"></div>
+                            @elseif (addon_is_activated('club_point') && $v->earn_point > 0)
                             <div class="px-2 mt-0 cat-club">{{  translate('Club Point') }}:<span class="fw-700 float-right">{{ $v->earn_point }}</span></div>
                             @else
                             <div class="px-2 mt-0 cat-club">{{  translate('Club Point') }}:<span class="fw-700 float-right">0</span></div>
                             @endif
                         </div>
-                        <div class="pl-3 pt-3 pr-2 pb-2 col-md-9 border-left col-xs-8">
+                        <div class="pl-3 pt-3 pr-2 pb-2 col-md-9 col-xs-8">
                             <div class="row">
                                 <div class="col-md-7 col-sm-12 cat-title">
+                                    <h6 style="font-size: 15px;font-weight: 600;">{{ substr($v->name, 0, 20) }} 
+                                        <?php /* &nbsp;<span style="font-size:12px;">{{ $v->brand->name ?? '' }}</span> */ ?>
+                                        <i class="fa fa-info-circle view-detail-btn-i" onclick="showAddToCartModal(<?= $v->id ?>)" data-toggle="tooltip"  data-placement="left" tabindex="0" data-original-title="" title=""></i>
+                                    </h6>
                                     @if($v->category)
-                                    <h6 style="font-size: 15px;font-weight: 600;">{{ substr($v->category->name, 0, 20) }}</h6>
+                                    <h4 class="text-primary cat-sub">{{ substr($v->category->name, 0, 20) }}</h4>
                                     @endif
-                                    <h4 class="text-primary cat-sub">{{ substr($v->name, 0, 20) }} &nbsp;&nbsp;<span style="font-size:12px;">{{ $v->brand->name ?? '' }}</span></h4>
                                     <h5 class="text-primary rating-list">
                                         @php
                                         $total = 0;
@@ -564,6 +667,13 @@
 
                                 </div>
                                 <div class="col-md-5 col-sm-12">
+                                    @if ($v->brand != null)
+                                    <div class="col-auto mt-1 mb-1 p-0 brand-img-section">
+                                        <a href="{{ route('products.brand',$v->brand->slug) }}" target="_blank">
+                                            <img src="{{ uploaded_asset($v->brand->logo) }}" alt="{{ $v->brand->getTranslation('name') }}" height="50" class="shadow p-2 rounded">
+                                        </a>
+                                    </div>
+                                    @endif
                                     <div class="text-right m-0" >
                                         <!--                                                    <div class="row">
                                                                                                 <div class="col-sm-2">
@@ -573,35 +683,26 @@
                                                                                                     <div class="aiz-share"></div>
                                                                                                 </div>
                                                                                             </div>-->
-                                        <div class="row">
-                                            <div class="col-sm-12">
-                                                @if(isset($v->referral_code_url))
-                                                <div>
-                                                    <button type=button id="ref-cpurl-btn" class="btn btn-sm btn-secondary" data-attrcpy="{{ translate('Copied')}}" onclick="CopyToClipboard(this)" data-url="{{$v->referral_code_url}}">{{ isset($v->referral_commission) ? $v->referral_commission : translate('Copy the Promote Link')}}</button>
-                                                </div>
-                                                @endif
-                                            </div>
-                                        </div>
                                     </div>
                                 </div>
                             </div>
 
                             @php $min_bid_amount = $highest_bid != null ? $highest_bid+1 : $v->starting_bid; @endphp
                             <div class="row">
-                                <div class="col-sm-12 mt-3">
+                                <div class="col-sm-12">
                                     <?php
                                     /* <h5 class="text-primary" style="font-size: 14px;color: #000 !important;">
                                       {!! substr((strip_tags($v->description) ?? 'N/A'), 0, 80) !!}
                                       </h5> */
                                     ?>
-                                    <a href="javascript:void(0)" class="ml-auto mr-0 btn btn-primary btn-sm shadow-md" style="background-color: #14a800;" onclick="showAddToCartModal(<?= $v->id ?>)" data-toggle="tooltip"  data-placement="left" tabindex="0" data-original-title="" title="">
+                                    <a href="javascript:void(0)" class="ml-auto mr-0 mt-3 btn btn-primary btn-sm shadow-md theme-btn-pink view-detail-btn-section" onclick="showAddToCartModal(<?= $v->id ?>)" data-toggle="tooltip"  data-placement="left" tabindex="0" data-original-title="" title="">
                                         View Details
                                     </a>
 
                                     @if($v->auction_end_date >= strtotime("now"))
                                     @if(Auth::check() && $v->user_id == Auth::user()->id)
                                     @else
-                                    <button type="button" class="ml-auto mr-0 btn btn-primary btn-sm shadow-md" onclick="bid_modal(<?= $v->id ?>)">
+                                    <button type="button" class="ml-auto mr-0 mt-3 btn btn-primary btn-sm shadow-md" onclick="bid_modal(<?= $v->id ?>)">
                                         <i class="las la-gavel"></i>
                                         @if(Auth::check() && Auth::user()->product_bids->where('product_id',$v->id)->first() != null)
                                         {{ translate('Change Bid')}}
@@ -623,21 +724,23 @@
                             </div>
                             @endif
                             @endif                                    
-                            <div class="row">
-                                <div class="col-sm-12">
-                                    <p class="text-right m-2 catbtnList">
-                                        <a href="javascript:void(0)" style="/* position: relative; *//* right: 0; */margin-right: 7px;" onclick="addToWishList(<?= $v->id ?>)" data-toggle="tooltip" data-title="Add to wishlist" data-placement="bottom" tabindex="0" data-original-title="" title="">
-                                            <i class="la la-heart-o" style="font-size: 21px;"></i>
-                                        </a>
-                                        <a href="javascript:void(0)" style="/* position: relative; *//* right: 0; */margin-right: 7px;" onclick="addToCompare(<?= $v->id ?>)" data-toggle="tooltip" data-title="Add to compare" data-placement="bottom" tabindex="0" data-original-title="" title="">
-                                            <i class="las la-sync"  style="font-size: 21px;"></i>
-                                        </a>
-                                        <a href="javascript:void(0)" style="/* position: relative; *//* right: 0; */margin-right: 7px;" onclick="directAddToCart(<?= $v->id ?>)" class="addcart-btn<?= $v->id ?>" data-toggle="tooltip" data-title="Add to cart" data-placement="bottom" tabindex="0" data-original-title="" title="">
-                                            <i class="las la-shopping-cart"  style="font-size: 25px;"></i>
-                                        </a>
-                                    </p>
-                                </div>
-                            </div>
+                            <?php
+                            /* <div class="row">
+                              <div class="col-sm-12">
+                              <p class="text-right m-2 catbtnList">
+                              <a href="javascript:void(0)" style="margin-right: 7px;" onclick="addToWishList(<?= $v->id ?>)" data-toggle="tooltip" data-title="Add to wishlist" data-placement="bottom" tabindex="0" data-original-title="" title="">
+                              <i class="la la-heart-o" style="font-size: 21px;"></i>
+                              </a>
+                              <a href="javascript:void(0)" style="margin-right: 7px;" onclick="addToCompare(<?= $v->id ?>)" data-toggle="tooltip" data-title="Add to compare" data-placement="bottom" tabindex="0" data-original-title="" title="">
+                              <i class="las la-sync"  style="font-size: 21px;"></i>
+                              </a>
+                              <a href="javascript:void(0)" style="margin-right: 7px;" onclick="directAddToCart(<?= $v->id ?>)" class="addcart-btn<?= $v->id ?>" data-toggle="tooltip" data-title="Add to cart" data-placement="bottom" tabindex="0" data-original-title="" title="">
+                              <i class="las la-shopping-cart"  style="font-size: 25px;"></i>
+                              </a>
+                              </p>
+                              </div>
+                              </div> */
+                            ?>
                         </div>
                     </div>
                 </div>
@@ -669,6 +772,11 @@
     @endforeach
     @endif
     @foreach($producstList as $key => $category)
+    @if(!empty($category->banner) && file_exists('public/'. uploaded_asset($category->banner,true)))
+    <h2 class="mt-3 pt-3 p-0 top-catTitle container" id="p{{ $category->parent_id !== 0 ? $category->parent_id: $category->id }}" style="/* background: rgb(37, 211, 102); *//* padding: 15px; */font-size: 30px;font-weight: 700;text-transform: uppercase;color: rgb(37, 211, 102);">
+        <img class="cat-image lazyload mr-2 w-100" src="{{ uploaded_asset($category->banner) }}">
+    </h2>
+    @else    
     <h2 class="mt-3 pt-3 pl-0 top-catTitle container" id="p{{ $category->parent_id !== 0 ? $category->parent_id: $category->id }}" style="/* background: rgb(37, 211, 102); *//* padding: 15px; */font-size: 30px;font-weight: 700;text-transform: uppercase;color: rgb(37, 211, 102);">
         <!--<h2 class="mt-5 pt-3 container" id="p{{ $category->parent_id !== 0 ? $category->parent_id: $category->id }}" style="/* background: rgb(37, 211, 102); *//* padding: 15px; */font-size: 30px;font-weight: 700;text-transform: uppercase;color: rgb(37, 211, 102);">-->
         <img class="cat-image lazyload mr-2"
@@ -676,6 +784,8 @@
              width="60">
         <span>{{ $category['name'] }}</span>
     </h2>
+    @endif
+
     @foreach($category['products'] as $k=>$v)
     <section class="page-section my-3 pr{{ $v->id }}" id="sub{{ $v->category_id }}">
         <div class="container" style="background-color: #ffffff;">
@@ -686,19 +796,25 @@
                         <div class="p-0 col-md-3 col-xs-4" >
                             <span class="badge-custom">OFF<span class="box ml-1 mr-0">&nbsp;{{ $v->unit_price > 0 ? floor(($v->discount/$v->unit_price)*100) : '0.0' }}%</span></span>
                             <img src="{{ uploaded_asset($v->thumbnail_img) }}" class="img-thumbnail border-0" style="height: 185px;width: 100%;object-fit: cover;"/>
-                            @if (addon_is_activated('club_point') && $v->earn_point > 0)
+                            @if(isset($v->referral_code_url))
+                            <button type=button id="ref-cpurl-btn" class="btn btn-sm btn-secondary ref-cpurl-btn px-2 mt-0 cat-club w-100 p-1" data-attrcpy="{{ translate('Copied')}}" onclick="CopyToClipboard(this)" data-id="{{ $v->id }}" data-name="{{ $v->name }}" data-url="{{$v->referral_code_url}}">{{ isset($v->referral_commission) ? $v->referral_commission : translate('Copy the Promote Link')}}</button>
+                            <div class="aiz-share services-share-icons sh-pr{{ $v->id }}"></div>
+                            @elseif (addon_is_activated('club_point') && $v->earn_point > 0)
                             <div class="px-2 mt-0 cat-club">{{  translate('Club Point') }}:<span class="fw-700 float-right">{{ $v->earn_point }}</span></div>
                             @else
                             <div class="px-2 mt-0 cat-club">{{  translate('Club Point') }}:<span class="fw-700 float-right">0</span></div>
                             @endif
                         </div>
-                        <div class="pl-3 pt-3 pr-2 pb-2 col-md-9 border-left col-xs-8">
+                        <div class="pl-3 pt-3 pr-2 pb-2 col-md-9 col-xs-8">
                             <div class="row">
                                 <div class="col-md-7 col-sm-12 cat-title">
+                                    <h6 style="font-size: 15px;font-weight: 600;">{{ substr($v->name, 0, 20) }} 
+                                        <?php /* &nbsp;<span style="font-size:12px;">{{ $v->brand->name ?? '' }}</span> */ ?>
+                                        <i class="fa fa-info-circle view-detail-btn-i" onclick="showAddToCartModal(<?= $v->id ?>)" data-toggle="tooltip"  data-placement="left" tabindex="0" data-original-title="" title=""></i>
+                                    </h6>
                                     @if($v->category)
-                                    <h6 style="font-size: 15px;font-weight: 600;">{{ substr($v->category->name, 0, 20) }}</h6>
+                                    <h4 class="text-primary cat-sub">{{ substr($v->category->name, 0, 20) }}</h4>
                                     @endif
-                                    <h4 class="text-primary cat-sub">{{ substr($v->name, 0, 20) }} &nbsp;&nbsp;<span style="font-size:12px;">{{ $v->brand->name ?? '' }}</span></h4>
                                     <h5 class="text-primary rating-list">
                                         @php
                                         $total = 0;
@@ -731,6 +847,13 @@
                                     </div>
                                 </div>
                                 <div class="col-md-5 col-sm-12">
+                                    @if ($v->brand != null)
+                                    <div class="col-auto mt-1 mb-1 p-0 brand-img-section">
+                                        <a href="{{ route('products.brand',$v->brand->slug) }}" target="_blank">
+                                            <img src="{{ uploaded_asset($v->brand->logo) }}" alt="{{ $v->brand->getTranslation('name') }}" height="50" class="shadow p-2 rounded">
+                                        </a>
+                                    </div>
+                                    @endif
                                     <div class="text-right m-0" >
                                         <!--                                                    <div class="row">
                                                                                                 <div class="col-sm-2">
@@ -740,26 +863,17 @@
                                                                                                     <div class="aiz-share"></div>
                                                                                                 </div>
                                                                                             </div>-->
-                                        <div class="row">
-                                            <div class="col-sm-12">
-                                                @if(isset($v->referral_code_url))
-                                                <div>
-                                                    <button type=button id="ref-cpurl-btn" class="btn btn-sm btn-secondary" data-attrcpy="{{ translate('Copied')}}" onclick="CopyToClipboard(this)" data-url="{{$v->referral_code_url}}">{{ isset($v->referral_commission) ? $v->referral_commission : translate('Copy the Promote Link')}}</button>
-                                                </div>
-                                                @endif
-                                            </div>
-                                        </div>
                                     </div>
                                 </div>
                             </div>
                             <div class="row">
-                                <div class="col-sm-12 mt-3">
+                                <div class="col-sm-12">
                                     <?php
                                     /* <h5 class="text-primary" style="font-size: 14px;color: #000 !important;">
                                       {!! substr((strip_tags($v->description) ?? 'N/A'), 0, 80) !!}
                                       </h5> */
                                     ?>
-                                    <a href="javascript:void(0)" class="ml-auto mr-0 btn btn-primary btn-sm shadow-md" style="background-color: #14a800;" onclick="showAddToCartModal(<?= $v->id ?>)" data-toggle="tooltip"  data-placement="left" tabindex="0" data-original-title="" title="">
+                                    <a href="javascript:void(0)" class="ml-auto mr-0 mt-3 btn btn-primary btn-sm shadow-md theme-btn-pink view-detail-btn-section" onclick="showAddToCartModal(<?= $v->id ?>)" data-toggle="tooltip"  data-placement="left" tabindex="0" data-original-title="" title="">
                                         View Details
                                     </a>
                                 </div>
@@ -955,11 +1069,14 @@ if (count($childrenCategories)) {
                 0: {
                     items: 1
                 },
-                600: {
-                    items: 1
+                300: {
+                    items: 2
+                },
+                500: {
+                    items: 4
                 },
                 1000: {
-                    items: 3
+                    items: 4
                 }
             }
         })
@@ -983,7 +1100,18 @@ if (count($childrenCategories)) {
 <script>
 
     function CopyToClipboard(e) {
+
         var url = $(e).data('url');
+
+        var id = $(e).data('id');
+        var name = $(e).data('name');
+        $('.sh-pr' + id).toggle(400);
+        $('.sh-pr' + id + ' .jssocials-share-email .jssocials-share-link').attr('href', 'mailto:?subject=' + name + '&body=' + url);
+        $('.sh-pr' + id + ' .jssocials-share-twitter .jssocials-share-link').attr('href', 'https://twitter.com/share?url=' + url);
+        $('.sh-pr' + id + ' .jssocials-share-facebook .jssocials-share-link').attr('href', 'https://facebook.com/sharer/sharer.php?u=' + url);
+        $('.sh-pr' + id + ' .jssocials-share-linkedin .jssocials-share-link').attr('href', 'https://www.linkedin.com/shareArticle?mini=true&url=' + url);
+        $('.sh-pr' + id + ' .jssocials-share-whatsapp .jssocials-share-link').attr('href', 'whatsapp://send?text=' + url);
+
         var $temp = $("<input>");
         $("body").append($temp);
         $temp.val(url).select();

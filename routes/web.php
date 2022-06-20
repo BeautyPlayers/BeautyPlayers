@@ -86,6 +86,8 @@ Auth::routes(['verify' => true]);
 // Login
 Route::controller(LoginController::class)->group(function () {
     Route::get('/logout', 'logout');
+    Route::post('/whatsapp-login', 'loginSendOtp')->name('social.whatsapp');
+    Route::post('/otp-verify', 'otpVerify')->name('otp.verify');
     Route::get('/social-login/redirect/{provider}', 'redirectToProvider')->name('social.login');
     Route::get('/social-login/{provider}/callback', 'handleProviderCallback')->name('social.callback');
 });
@@ -118,7 +120,7 @@ Route::controller(HomeController::class)->group(function () {
     Route::get('/flash-deal/{slug}', 'flash_deal_details')->name('flash-deal-details');
 
     Route::get('/product/{slug}', 'product')->name('product');
-    Route::get('/all/services', 'services_cat');
+    Route::get('/all/services', 'services_cat')->name('services');
     Route::post('/product/variant_price', 'variant_price')->name('products.variant_price');
     Route::get('/shop/{slug}', 'shop')->name('shop.visit');
     Route::get('/shop/{slug}/{type}', 'filter_shop')->name('shop.visit.type');

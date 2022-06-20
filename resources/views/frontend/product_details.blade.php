@@ -35,6 +35,9 @@
 @endsection
 
 @section('content')
+    <script>
+        window.location.href = "{{ route('services') }}#pr{{ $detailedProduct->id }}";
+    </script>
     <section class="mb-4 pt-3">
         <div class="container">
             <div class="bg-white shadow-sm rounded p-3">
@@ -246,7 +249,10 @@
 
                                     <div class="row no-gutters">
                                         <div class="col-sm-2">
-                                            <div class="opacity-50 my-2">{{ \App\Models\Attribute::find($choice->attribute_id)->getTranslation('name') }}:</div>
+                                            @php
+                                            $attr = \App\Models\Attribute::find($choice->attribute_id);
+                                            @endphp
+                                            <div class="opacity-50 mt-2 ">{{ $attr ? $attr->getTranslation('name') : 'Attribute' }}:</div>
                                         </div>
                                         <div class="col-sm-10">
                                             <div class="aiz-radio-inline">
@@ -801,7 +807,7 @@
     </div>
 @endsection
 
-@section('script')
+@section('script')    
     <script type="text/javascript">
         $(document).ready(function() {
             getVariantPrice();

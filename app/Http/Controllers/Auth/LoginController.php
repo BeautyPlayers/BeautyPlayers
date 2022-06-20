@@ -12,6 +12,7 @@ use Session;
 use Illuminate\Http\Request;
 use CoreComponentRepository;
 use Illuminate\Support\Str;
+use Auth;
 
 class LoginController extends Controller
 {
@@ -255,5 +256,92 @@ class LoginController extends Controller
     public function __construct()
     {
         $this->middleware('guest')->except('logout');
+    }
+    
+    
+    
+    
+    public function loginSendOtp(Request $request){
+        $phone_number = "+91".$request->phone_number;
+        $user = User::where('phone', $phone_number)->first();
+        $otp = rand(1111, 9999);
+        if($user){
+            $user->verification_code = $otp;
+            $user->save();
+            return $this->sendWhatsappMessage("91".$request->phone_number, $otp, $user->name);
+        }
+    }
+    
+    
+    public function otpVerify(Request $request){
+        $phone_number = '+91'.$request->phone_number;
+        $user = User::where('phone', $phone_number)->first();
+        if($user){
+            if($user->verification_code == $request->otp){
+                Auth::login($user);
+                return response()->json(['status' => 'success', 'message' => "Something went wrong"], 200);
+            }
+            
+            return response()->json(['status' => 'failed', 'message' => "Incorrect OTP"], 200);
+        }
+        return response()->json(['status' => 'failed', 'message' => "Something went wrong"], 200);
+    }
+    
+    public function sendWhatsappMessage($phone_number, $otp, $name='User'){
+    //     $postDataArray = [
+    //     	"channelId"=>"61645c0c967b660004fc3247",
+    //     	"channelType"=>"whatsapp",
+    //     	"recipient"=> [
+    // 	       "name" =>  "BeautyPlayers OTP",
+    // 	       "phone" => $phone_number
+    // 	    ],
+    // 	    "whatsapp" => [
+    // 	        "type" => "text",
+    // 	        "text" => [
+    // 	          "body" => "Beauty Players One Time Login pin is: ".$otp  
+	   //         ],
+    // 	    ]
+    // 	];
+    	
+    	$postDataArray = [
+        	"channelId"=>"61645c0c967b660004fc3247",
+        	"channelType"=>"whatsapp",
+        	"recipient"=> [
+    	       "name" =>  "BeautyPlayers OTP",
+    	       "phone" => $phone_number
+    	    ],
+    	    "whatsapp" => [
+    	        "type" => "template",
+    	        "template" => [
+                    "templateName" => "otp_clone2",
+                    "bodyValues" => [
+                        "name" => $name,
+                        'otp' => $otp
+                    ]
+                ]
+    	      
+    	    ]
+    	];
+
+         
+        // $data = http_build_query($postDataArray);
+        $ch = curl_init();
+        curl_setopt($ch, CURLOPT_URL, 'https://server.gallabox.com/devapi/messages/whatsapp');
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+        curl_setopt($ch, CURLOPT_POST, 1);
+        curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($postDataArray));
+        
+        $headers = array();
+        $headers[] = 'Apikey: 61a60c8b0187730004bf48d5';
+        $headers[] = 'Apisecret: 9981f7a418b34c498a154b7b951fdd99';
+        $headers[] = 'Content-Type: application/json';
+        curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
+        
+        $result = curl_exec($ch);
+        return $result;
+        if (curl_errno($ch)) {
+            echo 'Error:' . curl_error($ch);
+        }
+        curl_close($ch);
     }
 }

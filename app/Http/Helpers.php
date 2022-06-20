@@ -560,9 +560,12 @@ if (!function_exists('app_timezone')) {
 
 //return file uploaded via uploader
 if (!function_exists('uploaded_asset')) {
-    function uploaded_asset($id)
+    function uploaded_asset($id,$isFileName = false)
     {
         if (($asset = \App\Models\Upload::find($id)) != null) {
+            if($isFileName){
+                return $asset->file_name;
+            }
             return $asset->external_link == null ? my_asset($asset->file_name) : $asset->external_link;
         }
         return null;

@@ -262,15 +262,121 @@
                                     </a>
                                 </li>
                             @endif
+                                            
+                                <li class="list-inline-item">
+                                    <a onclick="show_whatsapp_modal()" style="background-color: #25D366; cursor: pointer">
+                                        <i class="lab la-whatsapp"></i>
+                                    </a>
+                                </li>
                         </ul>
                     @endif
                 </div>
             </div>
         </div>
     </div>
+<div class="modal fade" id="whatsapp_login_modal">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+    <div class="modal-header">
+      <h5 class="modal-title h6">{{ translate('Enter your registered phone number')}}</h5>
+      <button type="button" class="close" data-dismiss="modal">
+      </button>
+    </div>
+    <div class="modal-body" style="max-height: 100%;height: auto;overflow: unset;">
+            <div id="wa_box">
+                <input type="tel" id="phone-code-whatsapp" class="form-control{{ $errors->has('phone') ? ' is-invalid' : '' }}" value="{{ old('phone') }}" placeholder="" name="phone" autocomplete="off">
+                <input type="hidden" name="country_code_whatsapp" value="">                
+            </div>
+            <div id="otp_box">
+                <input type="text" id="otp_code" placeholder="Enter the OTP you received on whatsapp." class="form-control"> 
+            </div>
+
+    </div>
+    <div class="modal-footer">
+      <button type="button" class="btn btn-light" data-dismiss="modal">{{translate('Cancel')}}</button>
+      <a href="#" id="whatsapp_login" class="btn btn-primary">{{ translate('Send OTP') }}</a>
+      <a href="#" id="whatsapp_otp_submit" class="btn btn-primary">{{ translate('Submit OTP') }}</a>
+    </div>
+  </div>
+  </div>
+</div>
 @endsection
 
 @section('script')
+    <script type="text/javascript">
+        var country_code = null;
+        var phone_number = null;
+        $(function(){
+            $('#otp_box').hide();
+            $('#whatsapp_otp_submit').hide();
+
+            $('#whatsapp_login').on('click', function(){
+                country_code = $('input[name=country_code_whatsapp]').val();
+                phone_number = $('#phone-code-whatsapp').val();
+                $.post('{{ route('social.whatsapp') }}',{_token:$('meta[name="csrf-token"]').attr('content'), country_code: country_code, phone_number: phone_number}, function(data){
+                    // $('#affiliate_withdraw_modal #modal-content').html(data);
+                    // $('#affiliate_withdraw_modal').modal('show', {backdrop: 'static'});
+                    // AIZ.plugins.bootstrapSelect('refresh');
+                    
+                    $('#wa_box').hide();
+                    $('#whatsapp_login').hide();
+                    $('#otp_box').show();
+                    $('#whatsapp_otp_submit').show();
+                });
+            })
+            
+            $('#whatsapp_otp_submit').on('click', function(){
+                var otp_code = $('#otp_code').val();
+                $.post('{{ route('otp.verify') }}',{_token:$('meta[name="csrf-token"]').attr('content'),country_code:country_code,phone_number:phone_number,otp:otp_code}, function(data){
+                    if(data.status == 'success'){
+                        location.reload();
+                    } else {
+                        AIZ.plugins.notify('danger', "{{ translate('incorrect otp') }}");
+                    }
+                });
+            })
+            
+        
+        })
+    
+        function show_whatsapp_modal(){
+            $('#whatsapp_login_modal').modal('show');
+            // document.getElementById('reject_link').setAttribute('href' , reject_link);
+        }
+        var isPhoneShown = true,
+            countryData = window.intlTelInputGlobals.getCountryData(),
+            input = document.querySelector("#phone-code-whatsapp");
+
+        for (var i = 0; i < countryData.length; i++) {
+            var country = countryData[i];
+            if(country.iso2 == 'bd'){
+                country.dialCode = '88';
+            }
+        }
+
+        var iti = intlTelInput(input, {
+            separateDialCode: true,
+            utilsScript: "{{ static_asset('assets/js/intlTelutils.js') }}?1590403638580",
+            onlyCountries: @php echo json_encode(\App\Models\Country::where('id', 101)->pluck('code')->toArray()) @endphp,
+            customPlaceholder: function(selectedCountryPlaceholder, selectedCountryData) {
+                if(selectedCountryData.iso2 == 'bd'){
+                    return "01xxxxxxxxx";
+                }
+                return selectedCountryPlaceholder;
+            }
+        });
+
+        var country = iti.getSelectedCountryData();
+        $('input[name=country_code]').val(country.dialCode);
+
+        input.addEventListener("countrychange", function(e) {
+            // var currentMask = e.currentTarget.placeholder;
+
+            var country = iti.getSelectedCountryData();
+            $('input[name=country_code_whatsapp]').val(country.dialCode);
+
+        });
+    </script>
     <script type="text/javascript">
         function removeFromCartView(e, key){
             e.preventDefault();
@@ -307,7 +413,7 @@
         var iti = intlTelInput(input, {
             separateDialCode: true,
             utilsScript: "{{ static_asset('assets/js/intlTelutils.js') }}?1590403638580",
-            onlyCountries: @php echo json_encode(\App\Models\Country::where('status', 1)->pluck('code')->toArray()) @endphp,
+            onlyCountries: @php echo json_encode(\App\Models\Country::where('id', 101)->pluck('code')->toArray()) @endphp,
             customPlaceholder: function(selectedCountryPlaceholder, selectedCountryData) {
                 if(selectedCountryData.iso2 == 'bd'){
                     return "01xxxxxxxxx";

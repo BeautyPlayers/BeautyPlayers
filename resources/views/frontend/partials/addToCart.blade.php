@@ -3,7 +3,7 @@
         line-height: 2;
     }
     .related-product-div .slick-arrow .las{
-        display: none;
+        /*display: none;*/
     }
 </style>
 <div class="modal-body p-4 c-scrollbar-light">
@@ -583,7 +583,11 @@
                     </div>
                     <div class="p-3">
                         <div class="aiz-carousel gutters-5 half-outside-arrow" data-items="5" data-xl-items="3" data-lg-items="4"  data-md-items="3" data-sm-items="2" data-xs-items="2" data-arrows='true' data-infinite='true'>
-                            @foreach (filter_products(\App\Models\Product::where('category_id', $product->category_id)->where('id', '!=', $product->id))->limit(10)->get() as $key => $related_product)
+                            @php
+                            $related_product_ids = \App\Models\ProductsAddon::where('product_id', $product->id)->where('addon_product_status', 1)->pluck('related_product_id')->toArray();
+                            @endphp
+                            @foreach (filter_products(\App\Models\Product::whereIn('id', $related_product_ids)->where('id', '!=', $product->id))->limit(10)->get() as $key => $related_product)
+                            <?php /*@foreach (filter_products(\App\Models\Product::where('category_id', $product->category_id)->where('id', '!=', $product->id))->limit(10)->get() as $key => $related_product)*/ ?>
                             <div class="carousel-box">
                                 <div class="aiz-card-box border border-light rounded hov-shadow-md my-2 has-transition">
                                     <div class="">

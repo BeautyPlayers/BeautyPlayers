@@ -42,6 +42,8 @@ use App\Services\ProductFlashDealService;
 
 use App\Services\ProductStockService;
 
+use App\Models\ProductsAddon;
+
 use App\Models\ServicePackage;
 use App\Models\ServicePackageProduct;
 
@@ -372,10 +374,47 @@ class ProductController extends Controller
 
             ->get();
 
+        $select_related_products = Product::with('brand')->orderBy('id', 'desc')
+                ->where('auction_product', 0)
+                ->where('wholesale_product', 0)->get();
 
+        return view('backend.product.products.create', compact('categories','select_related_products'));
 
-        return view('backend.product.products.create', compact('categories'));
+    }
+    
+    
+    
 
+    public function choose_addon_products(Request $request)
+
+    {
+        //return $request;
+        
+        $select_products = [];
+        if($request->select_addon_products){
+            $select_products = Product::with('brand')->orderBy('id', 'desc')->whereIn('id', $request->select_addon_products)->get()->toArray();
+        }
+        
+        $htm = '';
+        $flag = false;
+        
+        $exist_select_products = [];
+        if(count($select_products)){
+            if(isset($request->id)){
+                $exist_select_products = ProductsAddon::where('product_id',$request->id)->get()->toArray();
+            }
+            $htm = view('backend.product.products.addonProductList', compact('select_products','exist_select_products'))->render();
+            $flag = true;
+            
+        }
+        
+        $result = array();
+        $result['htm'] = $htm;
+       
+        $data = array();
+        $data['data'] = $result;
+        $data['flag'] = $flag;
+        return Response()->json($data);
     }
 
     public function create_packages()
@@ -724,7 +763,9 @@ class ProductController extends Controller
     public function store(ProductRequest $request)
 
     {
-
+        //return $request;
+        $input = \Illuminate\Support\Facades\Request::all();
+        
         $product = $this->productService->store($request->except([
 
             '_token', 'sku', 'choice', 'tax_id', 'tax', 'tax_type', 'flash_deal_id', 'flash_discount', 'flash_discount_type'
@@ -767,6 +808,20 @@ class ProductController extends Controller
 
         ]), $product);
 
+        //Addon Products
+        if(count($input['select_addon_products'])){
+            foreach($input['select_addon_products'] as $key => $select_addon_product_id){
+                $addProductArr = array();
+                $addProductArr['product_id'] = $product->id;
+                $addProductArr['related_product_id'] = $select_addon_product_id;
+                if(array_key_exists('addon_product_status'. $select_addon_product_id, $input)){
+                    $addProductArr['addon_product_status'] = true;
+                }else{
+                    $addProductArr['addon_product_status'] = false;
+                }
+                $addProductRes = ProductsAddon::create($addProductArr);
+            }
+        }
 
 
         // Product Translations
@@ -860,8 +915,16 @@ class ProductController extends Controller
             ->with('childrenCategories')
 
             ->get();
+        
+        
+        $select_related_products = Product::with('brand')->orderBy('id', 'desc')
+                ->where('id','!=' ,$id)
+                ->where('auction_product', 0)
+                ->where('wholesale_product', 0)->get();
+        
+        $select_products = ProductsAddon::where('product_id',$id)->pluck('related_product_id')->toArray();
 
-        return view('backend.product.products.edit', compact('product', 'categories', 'tags', 'lang'));
+        return view('backend.product.products.edit', compact('product', 'categories', 'tags', 'lang','select_related_products','select_products'));
 
     }
 
@@ -929,6 +992,8 @@ class ProductController extends Controller
 
     public function update(ProductRequest $request, Product $product)
     {
+        $input = \Illuminate\Support\Facades\Request::all();
+        //return $input;
         //Product
         $products = Product::where('id',$product->id)->orWhere('parent_product_id',$product->id)->get();
 
@@ -973,6 +1038,40 @@ class ProductController extends Controller
                     'name', 'unit', 'description'
                 ])
             );
+            
+            if(count($input['select_addon_products'])){
+                $exist_select_products = [];
+                $delete_exist = [];
+                if(isset($input['id'])){
+                    $exist_select_products = ProductsAddon::where('product_id',$input['id'])->pluck('related_product_id')->toArray();
+                    foreach($exist_select_products as $exist_select_product){
+                        if(!in_array($exist_select_product,$input['select_addon_products'])){
+                            $delete_exist[] = $exist_select_product;
+                        }
+                    }
+                }
+            
+                foreach($input['select_addon_products'] as $key => $select_addon_product_id){
+                    $addProductArr = array();
+                    $addProductArr['product_id'] = $product->id;
+                    $addProductArr['related_product_id'] = $select_addon_product_id;
+                    if(array_key_exists('addon_product_status'. $select_addon_product_id, $input)){
+                        $addProductArr['addon_product_status'] = true;
+                    }else{
+                        $addProductArr['addon_product_status'] = false;
+                    }
+                    
+                    if(count($exist_select_products) && in_array($select_addon_product_id,$exist_select_products)){
+                         $servicePkgRes = ProductsAddon::where('product_id',$product->id)->where('related_product_id',$select_addon_product_id)->update($addProductArr);
+                    }else{
+                         $servicePkgRes = ProductsAddon::create($addProductArr);
+                    }                
+                   
+                }
+                if(count($delete_exist)){
+                    ProductsAddon::where('product_id',$product->id)->whereIn('related_product_id',$delete_exist)->delete();
+                }
+            }
         }
 
 

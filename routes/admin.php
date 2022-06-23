@@ -101,6 +101,8 @@ Route::group(['prefix' => 'admin', 'middleware' => ['auth', 'admin']], function(
         Route::post('/products/sku_combination_edit', 'sku_combination_edit')->name('products.sku_combination_edit');
         Route::post('/products/add-more-choice-option', 'add_more_choice_option')->name('products.add-more-choice-option');
 
+        Route::post('/products/choose_addon_products', 'choose_addon_products')->name('products.choose_addon_products');
+        
         Route::get('/packages/all', 'all_packages')->name('packages.all');
         Route::get('/packages/create', 'create_packages')->name('packages.create');
         Route::post('/packages/store_package/', 'store_package')->name('packages.store');

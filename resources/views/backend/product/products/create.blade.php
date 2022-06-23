@@ -321,6 +321,33 @@
                         </div>
                     </div>
                 </div>
+
+                <div class="card">
+                    <div class="card-header">
+                        <h5 class="mb-0 h6">{{translate('Addon Products')}}</h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="form-group row">
+                            <div class="col-md-12 col-12">
+                                <label class="col-from-label">{{translate('Select services')}} <span class="text-danger">*</span></label>
+                                <select class="form-control aiz-selectpicker" data-live-search="true" data-selected-text-format="count" name="select_addon_products[]" id="select_addon_products" multiple>
+                                    @foreach ($select_related_products as $key => $select_related_product)
+                                    <option  value="{{ $select_related_product->id }}" data-content="<span><span>{{ $select_related_product->name }}</span><?= $select_related_product->brand ? '<span>[' . $select_related_product->brand->name . ']</span>' : '' ?></span>"></option>
+                                    <!--<option  value="{{ $select_related_product->id }}"></option>-->
+                                    @endforeach
+                                </select>
+                            </div>
+                        </div>
+                        
+                        <div class="form-group row">
+                            <div class="col-md-12 mt-3">
+                                <div class="choose_addon_services" id="choose_addon_services">
+
+                                </div>
+                            </div>
+                        </div>                        
+                    </div>
+                </div>
                 <div class="card">
                     <div class="card-header">
                         <h5 class="mb-0 h6">{{translate('SEO Meta Tags')}}</h5>
@@ -764,6 +791,25 @@
 
         update_sku();
     });
+    
+    $('#select_addon_products').on('change', function () {
+        update_addon_services();
+    });
+    function update_addon_services() {
+        $.ajax({
+        type: "POST",
+                url: '{{ route('products.choose_addon_products') }}',
+                data: $('#choice_form').serialize(),
+                success: function (data) {
+                //console.log(data);
+                if (data.flag) {
+                $('#choice_form #choose_addon_services').html(data.data.htm);
+                } else {
+                $('#choice_form #choose_addon_services').html('');
+                }
+                }
+        });
+    }
 
 </script>
 

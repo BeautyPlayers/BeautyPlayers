@@ -48,6 +48,7 @@ use App\Models\ServicePackage;
 use App\Models\ServicePackageProduct;
 
 
+
 class ProductController extends Controller
 
 {
@@ -227,6 +228,58 @@ class ProductController extends Controller
     }
 
 
+    public function all_packages(Request $request)
+
+    {
+
+        $col_name = null;
+
+        $query = null;
+
+        $sort_search = null;
+
+        $packages = ServicePackage::orderBy('id', 'desc');
+
+        if ($request->search != null) {
+
+            $sort_search = $request->search;
+
+            $packages = $packages->where(function ($q) use ($sort_search) {
+                         $q->where('name', 'like', '%' . $sort_search . '%')
+                            ->orWhere('cost_price', 'like', '%' . $sort_search . '%')
+                            ->orWhere('special_price', 'like', '%' . $sort_search . '%')
+                            ->orWhere('validity', 'like', '%' . $sort_search . '%');
+                     });
+
+        }
+
+        if ($request->type != null) {
+
+            $var = explode(",", $request->type);
+
+            $col_name = $var[0];
+
+            $query = $var[1];
+
+            $packages = $packages->orderBy($col_name, $query);
+
+            $sort_type = $request->type;
+
+        }
+
+
+
+        $packages = $packages->paginate(15);
+
+        $type = 'All';
+
+
+
+        return view('backend.product.packages.index', compact('packages', 'type', 'col_name', 'query', 'sort_search'));
+
+    }
+
+
 
     public function all_products(Request $request)
 
@@ -289,58 +342,6 @@ class ProductController extends Controller
 
 
         return view('backend.product.products.index', compact('products', 'type', 'col_name', 'query', 'seller_id', 'sort_search'));
-
-    }
-
-
-    public function all_packages(Request $request)
-
-    {
-
-        $col_name = null;
-
-        $query = null;
-
-        $sort_search = null;
-
-        $packages = ServicePackage::orderBy('id', 'desc');
-
-        if ($request->search != null) {
-
-            $sort_search = $request->search;
-
-            $packages = $packages->where(function ($q) use ($sort_search) {
-                         $q->where('name', 'like', '%' . $sort_search . '%')
-                            ->orWhere('cost_price', 'like', '%' . $sort_search . '%')
-                            ->orWhere('special_price', 'like', '%' . $sort_search . '%')
-                            ->orWhere('validity', 'like', '%' . $sort_search . '%');
-                     });
-
-        }
-
-        if ($request->type != null) {
-
-            $var = explode(",", $request->type);
-
-            $col_name = $var[0];
-
-            $query = $var[1];
-
-            $packages = $packages->orderBy($col_name, $query);
-
-            $sort_type = $request->type;
-
-        }
-
-
-
-        $packages = $packages->paginate(15);
-
-        $type = 'All';
-
-
-
-        return view('backend.product.packages.index', compact('packages', 'type', 'col_name', 'query', 'sort_search'));
 
     }
 
@@ -417,6 +418,7 @@ class ProductController extends Controller
         return Response()->json($data);
     }
 
+
     public function create_packages()
 
     {
@@ -428,7 +430,7 @@ class ProductController extends Controller
         $products =Product::with('brand')->orderBy('id', 'desc')
                 ->where('auction_product', 0)
                 ->where('wholesale_product', 0)->get();
-        //return $products;
+
 
 
         return view('backend.product.packages.create', compact('products'));
@@ -722,6 +724,8 @@ class ProductController extends Controller
 
     }
 
+
+
     public function add_more_choice_option(Request $request)
 
     {
@@ -798,16 +802,6 @@ class ProductController extends Controller
 
         ]), $product);
 
-
-
-        //Product Stock
-
-        $this->productStockService->store($request->only([
-
-            'colors_active', 'colors', 'choice_no', 'unit_price', 'sku', 'current_stock', 'product_id'
-
-        ]), $product);
-
         //Addon Products
         if(count($input['select_addon_products'])){
             foreach($input['select_addon_products'] as $key => $select_addon_product_id){
@@ -822,6 +816,17 @@ class ProductController extends Controller
                 $addProductRes = ProductsAddon::create($addProductArr);
             }
         }
+
+
+
+        //Product Stock
+
+        $this->productStockService->store($request->only([
+
+            'colors_active', 'colors', 'choice_no', 'unit_price', 'sku', 'current_stock', 'product_id'
+
+        ]), $product);
+
 
 
         // Product Translations

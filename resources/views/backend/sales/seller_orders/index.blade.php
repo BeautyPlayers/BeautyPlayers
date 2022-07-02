@@ -49,6 +49,7 @@
                     <th>{{translate('Seller')}}</th>
                     <th data-breakpoints="lg">{{translate('Amount')}}</th>
                     <th data-breakpoints="lg">{{translate('Delivery Status')}}</th>
+                    <th data-breakpoints="lg">{{translate('Booking Info')}}</th>
                     <th data-breakpoints="lg">{{translate('Payment Method')}}</th>
                     <th data-breakpoints="lg">{{translate('Payment Status')}}</th>
                     @if (addon_is_activated('refund_request'))
@@ -89,6 +90,9 @@
                                 $status = $order->delivery_status;
                             @endphp
                             {{ translate(ucfirst(str_replace('_', ' ', $status))) }}
+                        </td>
+                        <td>
+                            {{\App\Models\Booking::where('shop_id', $order->combined_order_id)->exists() ? \App\Models\Booking::where('shop_id', $order->combined_order_id)->first()->date_and_time : ' - ' }}
                         </td>
                         <td>
                             {{ translate(ucfirst(str_replace('_', ' ', $order->payment_type))) }}

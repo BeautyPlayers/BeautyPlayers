@@ -27,6 +27,12 @@
                         <span class="aiz-side-nav-text">{{ translate('Dashboard') }}</span>
                     </a>
                 </li>
+               <li class="aiz-side-nav-item">
+                    <a href="{{ route('seller.appointments.index') }}" class="aiz-side-nav-link">
+                        <i class="las la-person-booth aiz-side-nav-icon"></i>
+                        <span class="aiz-side-nav-text">{{ translate('Bookings') }}</span>
+                    </a>
+                </li>
                 <li class="aiz-side-nav-item">
                     <a href="#" class="aiz-side-nav-link">
                         <i class="las la-shopping-cart aiz-side-nav-icon"></i>

@@ -33,10 +33,10 @@
 @endsection
 
 @section('content')
-
     <script>
         window.location.href = "{{ route('services') }}#pr{{ $detailedProduct->id }}";
     </script>
+
     <section class="mb-4 pt-3">
         <div class="container">
             <div class="bg-white shadow-sm rounded p-3">

@@ -21,6 +21,7 @@ use App\Models\User;
 use App\Models\BusinessSetting;
 use App\Models\CombinedOrder;
 use App\Models\SmsTemplate;
+use App\Models\Booking;
 use Auth;
 use Session;
 use DB;
@@ -424,6 +425,15 @@ class OrderController extends Controller
             $combined_order->grand_total += $order->grand_total;
 
             $order->save();
+            
+            $booking_id = session('booking_id');
+
+            if ($booking_id) {
+                $booking = Booking::find($booking_id);
+                $booking->order_id = $order->id;
+                $booking->save();
+            }
+
         }
 
         $combined_order->save();

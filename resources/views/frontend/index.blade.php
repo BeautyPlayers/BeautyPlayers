@@ -62,8 +62,8 @@
                     @endif
                 </div>
 
-               <?php 
-               /* @if($num_todays_deal > 0)
+                <?php 
+               /*@if($num_todays_deal > 0)
                 <div class="col-lg-2 order-3 mt-3 mt-lg-0">
                     <div class="bg-white rounded shadow-sm">
                         <div class="bg-soft-primary rounded-top p-3 d-flex align-items-center justify-content-center">

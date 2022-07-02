@@ -220,7 +220,7 @@
                 <a class="menu-item-link open-subcat" id="0" href="#featuredPr">
                     <img style="width: 40px;/* float: left; */display: unset;"
                          src="{{ static_asset('assets/img/featured.png') }}">
-                    <div style="/*float: left;*/">{{ translate('Featured Products') }}</div>
+                    <div style="/*float: left;*/ white-space:initial">{{ translate('Featured Products') }}</div>
                 </a>
             </li>
             <?php
@@ -1067,10 +1067,10 @@ if (count($childrenCategories)) {
             dots: false,
             responsive: {
                 0: {
-                    items: 1
+                    items: 4
                 },
                 300: {
-                    items: 2
+                    items: 4
                 },
                 500: {
                     items: 4

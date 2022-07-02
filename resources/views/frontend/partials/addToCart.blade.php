@@ -582,7 +582,7 @@
                         </h3>
                     </div>
                     <div class="p-3">
-                        <div class="aiz-carousel gutters-5 half-outside-arrow" data-items="5" data-xl-items="3" data-lg-items="4"  data-md-items="3" data-sm-items="2" data-xs-items="2" data-arrows='true' data-infinite='true'>
+                        <div class="aiz-carousel gutters-5 half-outside-arrow" data-items="4" data-xl-items="3" data-lg-items="4"  data-md-items="3" data-sm-items="2" data-xs-items="2" data-arrows='true' data-infinite='true'>
                             @php
                             $related_product_ids = \App\Models\ProductsAddon::where('product_id', $product->id)->where('addon_product_status', 1)->pluck('related_product_id')->toArray();
                             @endphp
@@ -590,7 +590,7 @@
                             <?php /*@foreach (filter_products(\App\Models\Product::where('category_id', $product->category_id)->where('id', '!=', $product->id))->limit(10)->get() as $key => $related_product)*/ ?>
                             <div class="carousel-box">
                                 <div class="aiz-card-box border border-light rounded hov-shadow-md my-2 has-transition">
-                                    <div class="">
+                                    <div class="position-relative">
                                         <a href="{{ route('product', $related_product->slug) }}" class="d-block">
                                             <img
                                                 class="img-fit lazyload mx-auto h-140px h-md-210px"
@@ -600,6 +600,17 @@
                                                 onerror="this.onerror=null;this.src='{{ static_asset('assets/img/placeholder.jpg') }}';"
                                                 >
                                         </a>
+                                        <div class="absolute-top-right aiz-p-hov-icon">
+                                            <a href="javascript:void(0)" onclick="addToWishList(<?= $related_product->id ?>)" data-toggle="tooltip" data-title="{{ translate('Add to wishlist') }}" data-placement="left">
+                                                <i class="la la-heart-o"></i>
+                                            </a>
+                                            <a href="javascript:void(0)" onclick="addToCompare(<?= $related_product->id ?>)" data-toggle="tooltip" data-title="{{ translate('Add to compare') }}" data-placement="left">
+                                                <i class="las la-sync"></i>
+                                            </a>
+                                            <a href="javascript:void(0)" onclick="directAddToCart(<?= $related_product->id ?>)" class="addcart-btn<?= $related_product->id ?>" data-toggle="tooltip" data-title="{{ translate('Add to cart') }}" data-placement="left">
+                                                <i class="las la-shopping-cart"></i>
+                                            </a>
+                                        </div>
                                     </div>
                                     <div class="p-md-3 p-2 text-left">
                                         <div class="fs-15">

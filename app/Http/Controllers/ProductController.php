@@ -809,7 +809,7 @@ class ProductController extends Controller
         ]), $product);
 
         //Addon Products
-        if(count($input['select_addon_products'])){
+        if(array_key_exists('select_addon_products', $input) && count($input['select_addon_products'])){
             foreach($input['select_addon_products'] as $key => $select_addon_product_id){
                 $addProductArr = array();
                 $addProductArr['product_id'] = $product->id;
@@ -1039,18 +1039,22 @@ class ProductController extends Controller
                 ])
             );
             
-            if(count($input['select_addon_products'])){
-                $exist_select_products = [];
-                $delete_exist = [];
-                if(isset($input['id'])){
-                    $exist_select_products = ProductsAddon::where('product_id',$input['id'])->pluck('related_product_id')->toArray();
-                    foreach($exist_select_products as $exist_select_product){
+            
+            $exist_select_products = [];
+            $delete_exist = [];
+            if(isset($input['id'])){
+                $exist_select_products = ProductsAddon::where('product_id',$input['id'])->pluck('related_product_id')->toArray();
+                foreach($exist_select_products as $exist_select_product){
+                    if(array_key_exists('select_addon_products', $input) && count($input['select_addon_products'])){
                         if(!in_array($exist_select_product,$input['select_addon_products'])){
                             $delete_exist[] = $exist_select_product;
                         }
+                    }else{
+                        $delete_exist[] = $exist_select_product;
                     }
                 }
-            
+            }
+            if(array_key_exists('select_addon_products', $input) && count($input['select_addon_products'])){
                 foreach($input['select_addon_products'] as $key => $select_addon_product_id){
                     $addProductArr = array();
                     $addProductArr['product_id'] = $product->id;
@@ -1068,9 +1072,9 @@ class ProductController extends Controller
                     }                
                    
                 }
-                if(count($delete_exist)){
-                    ProductsAddon::where('product_id',$product->id)->whereIn('related_product_id',$delete_exist)->delete();
-                }
+            }
+            if(count($delete_exist)){
+                ProductsAddon::where('product_id',$product->id)->whereIn('related_product_id',$delete_exist)->delete();
             }
         }
 

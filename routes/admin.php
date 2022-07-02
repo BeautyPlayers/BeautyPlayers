@@ -42,6 +42,7 @@ use App\Http\Controllers\SupportTicketController;
 use App\Http\Controllers\TaxController;
 use App\Http\Controllers\UpdateController;
 use App\Http\Controllers\WebsiteController;
+use App\Http\Controllers\SellerLevelController;
 
 /*
   |--------------------------------------------------------------------------
@@ -151,6 +152,10 @@ Route::group(['prefix' => 'admin', 'middleware' => ['auth', 'admin']], function(
         Route::post('/sellers/profile_modal', 'profile_modal')->name('sellers.profile_modal');
         Route::post('/sellers/approved', 'updateApproved')->name('sellers.approved');
     });
+    
+    //Seller Level
+    Route::resource('seller-levels', SellerLevelController::class);
+    Route::get('/seller-levels/destroy/{id}', [SellerLevelController::class, 'destroy'])->name('seller-levels.destroy');
 
     // Seller Payment
     Route::controller(PaymentController::class)->group(function () {

@@ -394,6 +394,11 @@
                                 </a>
                             </li>
                             <li class="aiz-side-nav-item">
+                                <a href="{{ route('seller-levels.index') }}" class="aiz-side-nav-link {{ areActiveRoutes(['seller-levels.index','seller-levels.create','seller-levels.edit'])}}">
+                                    <span class="aiz-side-nav-text">{{ translate('Seller Levels') }}</span>
+                                </a>
+                            </li>
+                            <li class="aiz-side-nav-item">
                                 <a href="{{ route('sellers.payment_histories') }}" class="aiz-side-nav-link">
                                     <span class="aiz-side-nav-text">{{ translate('Payouts') }}</span>
                                 </a>

@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Shop;
 use App\Utility\PayfastUtility;
+use Goutte\Client;
 use Illuminate\Http\Request;
 use App\Models\Category;
 use App\Models\Cart;
@@ -13,8 +15,10 @@ use App\Models\Address;
 use App\Models\CombinedOrder;
 use App\Utility\PayhereUtility;
 use App\Utility\NotificationUtility;
+use Illuminate\Support\Facades\DB;
 use Session;
 use Auth;
+use Stevebauman\Location\Facades\Location;
 
 class CheckoutController extends Controller
 {
@@ -39,12 +43,12 @@ class CheckoutController extends Controller
             }
         }
         // Minumum order amount check end
-        
+
         if ($request->payment_option != null) {
             (new OrderController)->store($request);
 
             $request->session()->put('payment_type', 'cart_payment');
-            
+
             $data['combined_order_id'] = $request->session()->get('combined_order_id');
             $request->session()->put('payment_data', $data);
 
@@ -86,6 +90,32 @@ class CheckoutController extends Controller
         }
         Session::put('combined_order_id', $combined_order_id);
         return redirect()->route('order_confirmed');
+    }
+
+    public function get_nearby_sellers(Request $request)
+    {
+//        $ip = "119.63.138.116";
+        $ip = $request->ip();
+        
+        $currentUserInfo = Location::get($ip);
+        $lat = $currentUserInfo->latitude;
+        $lon = $currentUserInfo->longitude;
+        //find distance against zip code.
+        $distanceQuery = Shop::select('*',
+            DB::raw("6371 * acos(cos(radians(" . $lat . "))
+            * cos(radians(delivery_pickup_latitude))
+            * cos(radians(delivery_pickup_longitude) - radians(" . $lon . "))
+            + sin(radians(" . $lat . "))
+            * sin(radians(delivery_pickup_latitude))) AS distance_in_km"));
+
+        $nearby_sellers = Shop::query()
+            ->fromSub($distanceQuery, 'shops')
+            // ->where('distance_in_km', '<', '30')
+            ->where('verification_status', 1)
+            ->orderBy('distance_in_km', 'ASC')
+            ->get();
+
+        return view('frontend.nearby_sellers', compact('nearby_sellers'));
     }
 
     public function get_shipping_info(Request $request)
@@ -251,7 +281,7 @@ class CheckoutController extends Controller
                         $response_message['response'] = 'warning';
                         $response_message['message'] = translate('This coupon is not applicable to your cart products!');
                     }
-                    
+
                 } else {
                     $response_message['response'] = 'warning';
                     $response_message['message'] = translate('You already used this coupon!');
@@ -323,7 +353,7 @@ class CheckoutController extends Controller
 
         //Session::forget('club_point');
         //Session::forget('combined_order_id');
-        
+
         foreach($combined_order->orders as $order){
             NotificationUtility::sendOrderPlacedNotification($order);
         }

@@ -13,6 +13,12 @@
                             </div>
                         </div>
                         <div class="col done">
+                            <div class="text-center text-primary">
+                                <i class="la-3x mb-2 las la-search-location"></i>
+                                <h3 class="fs-14 fw-600 d-none d-lg-block ">Nearby sellers</h3>
+                            </div>
+                        </div>
+                        <div class="col done">
                             <div class="text-center text-success">
                                 <i class="la-3x mb-2 las la-map"></i>
                                 <h3 class="fs-14 fw-600 d-none d-lg-block">{{ translate('2. Shipping info')}}</h3>

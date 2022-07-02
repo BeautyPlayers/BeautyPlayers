@@ -180,6 +180,25 @@
                 </table>
             </div>
         </div>
+        
+        @php($booking = \App\Models\Booking::where('order_id', $order->id)->first())
+        @if($booking)
+        <div class="clearfix float-left">
+            <table class="table">
+                <tbody>
+                    <tr>
+                        <td>
+                            <strong class="text-muted">Seller :</strong>
+                        </td>
+                        <td>
+                            {{ optional(\App\Models\Shop::find($booking->shop_id)->user)->name }}
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        @endif
+        
         <div class="clearfix float-right">
             <table class="table">
                 <tbody>

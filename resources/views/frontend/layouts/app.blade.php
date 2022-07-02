@@ -57,7 +57,7 @@
     @endif
     <link rel="stylesheet" href="{{ static_asset('assets/css/aiz-core.css') }}">
     <link rel="stylesheet" href="{{ static_asset('assets/css/custom-style.css') }}">
-    
+    @stack('style')
 
   
     <script>
@@ -546,12 +546,10 @@
                     data: $('#option-choice-form').serializeArray(),
                     success: function(data){
 
-                       //$('#addToCart-modal-body').html(null);
+                       $('#addToCart-modal-body').html(null);
                        $('.c-preloader').hide();
-                       //$('#modal-size').removeClass('modal-lg');
-                       //$('#addToCart-modal-body').html(data.modal_view);
-                       $('#addToCart-modal-body button.add-to-cart span').text('Added to cart').removeAttr('onclick');
-                       $('#addToCart-modal-body button.add-to-cart').removeAttr('onclick');
+                       $('#modal-size').removeClass('modal-lg');
+                       $('#addToCart-modal-body').html(data.modal_view);
                        AIZ.extra.plusMinus();
                        AIZ.plugins.slickCarousel();
                        updateNavCart(data.nav_cart_view,data.cart_count);
@@ -598,9 +596,7 @@
 
     @yield('script')
 
-    @php
-        echo get_setting('footer_script');
-    @endphp
+    
 
 </body>
 </html>

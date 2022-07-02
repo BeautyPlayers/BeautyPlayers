@@ -22,6 +22,12 @@
                         <span class="aiz-side-nav-text">{{translate('Dashboard')}}</span>
                     </a>
                 </li>
+                <li class="aiz-side-nav-item">
+                    <a href="{{route('appointments.index')}}" class="aiz-side-nav-link">
+                        <i class="las la-home aiz-side-nav-icon"></i>
+                        <span class="aiz-side-nav-text">{{translate('Appointments')}}</span>
+                    </a>
+                </li>
 
                 <!-- POS Addon-->
                 @if (addon_is_activated('pos_system'))
@@ -424,6 +430,11 @@
                                     <span class="aiz-side-nav-text">{{ translate('Seller Verification Form') }}</span>
                                 </a>
                             </li>
+                            <!--<li class="aiz-side-nav-item">-->
+                            <!--    <a href="{{ route('seller.bookings') }}" class="aiz-side-nav-link">-->
+                            <!--        <span class="aiz-side-nav-text">Seller Bookings</span>-->
+                            <!--    </a>-->
+                            <!--</li>-->
                         </ul>
                     </li>
                 @endif
@@ -483,7 +494,7 @@
                         </ul>
                     </li>
                 @endif
-                
+
                 <!--Blog System-->
                 @if(Auth::user()->user_type == 'admin' || in_array('23', json_decode(Auth::user()->staff->role->permissions)))
                     <li class="aiz-side-nav-item">

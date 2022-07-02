@@ -140,5 +140,10 @@ Route::group(['prefix' => 'seller', 'middleware' => ['seller', 'verified', 'user
 
     // Notifications
     Route::get('all-notification', [NotificationController::class, 'index'])->name('all-notification');
+    
+    //Appointments
+    Route::resource('appointments', \App\Http\Controllers\Seller\AppointmentController::class);
+    Route::get('bookings.status/{id}', [\App\Http\Controllers\Seller\AppointmentController::class, 'seller_booking_status'])->name('bookings.status');
+
 });
 

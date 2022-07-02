@@ -508,6 +508,7 @@ class CartController extends Controller
         }
     }
 
+
     //removes from Cart
     public function removeFromCart(Request $request)
     {

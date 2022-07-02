@@ -3,6 +3,7 @@
 use App\Http\Controllers\AddonController;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\AizUploadController;
+use App\Http\Controllers\AppointmentController;
 use App\Http\Controllers\AttributeController;
 use App\Http\Controllers\BlogCategoryController;
 use App\Http\Controllers\BlogController;
@@ -138,9 +139,12 @@ Route::group(['prefix' => 'admin', 'middleware' => ['auth', 'admin']], function(
     });
 
     // Seller
+    Route::resource('appointments', AppointmentController::class);
     Route::resource('sellers', SellerController::class);
     Route::controller(SellerController::class)->group(function () {
         Route::get('sellers_ban/{id}', 'ban')->name('sellers.ban');
+        Route::get('/seller/bookings', 'seller_booking')->name('seller.bookings');
+        Route::get('/seller/booking-status/{id}', 'seller_booking_status')->name('seller.bookings.status');
         Route::get('/sellers/destroy/{id}', 'destroy')->name('sellers.destroy');
         Route::post('/bulk-seller-delete', 'bulk_seller_delete')->name('bulk-seller-delete');
         Route::get('/sellers/view/{id}/verification', 'show_verification_request')->name('sellers.show_verification_request');
@@ -446,7 +450,7 @@ Route::group(['prefix' => 'admin', 'middleware' => ['auth', 'admin']], function(
 
     // States
     Route::resource('states', StateController::class);
-    Route::post('/states/status', [StateController::class, 'updateStatus'])->name('states.status');
+	Route::post('/states/status', [StateController::class, 'updateStatus'])->name('states.status');
 
     Route::resource('cities', CityController::class);
     Route::controller(CityController::class)->group(function () {

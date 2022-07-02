@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Booking;
 use Illuminate\Http\Request;
 use App\Models\Seller;
 use App\Models\User;
@@ -269,4 +270,46 @@ class SellerController extends Controller
         $shop->user->save();
         return back();
     }
+
+    public function seller_booking(Request $request)
+{
+    $sort_search = null;
+    $approved = null;
+
+    $shops = Shop::select('shops.*', \DB::raw('bookings.date_and_time as booking_time, bookings.shop_id as shop_id, bookings.status as booking_status, bookings.id as booking_id'))
+        ->leftJoin('bookings', function ($join) {
+            $join->on('shops.id', '=', 'bookings.shop_id');
+        })->whereNotNull('bookings.shop_id')
+        ->latest();
+
+
+    if ($request->has('search')) {
+        $sort_search = $request->search;
+        $user_ids = User::where('user_type', 'seller')->where(function ($user) use ($sort_search) {
+            $user->where('name', 'like', '%' . $sort_search . '%')->orWhere('email', 'like', '%' . $sort_search . '%');
+        })->pluck('id')->toArray();
+
+        $shops = $shops->where(function ($shops) use ($user_ids) {
+            $shops->whereIn('shops.user_id', $user_ids);
+        });
+    }
+    if ($request->approved_status != null) {
+        $approved = $request->approved_status;
+        $shops = $shops->where('verification_status', $approved);
+    }
+
+    $shops = $shops->paginate(15);
+    return view('backend.sellers.booking.index', compact('shops', 'sort_search', 'approved'));
+}
+
+public function seller_booking_status($id)
+    {
+        Booking::find($id)->update([
+            'status' => request('status')
+        ]);
+
+        flash('Your Booking Status updated!')->success();
+        return back();
+    }
+
 }

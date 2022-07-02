@@ -15,6 +15,12 @@
                     </div>
                     <div class="col">
                         <div class="text-center">
+                            <i class="la-3x mb-2 opacity-50 las la-search-location"></i>
+                            <h3 class="fs-14 fw-600 d-none d-lg-block opacity-50">Nearby sellers</h3>
+                        </div>
+                    </div>
+                    <div class="col">
+                        <div class="text-center">
                             <i class="la-3x mb-2 opacity-50 las la-map"></i>
                             <h3 class="fs-14 fw-600 d-none d-lg-block opacity-50">{{ translate('2. Shipping info')}}</h3>
                         </div>
@@ -137,8 +143,8 @@
                             </div>
                             <div class="col-md-6 text-center text-md-right">
                                 @if(Auth::check())
-                                    <a href="{{ route('checkout.shipping_info') }}" class="btn btn-primary fw-600">
-                                        {{ translate('Continue to Shipping')}}
+                                    <a href="{{ route('checkout.nearby_sellers') }}" class="btn btn-primary fw-600">
+                                        {{ translate('Continue to Nearby Sellers ')}}
                                     </a>
                                 @else
                                     <button class="btn btn-primary fw-600" onclick="showCheckoutModal()">{{ translate('Continue to Shipping')}}</button>
@@ -262,7 +268,6 @@
                                     </a>
                                 </li>
                             @endif
-                                            
                                 <li class="list-inline-item">
                                     <a onclick="show_whatsapp_modal()" style="background-color: #25D366; cursor: pointer">
                                         <i class="lab la-whatsapp"></i>
@@ -274,7 +279,7 @@
             </div>
         </div>
     </div>
-<div class="modal fade" id="whatsapp_login_modal">
+    <div class="modal fade" id="whatsapp_login_modal">
   <div class="modal-dialog modal-dialog-centered">
     <div class="modal-content">
     <div class="modal-header">
@@ -290,7 +295,6 @@
             <div id="otp_box">
                 <input type="text" id="otp_code" placeholder="Enter the OTP you received on whatsapp." class="form-control"> 
             </div>
-
     </div>
     <div class="modal-footer">
       <button type="button" class="btn btn-light" data-dismiss="modal">{{translate('Cancel')}}</button>
@@ -309,7 +313,6 @@
         $(function(){
             $('#otp_box').hide();
             $('#whatsapp_otp_submit').hide();
-
             $('#whatsapp_login').on('click', function(){
                 country_code = $('input[name=country_code_whatsapp]').val();
                 phone_number = $('#phone-code-whatsapp').val();
@@ -346,14 +349,12 @@
         var isPhoneShown = true,
             countryData = window.intlTelInputGlobals.getCountryData(),
             input = document.querySelector("#phone-code-whatsapp");
-
         for (var i = 0; i < countryData.length; i++) {
             var country = countryData[i];
             if(country.iso2 == 'bd'){
                 country.dialCode = '88';
             }
         }
-
         var iti = intlTelInput(input, {
             separateDialCode: true,
             utilsScript: "{{ static_asset('assets/js/intlTelutils.js') }}?1590403638580",
@@ -365,16 +366,12 @@
                 return selectedCountryPlaceholder;
             }
         });
-
         var country = iti.getSelectedCountryData();
         $('input[name=country_code]').val(country.dialCode);
-
         input.addEventListener("countrychange", function(e) {
             // var currentMask = e.currentTarget.placeholder;
-
             var country = iti.getSelectedCountryData();
             $('input[name=country_code_whatsapp]').val(country.dialCode);
-
         });
     </script>
     <script type="text/javascript">
@@ -393,7 +390,7 @@
                 $('#cart-summary').html(data.cart_view);
             });
         }
-        
+
         function showCheckoutModal(){
             $('#login-modal').modal();
         }

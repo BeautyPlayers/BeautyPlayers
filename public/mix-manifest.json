@@ -1,5 +1,6 @@
 {
     "/js/app.js": "/js/app.js",
     "/css/app.css": "/css/app.css",
-    "/css/frontend/nearby_sellers.css": "/css/frontend/nearby_sellers.css"
+    "/css/frontend/nearby_sellers.css": "/css/frontend/nearby_sellers.css",
+    "/css/frontend/nav_new.css": "/css/frontend/nav_new.css"
 }

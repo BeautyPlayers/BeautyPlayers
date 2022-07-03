@@ -14463,7 +14463,8 @@ module.exports = Cancel;
 
 __webpack_require__(12);
 __webpack_require__(43);
-module.exports = __webpack_require__(44);
+__webpack_require__(44);
+module.exports = __webpack_require__(45);
 
 
 /***/ }),
@@ -49064,7 +49065,7 @@ var staticRenderFns = [
             _vm._v(" "),
             _c("div", { staticClass: "card-body" }, [
               _vm._v(
-                "\r\n                        I'm an example component.\r\n                    "
+                "\n                        I'm an example component.\n                    "
               )
             ])
           ])
@@ -49090,6 +49091,12 @@ if (false) {
 
 /***/ }),
 /* 44 */
+/***/ (function(module, exports) {
+
+// removed by extract-text-webpack-plugin
+
+/***/ }),
+/* 45 */
 /***/ (function(module, exports) {
 
 // removed by extract-text-webpack-plugin

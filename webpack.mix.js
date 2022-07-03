@@ -15,3 +15,5 @@ mix.js('resources/js/app.js', 'public/js')
    .sass('resources/sass/app.scss', 'public/css');
    
 mix.sass('resources/sass/frontend/nearby_sellers.scss', 'public/css/frontend');
+
+mix.sass('resources/sass/frontend/nav_new.scss', 'public/css/frontend');

@@ -208,9 +208,10 @@ if it's not present, don't show loader */
 	width: 100%;
 	height: 100%;
 	z-index: 9999;
-	background: url({{ static_asset('assets/img/preloader_1.gif') }}) center no-repeat #fff;
+	background: url("{{ static_asset('assets/img/preloader_1.gif') }}") center no-repeat #fff;
 }
 </style>
+<link rel="stylesheet" href="{{ static_asset('css/frontend/nav_new.css') }}">
 </head>
 <body>
     <div class="se-pre-con"> </div>
@@ -218,7 +219,7 @@ if it's not present, don't show loader */
     <div class="aiz-main-wrapper d-flex flex-column">
 
         <!-- Header -->
-        @include('frontend.inc.nav')
+        @include('frontend.inc.nav_new')
 
         @yield('content')
 
@@ -391,6 +392,9 @@ if it's not present, don't show loader */
 
         function search(){
             var searchKey = $('#search').val();
+            if(searchKey === '' ){
+                $('#search-content').html(null);
+            }
             if(searchKey.length > 0){
                 $('body').addClass("typed-search-box-shown");
 

@@ -72,6 +72,17 @@
                         </div>
                     </div>
                 @endif
+                
+                <div class="form-group row" id="category">
+                    <label class="col-md-2 col-form-label">{{ translate('Seller Level') }}</label>
+                    <div class="col-md-10">
+                        <select class="form-control aiz-selectpicker111" name="seller_level_id" id="seller_level_id">
+                            @foreach ($seller_levels as $seller_level)
+                                <option value="{{ $seller_level->id }}" <?= $shop->seller_level_id == $seller_level->id ? 'selected' : '' ?>>{{ $seller_level->name }}</option>
+                            @endforeach
+                        </select>
+                    </div>
+                </div>
                 <div class="row">
                     <label class="col-md-2 col-form-label">{{ translate('Meta Title') }}<span class="text-danger text-danger">*</span></label>
                     <div class="col-md-10">

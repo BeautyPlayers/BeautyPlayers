@@ -1,5 +1,7 @@
 {
     "/js/app.js": "/js/app.js",
     "/css/app.css": "/css/app.css",
-    "/css/frontend/nearby_sellers.css": "/css/frontend/nearby_sellers.css"
+    "/css/themes/doccure/style.css": "/css/themes/doccure/style.css",
+    "/css/frontend/nearby_sellers.css": "/css/frontend/nearby_sellers.css",
+    "/css/frontend/customer_register.css": "/css/frontend/customer_register.css"
 }

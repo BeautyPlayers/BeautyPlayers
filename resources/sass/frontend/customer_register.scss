@@ -1,0 +1,12 @@
+@import '../themes/doccure/style.scss';
+
+.form-focus .focus-label-phone{
+    left: 86px;
+}
+
+.form-focus:focus .iti .form-control:focus + .focus-label-phone, 
+.form-focus:focus .iti .form-control:-webkit-autofill + .focus-label-phone {
+    font-size: 12px !important;
+    top: -20 !important;
+    left: 85px !important;
+}

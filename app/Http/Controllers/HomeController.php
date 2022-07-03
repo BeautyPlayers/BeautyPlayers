@@ -82,7 +82,7 @@ class HomeController extends Controller
 
             }
         }
-        return view('frontend.user_registration');
+        return view('frontend.user_registration_new');
     }
 
     public function cart_login(Request $request)

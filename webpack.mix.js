@@ -14,4 +14,8 @@ const mix = require('laravel-mix');
 mix.js('resources/js/app.js', 'public/js')
    .sass('resources/sass/app.scss', 'public/css');
    
+mix.sass('resources/sass/themes/doccure/style.scss', 'public/css/themes/doccure');
+
 mix.sass('resources/sass/frontend/nearby_sellers.scss', 'public/css/frontend');
+
+mix.sass('resources/sass/frontend/customer_register.scss', 'public/css/frontend');

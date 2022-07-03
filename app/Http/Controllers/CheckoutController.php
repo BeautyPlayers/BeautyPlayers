@@ -94,7 +94,7 @@ class CheckoutController extends Controller
 
     public function get_nearby_sellers(Request $request)
     {
-    //    $ip = "119.63.138.116";
+//        $ip = "119.63.138.116";
         $ip = $request->ip();
         
         $currentUserInfo = Location::get($ip);

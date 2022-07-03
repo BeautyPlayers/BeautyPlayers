@@ -522,7 +522,6 @@ class HomeController extends Controller
        // abort(404);
     }
 
-
     public function seller_services($slug)
     {
         $shop  = Shop::where('slug', $slug)->first();

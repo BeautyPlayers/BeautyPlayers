@@ -49,7 +49,6 @@
 
     <!-- Google Fonts -->
     <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,600,600i,700,700i,800,800i&display=swap" rel="stylesheet">
-
     <!-- CSS Files -->
     <link rel="stylesheet" href="{{ static_asset('assets/css/vendors.css') }}">
     @if(\App\Models\Language::where('code', Session::get('locale', Config::get('app.locale')))->first()->rtl == 1)
@@ -58,6 +57,7 @@
     <link rel="stylesheet" href="{{ static_asset('assets/css/aiz-core.css') }}">
     <link rel="stylesheet" href="{{ static_asset('assets/css/custom-style.css') }}">
     @stack('style')
+    @yield('header-styles')
 
   
     <script>
@@ -195,8 +195,25 @@
     echo get_setting('header_script');
 @endphp
 
+<style>
+/* Paste this css to your style sheet file or under head tag */
+/* This only works with JavaScript, 
+if it's not present, don't show loader */
+.no-js #loader { display: none;  }
+.js #loader { display: block; position: absolute; left: 100px; top: 0; }
+.se-pre-con {
+	position: fixed;
+	left: 0px;
+	top: 0px;
+	width: 100%;
+	height: 100%;
+	z-index: 9999;
+	background: url({{ static_asset('assets/img/preloader_1.gif') }}) center no-repeat #fff;
+}
+</style>
 </head>
 <body>
+    <div class="se-pre-con"> </div>
     <!-- aiz-main-wrapper -->
     <div class="aiz-main-wrapper d-flex flex-column">
 
@@ -272,6 +289,19 @@
     </div>
 
     @yield('modal')
+
+    /* For showing/hiding page loading animation - start*/
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.4/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/modernizr/2.8.3/modernizr.js"></script>
+    <script>
+    //paste this code under the head tag or in a separate js file.
+        // Wait for window load
+        $(window).load(function() {
+            // Animate loader off screen
+            $(".se-pre-con").fadeOut("slow");;
+        });
+    </script>
+    /* For showing/hiding page loading animation - end*/
 
     <!-- SCRIPTS -->
     <script src="{{ static_asset('assets/js/vendors.js') }}"></script>
@@ -595,6 +625,7 @@
     </script>
 
     @yield('script')
+    @yield('footer-scripts')
 
     
 

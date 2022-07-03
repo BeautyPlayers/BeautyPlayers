@@ -290,18 +290,20 @@ if it's not present, don't show loader */
 
     @yield('modal')
 
-    /* For showing/hiding page loading animation - start*/
+    
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.4/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/modernizr/2.8.3/modernizr.js"></script>
     <script>
+    /* For showing/hiding page loading animation - start*/
     //paste this code under the head tag or in a separate js file.
         // Wait for window load
         $(window).load(function() {
             // Animate loader off screen
             $(".se-pre-con").fadeOut("slow");;
         });
+        /* For showing/hiding page loading animation - end*/
     </script>
-    /* For showing/hiding page loading animation - end*/
+    
 
     <!-- SCRIPTS -->
     <script src="{{ static_asset('assets/js/vendors.js') }}"></script>

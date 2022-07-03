@@ -6,6 +6,7 @@ use App\Models\BusinessSetting;
 use Illuminate\Http\Request;
 use App\Models\Shop;
 use App\Models\SellerLevel;
+use App\Models\SellerTag;
 use Auth;
 
 class ShopController extends Controller
@@ -14,7 +15,8 @@ class ShopController extends Controller
     {
         $shop = Auth::user()->shop;
         $seller_levels = SellerLevel::where('status',1)->get();
-        return view('seller.shop', compact('shop','seller_levels'));
+        $seller_tags = SellerTag::where('status',1)->get();
+        return view('seller.shop', compact('shop','seller_levels','seller_tags'));
     }
 
     public function update(Request $request)
@@ -32,6 +34,7 @@ class ShopController extends Controller
             $shop->slug             = preg_replace('/\s+/', '-', $request->name) . '-' . $shop->id;
             $shop->meta_title       = $request->meta_title;
             $shop->seller_level_id  = $request->seller_level_id;
+            $shop->seller_tag_id  = $request->seller_tag_id;
             $shop->meta_description = $request->meta_description;
             $shop->logo             = $request->logo;
         }

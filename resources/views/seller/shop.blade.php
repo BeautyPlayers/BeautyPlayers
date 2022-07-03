@@ -73,13 +73,28 @@
                     </div>
                 @endif
                 
-                <div class="form-group row" id="category">
+                <div class="form-group row" id="seller_level">
                     <label class="col-md-2 col-form-label">{{ translate('Seller Level') }}</label>
                     <div class="col-md-10">
                         <select class="form-control aiz-selectpicker111" name="seller_level_id" id="seller_level_id">
+                            @if(isset($seller_levels) && count($seller_levels))
                             @foreach ($seller_levels as $seller_level)
-                                <option value="{{ $seller_level->id }}" <?= $shop->seller_level_id == $seller_level->id ? 'selected' : '' ?>>{{ $seller_level->name }}</option>
+                                <option value="{{ $seller_level->id }}" <?= $shop->seller_level_id == $seller_level->id ? 'selected' : '' ?>>₹{{ $seller_level->commission }}/min</option>
                             @endforeach
+                            @endif
+                        </select>
+                    </div>
+                </div>
+                
+                <div class="form-group row" id="seller_tag">
+                    <label class="col-md-2 col-form-label">{{ translate('Seller Tag') }}</label>
+                    <div class="col-md-10">
+                        <select class="form-control aiz-selectpicker111" name="seller_tag_id" id="seller_tag_id">
+                            @if(isset($seller_tags) && count($seller_tags))
+                            @foreach ($seller_tags as $seller_tag)
+                                <option value="{{ $seller_tag->id }}" <?= $shop->seller_tag_id == $seller_tag->id ? 'selected' : '' ?>>{{ $seller_tag->name }}</option>
+                            @endforeach
+                            @endif
                         </select>
                     </div>
                 </div>

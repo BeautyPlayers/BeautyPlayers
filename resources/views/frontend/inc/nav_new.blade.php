@@ -26,7 +26,7 @@
                                 // var last_option = $('.select_location option:last').val();
                                 // console.log(last_option)
                                 $('.location-form input').val(complete_address);
-                                $('.select_location').val(last_option);
+                                // $('.select_location').val(last_option);
                             }
                         );
                     },
@@ -66,6 +66,38 @@
         let detect = {value:"detect"};
     detect_current_location(detect)
 })
+
+function loadLoginPage()
+{
+    document.location = "{{ route('user.login') }}";
+}
+function loadAffiliateRequestPage()
+{
+    document.location = "{{ route('affiliate.apply') }}";
+}
+@if(Auth::check())
+$(document).ready(function(){
+    $("#cb-affiliate-mode").change(function () {
+    var value = 0;
+    if($(this).is(":checked"))
+        value = 1;
+
+        $.ajax({
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            },
+            type: "post",
+            url: "{{route('user.affiliate_user.approved')}}",
+            async: true,
+            data: {
+                status: value, id: '{{Auth::user()->id}}'
+            },
+            success: function (msg) {
+            }
+        });
+    });
+});
+@endif
 </script>
 
 <nav class="navbar navbar-expand-lg navbar-light bg-light"
@@ -85,14 +117,36 @@
         </button>
 
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            @if(Auth::check())
+                @if(Auth::user()->affiliate_user)
+                <span class="mx-2 toggler-button">
+                    <label class="font-weight-bold text-dark">Book</label>
+                    <label class="switch">
+                        <input type="checkbox" id="cb-affiliate-mode" {{ Auth::user()->affiliate_user->status ? 'checked' : ''}}>
+                        <span class="slider-switch round"></span>
+                    </label>
+                    <label class="font-weight-bold text-dark">Reseller</label>
+                </span>
+                @else
+                <span class="mx-2 toggler-button">
+                    <label class="font-weight-bold text-dark">Book</label>
+                    <label class="switch">
+                        <input type="checkbox" onclick="loadAffiliateRequestPage()">
+                        <span class="slider-switch round"></span>
+                    </label>
+                    <label class="font-weight-bold text-dark">Reseller</label>
+                </span>
+                @endif
+            @else
             <span class="mx-2 toggler-button">
                 <label class="font-weight-bold text-dark">Book</label>
                 <label class="switch">
-                    <input type="checkbox">
+                    <input type="checkbox" onclick="loadLoginPage()">
                     <span class="slider-switch round"></span>
                 </label>
                 <label class="font-weight-bold text-dark">Reseller</label>
             </span>
+            @endif
             <form class="form-inline my-2 my-lg-0 m-auto location-form">
                 <input class="form-control mr-sm-2 location-bar px-4" type="text"
                     placeholder="Tap on it to pick you location..." aria-label="Search">

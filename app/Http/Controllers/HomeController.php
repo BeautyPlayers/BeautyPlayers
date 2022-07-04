@@ -22,6 +22,7 @@ use Cookie;
 use Illuminate\Support\Str;
 use App\Mail\SecondEmailVerifyMailManager;
 use App\Models\AffiliateConfig;
+use App\Models\AffiliateUser;
 use App\Models\Page;
 use Mail;
 use Illuminate\Auth\Events\PasswordReset;
@@ -895,5 +896,20 @@ class HomeController extends Controller
             ->get();
 
         return view('frontend.all_nearby_sellers', compact('nearby_sellers'));
+    }
+
+    public function userUpdateApproved(Request $request)
+    {
+        if(Auth::user()->id == $request->id){
+            $affiliate_user = AffiliateUser::where('user_id',(int)$request->id)->first();
+            $affiliate_user->status = $request->status;
+            if($affiliate_user->save()){
+                return 1;
+            }
+            return 0;
+        } else {
+            
+            return 0;
+        }
     }
 }

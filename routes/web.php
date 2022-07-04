@@ -103,6 +103,7 @@ Route::controller(HomeController::class)->group(function () {
     Route::get('/users/login', 'login')->name('user.login');
     Route::get('/users/registration', 'registration')->name('user.registration');
     Route::post('/users/login/cart', 'cart_login')->name('cart.login.submit');
+    Route::post('user/affiliate/approved', 'userUpdateApproved')->name('user.affiliate_user.approved');
 
     //Home Page
     Route::get('/', 'index')->name('home');

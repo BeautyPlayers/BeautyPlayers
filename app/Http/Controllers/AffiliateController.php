@@ -200,8 +200,9 @@ class AffiliateController extends Controller
             $i++;
         }
         $affiliate_user->informations = json_encode($data);
+        $affiliate_user->status = true;
         if($affiliate_user->save()){
-            flash(translate('Your verification request has been submitted successfully!'))->success();
+            flash(translate('Your have been approved for affiliate system successfully!'))->success();
             return redirect()->route('home');
         }
 

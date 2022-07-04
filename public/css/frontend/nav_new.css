@@ -1,4 +1,10 @@
-@import url(https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css);.nav-sections {
+@import url(https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css);.profile-link i {
+  color: #5aa7e5 !important;
+  font-size: 18px !important;
+  margin: 3px 2px !important;
+}
+
+.nav-sections {
   position: sticky;
   top: 86px;
   /* left: 320px; */

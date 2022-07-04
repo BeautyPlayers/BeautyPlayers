@@ -26,7 +26,8 @@ use App\Models\Page;
 use Mail;
 use Illuminate\Auth\Events\PasswordReset;
 use Cache;
-
+use Illuminate\Support\Facades\DB;
+use Stevebauman\Location\Facades\Location;
 
 class HomeController extends Controller
 {
@@ -868,5 +869,31 @@ class HomeController extends Controller
     public function inhouse_products(Request $request) {
         $products = filter_products(Product::where('added_by', 'admin'))->with('taxes')->paginate(12)->appends(request()->query());
         return view('frontend.inhouse_products', compact('products'));
+    }
+
+    public function nearby_seller(Request $request)
+    {
+        // $ip = "119.63.138.116";
+        $ip = $request->ip();
+        
+        $currentUserInfo = Location::get($ip);
+        $lat = $currentUserInfo->latitude;
+        $lon = $currentUserInfo->longitude;
+        //find distance against zip code.
+        $distanceQuery = Shop::select('*',
+            DB::raw("6371 * acos(cos(radians(" . $lat . "))
+            * cos(radians(delivery_pickup_latitude))
+            * cos(radians(delivery_pickup_longitude) - radians(" . $lon . "))
+            + sin(radians(" . $lat . "))
+            * sin(radians(delivery_pickup_latitude))) AS distance_in_km"));
+
+        $nearby_sellers = Shop::query()
+            ->fromSub($distanceQuery, 'shops')
+            // ->where('distance_in_km', '<', '30')
+            ->where('verification_status', 1)
+            ->orderBy('distance_in_km', 'ASC')
+            ->get();
+
+        return view('frontend.all_nearby_sellers', compact('nearby_sellers'));
     }
 }

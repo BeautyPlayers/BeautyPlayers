@@ -23,9 +23,9 @@
                                 var option = "<option value='"+complete_address+"'>"+complete_address+"</option>";
                                 console.log(option)
                                 $('.select_location').append(option);
-                                var last_option = $('.select_location option:last').val();
-                                console.log(last_option)
-                                $('.location-form input').val(last_option);
+                                // var last_option = $('.select_location option:last').val();
+                                // console.log(last_option)
+                                $('.location-form input').val(complete_address);
                                 $('.select_location').val(last_option);
                             }
                         );
@@ -99,7 +99,7 @@
             </form>
             <ul class="navbar-nav">
                 <li class="nav-item {{ Route::current()->getName() == 'services' ? 'pt-3' : 'px-1' }}">
-                    <a class="nav-link text-dark" href="https://template.doccure.io/html/template/search.html">
+                    <a class="nav-link text-dark" href="{{route('nearby.sellers')}}">
                         <img src="{{static_asset('assets/img/nearby.png')}}" alt="Beauty Players">
                         Nearby Experts
                     </a>
@@ -110,12 +110,21 @@
                         Coupons
                     </a>
                 </li>
+                @if(Auth::check())
+                <li class="nav-item px-1">
+                    <a class="nav-link profile-link text-dark" href="{{ route('dashboard') }}">
+                        <i class="fa-solid fa-user"></i>
+                        My Profile
+                    </a>
+                </li>
+                @else
                 <li class="nav-item px-1">
                     <a class="nav-link text-dark" href="{{ route('user.login') }}">
                         <img src="{{static_asset('assets/img/signin.png')}}" alt="">
                         Login
                     </a>
                 </li>
+                @endif
                 <li class="nav-item px-1" id="cart_items">
                     {{-- <a class="nav-link text-dark" href="#">
                         <img src="{{static_asset('assets/img/cart.png')}}" alt="">

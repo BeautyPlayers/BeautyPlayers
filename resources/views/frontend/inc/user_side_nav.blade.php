@@ -236,6 +236,12 @@
                         <span class="aiz-side-nav-text">{{translate('Manage Profile')}}</span>
                     </a>
                 </li>
+                <li class="aiz-side-nav-item">
+                    <a href="{{ route('logout') }}" class="aiz-side-nav-link">
+                        <i class="fa-solid fa-arrow-right-from-bracket la-user aiz-side-nav-icon"></i>
+                        <span class="aiz-side-nav-text">{{translate('Logout')}}</span>
+                    </a>
+                </li>
             </ul>
         </div>
 

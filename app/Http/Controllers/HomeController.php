@@ -543,7 +543,7 @@ class HomeController extends Controller
                 $dataCatIds = [];
                 
                 $categories = [];
-                $catIds = Product::where('auction_product', 0)->where('approved', 1)->where('user_id',$shop->user_id)->groupBy('category_id')->pluck('category_id')->toArray();
+                $catIds = Product::where('auction_product', 0)->where('user_id',$shop->user_id)->groupBy('category_id')->pluck('category_id')->toArray();
                 
                 
                 /*=================*/
@@ -562,9 +562,9 @@ class HomeController extends Controller
                         $subCategories = Category::with('categories')->whereIn('id',$catIds)->where('parent_id',$v->id)->get();
                         $getParentCategory[$k]['childrenCategories'] = $subCategories;
 
-                        $resproducts = Product::with('brand','user','category')->where('auction_product', 0)->where('approved', 1)->where('user_id',$shop->user_id)->where('category_id', $v->id)->orderBy('id', 'desc')->get();
+                        $resproducts = Product::with('brand','user','category')->where('auction_product', 0)->where('user_id',$shop->user_id)->where('category_id', $v->id)->orderBy('id', 'desc')->get();
                         $subCategoryIds = Category::with('categories')->whereIn('id',$catIds)->where('parent_id',$v->id)->pluck('id')->toArray();
-                        $resSubCatproducts = Product::with('brand','user','category')->where('auction_product', 0)->where('approved', 1)->where('user_id',$shop->user_id)->whereIn('category_id', $subCategoryIds)->orderBy('id', 'desc')->get();
+                        $resSubCatproducts = Product::with('brand','user','category')->where('auction_product', 0)->where('user_id',$shop->user_id)->whereIn('category_id', $subCategoryIds)->orderBy('id', 'desc')->get();
                         if(count($resSubCatproducts)){
                             $resproducts = $resproducts->merge($resSubCatproducts);
                         }
@@ -611,7 +611,7 @@ class HomeController extends Controller
                 /*=================*/
                 $todays_deal_products = Cache::rememberForever('todays_deal_products', function () use ($shop) {
 
-                    return filter_products(Product::with('brand', 'user', 'category')->where('published', 1)->where('user_id',$shop->user_id)->where('todays_deal', '1'))->get();
+                    return filter_products(Product::with('brand', 'user', 'category')->where('user_id',$shop->user_id)->where('todays_deal', '1'))->get();
 
                 });
                 /*=================*/

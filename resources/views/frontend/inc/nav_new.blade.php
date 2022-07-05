@@ -93,6 +93,7 @@ $(document).ready(function(){
                 status: value, id: '{{Auth::user()->id}}'
             },
             success: function (msg) {
+                location.reload();
             }
         });
     });

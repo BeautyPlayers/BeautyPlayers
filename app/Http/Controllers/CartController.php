@@ -40,7 +40,7 @@ class CartController extends Controller
     public function showCartModal(Request $request)
     {
         $product = Product::with('brand','user','category')->find($request->id);
-        return view('frontend.partials.addToCart', compact('product'));
+        return view('frontend.partials.addToCartNew', compact('product'));
     }
 
     public function showCartModalAuction(Request $request)

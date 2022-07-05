@@ -1,0 +1,132 @@
+@import url(https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css");@import url(https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css);@import url(https://unpkg.com/swiper/swiper-bundle.min.css);.modal-open .modal {
+  overflow-y: auto !important;
+}
+
+.modal-container {
+  width: 100%;
+  margin-right: auto;
+  margin-left: auto;
+  padding: 0 20px;
+}
+
+.faq-card-header p.title {
+  padding: 20px 25px;
+  margin: 0;
+}
+
+.btn-book-now {
+  background-color: #ab2e61 !important;
+  border: #ab2e61;
+}
+
+.btn-book-now:hover {
+  background-color: #992957;
+}
+
+.add-to-cart-modal {
+  background-color: white;
+}
+
+.add-to-cart-modal .two-str {
+  color: rgba(0, 0, 0, 0.858);
+  display: table;
+  margin-bottom: 5px;
+  width: 20%;
+}
+
+.add-to-cart-modal .swiper {
+  width: auto;
+  max-width: 65rem;
+  height: 100%;
+}
+
+.add-to-cart-modal .swiper-slide {
+  text-align: center;
+  font-size: 18px;
+  background: #fff;
+  /* Center slide text vertically */
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: center;
+  -ms-flex-pack: center;
+  justify-content: center;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  align-items: center;
+}
+
+.add-to-cart-modal .swiper-slide img {
+  display: block;
+  -o-object-fit: cover;
+     object-fit: cover;
+}
+
+.add-to-cart-modal .swiper-button-prev {
+  color: #000;
+}
+
+.add-to-cart-modal .swiper-button-next {
+  color: #000;
+}
+
+.add-to-cart-modal .img-header {
+  height: 220px !important;
+}
+
+@media only screen and (max-width: 1030px) {
+  .add-to-cart-modal .swiper {
+    width: auto;
+    max-width: 55rem;
+    height: 100%;
+  }
+
+  .add-to-cart-modal .img-header {
+    height: 180px !important;
+  }
+}
+
+@media only screen and (max-width: 770px) {
+  .add-to-cart-modal .swiper {
+    width: auto;
+    max-width: 40rem;
+    height: 100%;
+  }
+}
+
+@media only screen and (max-width: 430px) {
+  .add-to-cart-modal .swiper {
+    width: auto;
+    max-width: 22rem;
+    height: 100%;
+  }
+
+  .add-to-cart-modal .img-header {
+    height: 220px !important;
+  }
+}
+
+@media only screen and (max-width: 380px) {
+  .add-to-cart-modal .swiper {
+    width: auto;
+    max-width: 20rem;
+    height: 100%;
+  }
+
+  .add-to-cart-modal .img-header {
+    height: 190px !important;
+  }
+}
+
+@media only screen and (max-width: 330px) {
+  .add-to-cart-modal .swiper {
+    width: auto;
+    max-width: 16rem;
+    height: 100%;
+  }
+
+  .add-to-cart-modal .img-header {
+    height: 150px !important;
+  }
+}
+

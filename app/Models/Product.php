@@ -97,6 +97,6 @@ class Product extends Model
             $totalPoints += $review->rating;
         }
 
-        return (int)($totalPoints/count($this->reviews)); 
+        return count($this->reviews) ? (int)($totalPoints/count($this->reviews)) : 0; 
     }
 }

@@ -194,11 +194,14 @@
                     }
                 }
 
-                $excelent = (($excelent/$totalRatings) * 100);
-                $good = (($good/$totalRatings) * 100);
-                $average = (($average/$totalRatings) * 100);
-                $poor = (($poor/$totalRatings) * 100);
-                $worst = (($worst/$totalRatings) * 100);
+                if($totalRatings)
+                {
+                    $excelent = (($excelent/$totalRatings) * 100);
+                    $good = (($good/$totalRatings) * 100);
+                    $average = (($average/$totalRatings) * 100);
+                    $poor = (($poor/$totalRatings) * 100);
+                    $worst = (($worst/$totalRatings) * 100);
+                }
             @endphp
             <div class="row">
                 <h3 class="m-4" style="font-weight: 900;">Ratings and Reviews</h3>

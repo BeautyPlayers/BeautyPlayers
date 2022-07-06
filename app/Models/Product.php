@@ -89,4 +89,14 @@ class Product extends Model
     {
         return $query->where('digital', 0);
     }
+
+    public function averageRating()
+    {
+        $totalPoints = 0;
+        foreach($this->reviews as $review){
+            $totalPoints += $review->rating;
+        }
+
+        return (int)($totalPoints/count($this->reviews)); 
+    }
 }

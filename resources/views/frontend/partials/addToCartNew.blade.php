@@ -167,37 +167,92 @@
                     </div>
                 </div>
             </div>
+            @php
+                $totalRatings  =  count($product->reviews);
+                $excelent = 0;
+                $good = 0;
+                $average = 0;
+                $poor = 0;
+                $worst = 0;
+
+                foreach($product->reviews as $review)
+                {
+                    if($review->rating == 1){
+                        $worst++;
+                    }
+                    else if($review->rating == 2){
+                        $poor++;
+                    }
+                    else if($review->rating == 3){
+                        $average++;
+                    }
+                    else if($review->rating == 4){
+                        $good++;
+                    }
+                    else{
+                        $excelent++;
+                    }
+                }
+
+                $excelent = (($excelent/$totalRatings) * 100);
+                $good = (($good/$totalRatings) * 100);
+                $average = (($average/$totalRatings) * 100);
+                $poor = (($poor/$totalRatings) * 100);
+                $worst = (($worst/$totalRatings) * 100);
+            @endphp
             <div class="row">
                 <h3 class="m-4" style="font-weight: 900;">Ratings and Reviews</h3>
                 <div class="col-12">
                     <div class="row">
                         <span>
-                            <h3 class="mx-4" style="font-weight: 700;font-size: 3rem;">5</h3>
+                            <h3 class="mx-4" style="font-weight: 700;font-size: 3rem;">{{$product->averageRating()}}</h3>
                         </span>
                         <span>
                             <div class="row">
                                 <div class="col-12 mt-2">
-                                    <i class="fa-solid fa-star" style="color: green;"></i>
-                                    <i class="fa-solid fa-star" style="color: green;"></i>
-                                    <i class="fa-solid fa-star" style="color: green;"></i>
-                                    <i class="fa-solid fa-star" style="color: green;"></i>
-                                    <i class="fa-solid fa-star" style="color: green;"></i>
+                                    @for ($i=0; $i < $product->averageRating(); $i++)
+                                        <i class="fa-solid fa-star" style="color: #f7a616;"></i>
+                                    @endfor
+                                    @for ($i=0; $i < 5-$product->averageRating(); $i++)
+                                        <i class="fa-solid fa-star" style="color: #e2e2e2;"></i>
+                                    @endfor
                                 </div>
                                 <div class="col-12">
-                                    <h6>5 out of 5 stars</h6>
+                                    <h6>{{$product->averageRating()}} out of 5 stars</h6>
                                 </div>
                             </div>
                         </span>
                     </div>
                     <div class="row mb-3">
                         <div class="col-12">
+
+                            @if($excelent)
                             <div class="row w-100">
                                 <div class="col-md-2">Excellent</div>
                                 <div class="col-md-8">
-                                    <hr style="background-color: green;height:5px !important;">
+                                    <hr style="width:{{$excelent}}%;float:left;background-color:#f7a616;height:5px !important;">
                                 </div>
-                                <div class="col-md-2">100%</div>
+                                <div class="col-md-2">{{$excelent}}%</div>
                             </div>
+                            @else
+                            <div class="row w-100">
+                                <div class="col-md-2">Excellent</div>
+                                <div class="col-md-8">
+                                    <hr style="background-color: #eee;height:5px !important;">
+                                </div>
+                                <div class="col-md-2">0%</div>
+                            </div>
+                            @endif
+
+                            @if($good)
+                            <div class="row w-100">
+                                <div class="col-md-2">Good</div>
+                                <div class="col-md-8">
+                                    <hr style="width:{{$good}}%;float:left;background-color:#f7a616;height:5px !important;">
+                                </div>
+                                <div class="col-md-2">{{$good}}%</div>
+                            </div>
+                            @else
                             <div class="row w-100">
                                 <div class="col-md-2">Good</div>
                                 <div class="col-md-8">
@@ -205,6 +260,18 @@
                                 </div>
                                 <div class="col-md-2">0%</div>
                             </div>
+                            @endif
+
+
+                            @if($average)
+                            <div class="row w-100">
+                                <div class="col-md-2">Average</div>
+                                <div class="col-md-8">
+                                    <hr style="width:{{$average}}%;float:left;background-color:#f7a616;height:5px !important;">
+                                </div>
+                                <div class="col-md-2">{{$average}}%</div>
+                            </div>
+                            @else
                             <div class="row w-100">
                                 <div class="col-md-2">Average</div>
                                 <div class="col-md-8">
@@ -212,6 +279,18 @@
                                 </div>
                                 <div class="col-md-2">0%</div>
                             </div>
+                            @endif
+
+
+                            @if($poor)
+                            <div class="row w-100">
+                                <div class="col-md-2">Poor</div>
+                                <div class="col-md-8">
+                                    <hr style="width:{{$poor}}%;float:left;background-color:#f7a616;height:5px !important;">
+                                </div>
+                                <div class="col-md-2">{{$poor}}%</div>
+                            </div>
+                            @else
                             <div class="row w-100">
                                 <div class="col-md-2">Poor</div>
                                 <div class="col-md-8">
@@ -219,6 +298,18 @@
                                 </div>
                                 <div class="col-md-2">0%</div>
                             </div>
+                            @endif
+
+
+                            @if($worst)
+                            <div class="row w-100">
+                                <div class="col-md-2">Worst</div>
+                                <div class="col-md-8">
+                                    <hr style="width:{{$worst}}%;float:left;background-color:#f7a616;height:5px !important;">
+                                </div>
+                                <div class="col-md-2">{{$worst}}%</div>
+                            </div>
+                            @else
                             <div class="row w-100">
                                 <div class="col-md-2">Worst</div>
                                 <div class="col-md-8">
@@ -226,12 +317,57 @@
                                 </div>
                                 <div class="col-md-2">0%</div>
                             </div>
+                            @endif
+
                         </div>
                     </div>
                     <div class="row">
                         <div class="col-12 mb-3">
                             <div class="row">
-                                <div class="col-md-1">
+                                    <ul class="list-group list-group-flush">
+                                        @foreach ($product->reviews as $key => $review)
+                                        @if($review->user != null)
+                                        <li class="media list-group-item d-flex">
+                                            <span class="avatar avatar-md mr-3">
+                                                <img
+                                                    class="lazyload"
+                                                    src="{{ static_asset('assets/img/placeholder.jpg') }}"
+                                                    onerror="this.onerror=null;this.src='{{ static_asset('assets/img/placeholder.jpg') }}';"
+                                                    @if($review->user->avatar_original !=null)
+                                                    data-src="{{ uploaded_asset($review->user->avatar_original) }}"
+                                                    @else
+                                                    data-src="{{ static_asset('assets/img/placeholder.jpg') }}"
+                                                    @endif
+                                                    >
+                                            </span>
+                                            <div class="media-body text-left">
+                                                <div class="d-flex justify-content-between">
+                                                    <h3 class="fs-15 fw-600 mb-0">{{ $review->user->name }}</h3>
+                                                    <span class="rating rating-sm">
+                                                        @for ($i=0; $i < $review->rating; $i++)
+                                                        <i class="las la-star active"></i>
+                                                        @endfor
+                                                        @for ($i=0; $i < 5-$review->rating; $i++)
+                                                        <i class="las la-star"></i>
+                                                        @endfor
+                                                    </span>
+                                                </div>
+                                                <div class="opacity-60 mb-2">{{ date('d-m-Y', strtotime($review->created_at)) }}</div>
+                                                <p class="comment-text">
+                                                    {{ $review->comment }}
+                                                </p>
+                                            </div>
+                                        </li>
+                                        @endif
+                                        @endforeach
+                                    </ul>
+    
+                                    @if(count($product->reviews) <= 0)
+                                    <div class="text-center fs-18 opacity-70">
+                                        {{  translate('There have been no reviews for this product yet.') }}
+                                    </div>
+                                    @endif
+                                {{-- <div class="col-md-1">
                                     <svg class="MuiSvgIcon-root MuiSvgIcon-fontSizeLarge prof css-6flbmm"
                                         focusable="false" aria-hidden="true" viewBox="0 0 24 24"
                                         data-testid="AccountCircleIcon" style="width: 50px; height: 50px;">
@@ -262,43 +398,7 @@
                                     <i class="fa-solid fa-star" style="color: green;"></i>
                                     <i class="fa-solid fa-star" style="color: green;"></i>
                                     <i class="fa-solid fa-star" style="color: green;"></i>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-12 mb-3">
-                            <div class="row">
-                                <div class="col-md-1">
-                                    <svg class="MuiSvgIcon-root MuiSvgIcon-fontSizeLarge prof css-6flbmm"
-                                        focusable="false" aria-hidden="true" viewBox="0 0 24 24"
-                                        data-testid="AccountCircleIcon" style="width: 50px; height: 50px;">
-                                        <path
-                                            d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 3c1.66 0 3 1.34 3 3s-1.34 3-3 3-3-1.34-3-3 1.34-3 3-3zm0 14.2c-2.5 0-4.71-1.28-6-3.22.03-1.99 4-3.08 6-3.08 1.99 0 5.97 1.09 6 3.08-1.29 1.94-3.5 3.22-6 3.22z">
-                                        </path>
-                                    </svg>
-                                </div>
-                                <div class="col-md-9">
-                                    <div class="row">
-                                        <div class="col-12">
-                                            <h6 class="m-0 p-0">Atul Kumar Jain</h6>
-                                        </div>
-                                        <div class="col-12">
-                                            <p class="m-0 p-0">Monday, May 9, 2022</p>
-                                        </div>
-                                        <div class="col-12">
-                                            <p class="m-0 p-0">Khushboo Is very professional and provided very hygienic
-                                                and satisfying
-                                                service. Thanks. Mrs Devina Jain
-                                            </p>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col-md-2">
-                                    <i class="fa-solid fa-star" style="color: green;"></i>
-                                    <i class="fa-solid fa-star" style="color: green;"></i>
-                                    <i class="fa-solid fa-star" style="color: green;"></i>
-                                    <i class="fa-solid fa-star" style="color: green;"></i>
-                                    <i class="fa-solid fa-star" style="color: green;"></i>
-                                </div>
+                                </div> --}}
                             </div>
                         </div>
                     </div>

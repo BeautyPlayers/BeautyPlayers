@@ -50,6 +50,7 @@ class ProductController extends Controller
             $products = $products->where('name', 'like', '%' . $search . '%');
         }
         $products = $products->paginate(10);
+        //return $products[0]->category->parentCategory;
         return view('seller.product.products.index', compact('products', 'search'));
     }
 
@@ -67,21 +68,33 @@ class ProductController extends Controller
                 return back();
             }
         }
-        $products = Product::where('added_by', 'admin')->orderBy('created_at', 'desc')->paginate(15);
+        //$products = Product::where('added_by', 'admin')->orderBy('created_at', 'desc')->paginate(15);
+        $products = Product::where('user_id', Auth::user()->id)->where('digital', 0)->orderBy('created_at', 'desc')->paginate(15);
 //        dd($products);
+        $selected_cat = Product::where('user_id', Auth::user()->id)->where('digital', 0)->pluck('category_id')->toArray();
+        $parent_cat = Category::whereIn('id',$selected_cat)->where('digital', 0)->pluck('parent_id')->toArray();
+        
         $categories = Category::where('parent_id', 0)
             ->where('digital', 0)
-            ->with('childrenCategories')
+            ->whereNotIn('id',$selected_cat)
+            ->whereNotIn('id',$parent_cat)
+            //->with('childrenCategories')
+            ->with(['childrenCategories' => function($q) use($selected_cat) {
+                $q->whereNotIn('id',$selected_cat);
+            }])
             ->get();
         return view('seller.product.products.create', compact('categories','products'));
     }
 
     public function store(Request $request)
     {
-
         $products = [];
-        $categories = Category::whereIn('id', $request->category_id)->with('products')->get();
-
+        $categories = Category::with('products')
+                ->where(function ($q) use ($request){
+                   $q->whereIn('id', $request->category_id)
+                    ->orWhereIn('parent_id',$request->category_id);
+                })
+                ->get();
         foreach ($categories as $category){
             $products = array_merge($products,$category->products->pluck('id')->toArray());
         }

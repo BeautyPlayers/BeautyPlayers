@@ -38,9 +38,9 @@
                                     data-live-search="true" required multiple>
                                 @foreach ($categories as $category)
                                     <option value="{{ $category->id }}">{{ $category->getTranslation('name') }}</option>
-                                    @foreach ($category->childrenCategories as $childCategory)
+                                    <?php /*@foreach ($category->childrenCategories as $childCategory)
                                         @include('categories.child_category', ['child_category' => $childCategory])
-                                    @endforeach
+                                    @endforeach*/?>
                                 @endforeach
                             </select>
                         </div>
@@ -85,8 +85,9 @@
                         <tr>
                             <th>#</th>
                             <th width="30%">{{ translate('Name')}}</th>
+                            <th data-breakpoints="md">{{ translate('Parent Category')}}</th>
                             <th data-breakpoints="md">{{ translate('Category')}}</th>
-                            <th data-breakpoints="md">{{ translate('Current Qty')}}</th>
+                            <?php /*<th data-breakpoints="md">{{ translate('Current Qty')}}</th>*/ ?>
                             <th>{{ translate('Base Price')}}</th>
                             <th data-breakpoints="md" class="text-right">{{ translate('Options')}}</th>
                         </tr>
@@ -103,10 +104,22 @@
                                 </td>
                                 <td>
                                     @if ($product->category != null)
-                                        {{ $product->category->getTranslation('name') }}
+                                        @if($product->category->parent_id != 0 && !empty($product->category->parentCategory))
+                                            {{ $product->category->parentCategory->getTranslation('name') }}
+                                        @else
+                                        -
+                                        @endif
+                                    @else
+                                    -
                                     @endif
                                 </td>
                                 <td>
+                                    @if ($product->category != null)
+                                        {{ $product->category->getTranslation('name') }}
+                                    @endif
+                                </td>
+                                <?php 
+                                /*<td>
                                     @php
                                         $qty = 0;
                                         foreach ($product->stocks as $key => $stock) {
@@ -114,21 +127,22 @@
                                         }
                                         echo $qty;
                                     @endphp
-                                </td>
+                                </td>*/
+                                ?>
                                 <td>{{ $product->unit_price }}</td>
 
                                 <td class="text-right">
                                     <a class="btn btn-soft-success btn-icon btn-circle btn-sm"  href="{{ route('product', $product->slug) }}" target="_blank" title="{{ translate('View') }}">
                                         <i class="las la-eye"></i>
                                     </a>
+                                    <a href="#" class="btn btn-soft-danger btn-icon btn-circle btn-sm confirm-delete" data-href="{{route('seller.products.destroy', $product->id)}}" title="{{ translate('Delete') }}">
+                                        <i class="las la-trash"></i>
+                                    </a>
                                     {{--<a class="btn btn-soft-info btn-icon btn-circle btn-sm" href="{{route('seller.products.edit', ['id'=>$product->id, 'lang'=>env('DEFAULT_LANGUAGE')])}}" title="{{ translate('Edit') }}">
                                         <i class="las la-edit"></i>
                                     </a>
                                     <a href="{{route('seller.products.duplicate', $product->id)}}" class="btn btn-soft-success btn-icon btn-circle btn-sm"  title="{{ translate('Duplicate') }}">
                                          <i class="las la-copy"></i>
-                                    </a>
-                                    <a href="#" class="btn btn-soft-danger btn-icon btn-circle btn-sm confirm-delete" data-href="{{route('seller.products.destroy', $product->id)}}" title="{{ translate('Delete') }}">
-                                        <i class="las la-trash"></i>
                                     </a>--}}
                                 </td>
                             </tr>
@@ -673,7 +687,9 @@
 </form>
 
 @endsection
-
+@section('modal')
+    @include('modals.delete_modal')
+@endsection
 @section('script')
 <script type="text/javascript">
     $("[name=shipping_type]").on("change", function (){

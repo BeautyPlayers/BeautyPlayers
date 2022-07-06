@@ -75,8 +75,9 @@
                     <tr>
                         <th>#</th>
                         <th width="30%">{{ translate('Name')}}</th>
+                        <th data-breakpoints="md">{{ translate('Parent Category')}}</th>
                         <th data-breakpoints="md">{{ translate('Category')}}</th>
-                        <th data-breakpoints="md">{{ translate('Current Qty')}}</th>
+                        <?php /*<th data-breakpoints="md">{{ translate('Current Qty')}}</th>*/ ?>
                         <th>{{ translate('Base Price')}}</th>
                         @if(get_setting('product_approve_by_admin') == 1)
                             <th data-breakpoints="md">{{ translate('Approval')}}</th>
@@ -98,10 +99,21 @@
                             </td>
                             <td>
                                 @if ($product->category != null)
-                                    {{ $product->category->getTranslation('name') }}
+                                    @if($product->category->parent_id != 0 && !empty($product->category->parentCategory))
+                                        {{ $product->category->parentCategory->getTranslation('name') }}
+                                    @else
+                                    -
+                                    @endif
+                                @else
+                                -
                                 @endif
                             </td>
                             <td>
+                                @if ($product->category != null)
+                                    {{ $product->category->getTranslation('name') }}
+                                @endif
+                            </td>
+                            <?php /*<td>
                                 @php
                                     $qty = 0;
                                     foreach ($product->stocks as $key => $stock) {
@@ -109,7 +121,7 @@
                                     }
                                     echo $qty;
                                 @endphp
-                            </td>
+                            </td>*/ ?>
                             <td>{{ $product->unit_price }}</td>
                             @if(get_setting('product_approve_by_admin') == 1)
                                 <td>

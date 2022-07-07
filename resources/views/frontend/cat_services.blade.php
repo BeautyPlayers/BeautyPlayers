@@ -345,17 +345,12 @@
                                         $total += $v->reviews->count();
                                         @endphp
                                         <span class="rating" style="font-size: 15px;">
-                                            <?php
-                                            for ($i = 1; $i <= 5; $i++) {
-                                                if ($total >= $i) {
-                                                    ?>
-                                                    <span class="fa fa-star"></span>
-                                                <?php } else { ?>
-                                                    <span class="fa fa-star-o"></span>
-                                                    <?php
-                                                }
-                                            }
-                                            ?>
+                                            @for ($i=0; $i < $v->averageRating(); $i++)
+                                                <i class="fa-solid fa-star" style="color: #f7a616;"></i>
+                                            @endfor
+                                            @for ($i=0; $i < 5-$v->averageRating(); $i++)
+                                                <i class="fa-solid fa-star" style="color: #e2e2e2;"></i>
+                                            @endfor
                                             <?php /* {{ renderStarRating($v->rating) }} */ ?>
                                         </span>
                                         <span style="font-size: 12px;">({{ $total }} {{ translate('reviews')}})</span>
@@ -476,17 +471,12 @@
                                         $total += $v->reviews->count();
                                         @endphp
                                         <span class="rating" style="font-size: 15px;">
-                                            <?php
-                                            for ($i = 1; $i <= 5; $i++) {
-                                                if ($total >= $i) {
-                                                    ?>
-                                                    <span class="fa fa-star"></span>
-                                                <?php } else { ?>
-                                                    <span class="fa fa-star-o"></span>
-                                                    <?php
-                                                }
-                                            }
-                                            ?>
+                                            @for ($i=0; $i < $v->averageRating(); $i++)
+                                                <i class="fa-solid fa-star" style="color: #f7a616;"></i>
+                                            @endfor
+                                            @for ($i=0; $i < 5-$v->averageRating(); $i++)
+                                                <i class="fa-solid fa-star" style="color: #e2e2e2;"></i>
+                                            @endfor
                                             <?php /* {{ renderStarRating($v->rating) }} */ ?>
                                         </span>
                                         <span style="font-size: 12px;">({{ $total }} {{ translate('reviews')}})</span>
@@ -609,17 +599,12 @@
                                         $total += $v->reviews->count();
                                         @endphp
                                         <span class="rating" style="font-size: 15px;">
-                                            <?php
-                                            for ($i = 1; $i <= 5; $i++) {
-                                                if ($total >= $i) {
-                                                    ?>
-                                                    <span class="fa fa-star"></span>
-                                                <?php } else { ?>
-                                                    <span class="fa fa-star-o"></span>
-                                                    <?php
-                                                }
-                                            }
-                                            ?>
+                                            @for ($i=0; $i < $v->averageRating(); $i++)
+                                                <i class="fa-solid fa-star" style="color: #f7a616;"></i>
+                                            @endfor
+                                            @for ($i=0; $i < 5-$v->averageRating(); $i++)
+                                                <i class="fa-solid fa-star" style="color: #e2e2e2;"></i>
+                                            @endfor
                                             <?php /* {{ renderStarRating($v->rating) }} */ ?>
                                         </span>
                                         <span style="font-size: 12px;">({{ $total }} {{ translate('reviews')}})</span>
@@ -821,17 +806,13 @@
                                         $total += $v->reviews->count();
                                         @endphp
                                         <span class="rating" style="font-size: 15px;">
-                                            <?php
-                                            for ($i = 1; $i <= 5; $i++) {
-                                                if ($total >= $i) {
-                                                    ?>
-                                                    <span class="fa fa-star"></span>
-                                                <?php } else { ?>
-                                                    <span class="fa fa-star-o"></span>
-                                                    <?php
-                                                }
-                                            }
-                                            ?>
+                                            @for ($i=0; $i < $v->averageRating(); $i++)
+                                                <i class="fa-solid fa-star" style="color: #f7a616;"></i>
+                                            @endfor
+                                            @for ($i=0; $i < 5-$v->averageRating(); $i++)
+                                                <i class="fa-solid fa-star" style="color: #e2e2e2;"></i>
+                                            @endfor
+
                                             <?php /* {{ renderStarRating($v->rating) }} */ ?>
                                         </span>
                                         <span style="font-size: 12px;">({{ $total }} {{ translate('reviews')}})</span>

@@ -9,72 +9,77 @@
         style="display: flex;justify-content:center;align-items:center;height: 100%;">
         <div class="row w-100 px-3"
             style="background-color: #fff; padding-top: 75px !important;">
-            <div class=" col-md-4 my-2">
-                <img
-                    class="img-fluid img-header"
-                    src="{{ uploaded_asset($photo) }}"
-                    data-src="{{ uploaded_asset($photo) }}"
-                    onerror="if this.onerror=null this.src='{{ static_asset('assets/img/placeholder.jpg') }}';"
-                    style="border-radius: 10px;"
-                >
-            </div>
-            <div class="col-md-8 my-2 p-2" style="background-color:#eee;border-radius: 10px;">
+            <div class="col-md-12">
                 <div class="row">
-                    <div class="col-md-8">
-                        <h3 class="text-dark my-3">{{$product->getTranslation('name')}}</h3>
+                    <div class=" col-md-4 my-2">
+                        <img
+                            class="img-fluid img-header"
+                            src="{{ uploaded_asset($photo) }}"
+                            data-src="{{ uploaded_asset($photo) }}"
+                            onerror="if this.onerror=null this.src='{{ static_asset('assets/img/placeholder.jpg') }}';"
+                            style="border-radius: 10px;"
+                        >
                     </div>
-                    <div class="col-md-4 my-1">
-                        <span>
-                            {{-- <img src="https://classiq.in/wp-content/uploads/2020/12/loreal.png" alt=""
-                                style="width: 100px;height: 50px;border-radius: 10px;"> --}}
-                            @if ($product->brand != null)
-                                <div class="col-auto mt-1 mb-1 p-0 brand-img-section">
-                                    <a href="{{ route('products.brand',$product->brand->slug) }}" target="_blank">
-                                        <img src="{{ uploaded_asset($product->brand->logo) }}" alt="{{ $product->brand->getTranslation('name') }}"
-                                        {{-- class="shadow p-2 rounded" --}}
-                                        style="width: 100px;height: 50px;border-radius: 10px;"
-                                        >
-                                    </a>
-                                </div>
+                    <div class="col-md-8 my-2 p-2" style="background-color:#eee;border-radius: 10px;">
+                        <div class="row">
+                            <div class="col-md-8" style="height: 65px">
+                                <h5 class="text-dark mt-1 mb-1" style="font-weight: 600">{{ substr($product->getTranslation('name'),0,20)}}</h5>
+                                <p> {{ substr($product->category->name, 0, 20) }} </p>
+                            </div>
+                            <div class="col-md-4">
+                                <span>
+                                    {{-- <img src="https://classiq.in/wp-content/uploads/2020/12/loreal.png" alt=""
+                                        style="width: 100px;height: 50px;border-radius: 10px;"> --}}
+                                    @if ($product->brand != null)
+                                        <div class="col-auto mb-1 p-0 brand-img-section">
+                                            <a href="{{ route('products.brand',$product->brand->slug) }}" target="_blank">
+                                                <img src="{{ uploaded_asset($product->brand->logo) }}" alt="{{ $product->brand->getTranslation('name') }}"
+                                                {{-- class="shadow p-2 rounded" --}}
+                                                style="width: 100px;height: 50px;border-radius: 10px;"
+                                                >
+                                            </a>
+                                        </div>
+                                    @endif
+                                </span>
+                            </div>
+                        </div>
+                        <div>
+                            <p class="two-11 mb-0" style="display: flex; justify-content: flex-start;">
+                                @if(home_price($product) != home_discounted_price($product) )
+                                <small class="two-str" style="text-decoration: line-through;">{{ home_price($product) }}</small>
+                                @endif
+                                <strong class="ml-3">{{ home_discounted_price($product) }}</strong>
+                            </p>
+                            <p class="mb-1" style="font-weight: 600"><i class="fa-solid fa-clock"></i> {{ $product->getTranslation('unit') }} mins</p>
+                        </div>
+                        {{-- <button type="submit" onclick="addToCart() class="btn btn-success btn-book-now" style="font-size: 1.3rem;"> BOOK
+                            NOW</button> --}}
+                            @if ($product->digital == 1)
+                            <button type="button" class="btn btn-primary buy-now fw-600 add-to-cart" onclick="addToCart()">
+                                {{-- <i class="la la-shopping-cart"></i> --}}
+                                <span class="d-none d-md-inline-block">{{ translate('BOOK NOW')}}</span>
+                            </button>
+                            @elseif($qty > 0)
+                            @if ($product->external_link != null)
+                            <a type="button" class="btn btn-soft-primary mr-2 add-to-cart fw-600" href="{{ $product->external_link }}">
+                                <i class="las la-share"></i>
+                                <span class="d-none d-md-inline-block">{{ translate($product->external_link_btn)}}</span>
+                            </a>
+                            @else
+                            <button type="button" class="btn btn-primary buy-now fw-600 add-to-cart" onclick="addToCart()">
+                                {{-- <i class="la la-shopping-cart"></i> --}}
+                                <span class="d-none d-md-inline-block">{{ translate('BOOK NOW')}}</span>
+                            </button>
                             @endif
-                        </span>
+                            @endif
+                            <button type="button" class="btn btn-secondary out-of-stock fw-600 d-none" disabled>
+                                <i class="la la-cart-arrow-down"></i>{{ translate('Out of Stock')}}
+                            </button>
                     </div>
                 </div>
-                <div>
-                    <p class="two-11 mb-0 mt-3" style="display: flex; justify-content: flex-start;">
-                        @if(home_price($product) != home_discounted_price($product) )
-                        <small class="two-str" style="text-decoration: line-through;">{{ home_price($product) }}</small>
-                        @endif
-                        <strong>{{ home_discounted_price($product) }}</strong>
-                    </p>
-                    <p class=""><i class="fa-solid fa-clock"></i> {{ $product->getTranslation('unit') }} mins</p>
-                </div>
-                {{-- <button type="submit" onclick="addToCart() class="btn btn-success btn-book-now" style="font-size: 1.3rem;"> BOOK
-                    NOW</button> --}}
-                    @if ($product->digital == 1)
-                    <button type="button" class="btn btn-primary buy-now fw-600 add-to-cart" onclick="addToCart()">
-                        {{-- <i class="la la-shopping-cart"></i> --}}
-                        <span class="d-none d-md-inline-block">{{ translate('BOOK NOW')}}</span>
-                    </button>
-                    @elseif($qty > 0)
-                    @if ($product->external_link != null)
-                    <a type="button" class="btn btn-soft-primary mr-2 add-to-cart fw-600" href="{{ $product->external_link }}">
-                        <i class="las la-share"></i>
-                        <span class="d-none d-md-inline-block">{{ translate($product->external_link_btn)}}</span>
-                    </a>
-                    @else
-                    <button type="button" class="btn btn-primary buy-now fw-600 add-to-cart" onclick="addToCart()">
-                        {{-- <i class="la la-shopping-cart"></i> --}}
-                        <span class="d-none d-md-inline-block">{{ translate('BOOK NOW')}}</span>
-                    </button>
-                    @endif
-                    @endif
-                    <button type="button" class="btn btn-secondary out-of-stock fw-600 d-none" disabled>
-                        <i class="la la-cart-arrow-down"></i>{{ translate('Out of Stock')}}
-                    </button>
             </div>
             <div class="row">
-                <h3 class="m-4" style="font-weight: 900;">Description</h3>
+                <h4 class="m-4" style="font-weight: 600;">Description</h4>
                 <div class="col-12" style="margin-left: 10px">
                     {!! $product->getTranslation('description') !!}
                 </div>
@@ -162,7 +167,7 @@
                 }
             @endphp
             <div class="row">
-                <h3 class="m-4" style="font-weight: 900;">Ratings and Reviews</h3>
+                <h4 class="m-4" style="font-weight: 600;">Ratings and Reviews</h4>
                 <div class="col-12">
                     <div class="row">
                         <span>
@@ -366,8 +371,8 @@
                 </div>
             </div>
             <div class="row" style="overflow: auto;">
-                <h3 class="m-4" style="font-weight: 900; word-break: break-all !important;">Frequently Asked Questions
-                </h3>
+                <h4 class="m-4" style="font-weight: 600; word-break: break-all !important;">Frequently Asked Questions
+                </h4>
                 <div class="col-md-12">
                     <div id="accordion">
                         <div class="card">

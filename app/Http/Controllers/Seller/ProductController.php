@@ -49,7 +49,7 @@ class ProductController extends Controller
             $search = $request->search;
             $products = $products->where('name', 'like', '%' . $search . '%');
         }
-        $products = $products->paginate(10);
+        $products = $products->paginate(25);
         //return $products[0]->category->parentCategory;
         return view('seller.product.products.index', compact('products', 'search'));
     }
@@ -69,7 +69,7 @@ class ProductController extends Controller
             }
         }
         //$products = Product::where('added_by', 'admin')->orderBy('created_at', 'desc')->paginate(15);
-        $products = Product::where('user_id', Auth::user()->id)->where('digital', 0)->orderBy('created_at', 'desc')->paginate(15);
+        $products = Product::where('user_id', Auth::user()->id)->where('digital', 0)->orderBy('created_at', 'desc')->paginate(25);
 //        dd($products);
         $selected_cat = Product::where('user_id', Auth::user()->id)->where('digital', 0)->pluck('category_id')->toArray();
         $parent_cat = Category::whereIn('id',$selected_cat)->where('digital', 0)->pluck('parent_id')->toArray();
@@ -77,18 +77,27 @@ class ProductController extends Controller
         $categories = Category::where('parent_id', 0)
             ->where('digital', 0)
             ->whereNotIn('id',$selected_cat)
-            ->whereNotIn('id',$parent_cat)
+//            ->whereNotIn('id',$parent_cat)
             //->with('childrenCategories')
             ->with(['childrenCategories' => function($q) use($selected_cat) {
                 $q->whereNotIn('id',$selected_cat);
             }])
             ->get();
+            
+         /*$categories = Category::where('parent_id', 0)
+            ->where('digital', 0)
+            ->with(['childrenCategories' => function($q) use($selected_cat) {
+                $q->whereNotIn('id',$selected_cat);
+            }])
+            ->get();*/
         return view('seller.product.products.create', compact('categories','products'));
     }
 
     public function store(Request $request)
     {
         $products = [];
+        /*$categories = Category::whereIn('id', $request->category_id)->with('products')->get();*/
+        
         $categories = Category::with('products')
                 ->where(function ($q) use ($request){
                    $q->whereIn('id', $request->category_id)
@@ -96,7 +105,7 @@ class ProductController extends Controller
                 })
                 ->get();
         foreach ($categories as $category){
-            $products = array_merge($products,$category->products->pluck('id')->toArray());
+            $products = array_merge($products,$category->products->where('added_by', 'admin')->pluck('id')->toArray());
         }
         $product_ids = array_unique($products);
         if (addon_is_activated('seller_subscription') && 0) {
@@ -105,50 +114,55 @@ class ProductController extends Controller
                 return redirect()->route('seller.products');
             }
         }
+        $addProdCnt = 0;
         foreach ($product_ids as $prod_id){
-            $prod = collect(Product::find($prod_id));
-            $prod->merge(['brand_id' => $request->brand_id]);
-            $prod->put("added_by" , 'seller');
-//            dd($prod,collect($prod)->except([
-//                '_token', 'sku', 'choice', 'tax_id', 'tax', 'tax_type', 'flash_deal_id', 'flash_discount', 'flash_discount_type'
-//            ]));
-            $product = $this->productService->store($prod->toArray()) ;
+            $from_product_exist = Product::where('from_product_id',$prod_id)->where('user_id', Auth::user()->id)->where('digital', 0)->first();
+            if(!$from_product_exist){
+                $prod = collect(Product::find($prod_id));
+                $prod->merge(['brand_id' => $request->brand_id]);
+                $prod->put("added_by" , 'seller');
+                $prod->put("from_product_id" , $prod_id);
+    //            dd($prod,collect($prod)->except([
+    //                '_token', 'sku', 'choice', 'tax_id', 'tax', 'tax_type', 'flash_deal_id', 'flash_discount', 'flash_discount_type'
+    //            ]));
+                $product = $this->productService->store($prod->toArray()) ;
 
-            //Save Product-Tax
-            $p_tax = ProductTax::where('product_id', $prod_id)->get();
-            foreach ($p_tax as $tax){
-                $product_tax = new ProductTax();
-                $product_tax->tax_id = $tax->tax_id;
-                $product_tax->product_id = $product->id;
-                $product_tax->tax = $tax->tax;
-                $product_tax->tax_type = $tax->tax_type;
-                $product_tax->save();
+                //Save Product-Tax
+                $p_tax = ProductTax::where('product_id', $prod_id)->get();
+                foreach ($p_tax as $tax){
+                    $product_tax = new ProductTax();
+                    $product_tax->tax_id = $tax->tax_id;
+                    $product_tax->product_id = $product->id;
+                    $product_tax->tax = $tax->tax;
+                    $product_tax->tax_type = $tax->tax_type;
+                    $product_tax->save();
+                }
+
+                //Save product stock service
+                $product_stock = ProductStock::where('product_id', $prod_id)->first();
+                //dd($product_stock);
+                $this->productStockService->store([
+                    'colors_active' => $product_stock->colors_active,
+                    'colors' => $product_stock->colors,
+                    'choice_no' => $product_stock->choice_no,
+                    'unit_price' => $product->unit_price,
+                    'sku' => $product_stock->sku,
+                    'current_stock' => $product->current_stock,
+                    'product_id' => $product->id
+                ], $product);
+
+                //Default Language
+
+                $request->merge(['lang' => env('DEFAULT_LANGUAGE')]);
+                ProductTranslation::create([
+                    'lang' => env('DEFAULT_LANGUAGE'),
+                    'name' => $product->name,
+                    'unit' => $product->unit,
+                    'description' => $product->description,
+                    'product_id' => $product->id
+                ]);
+                $addProdCnt = $addProdCnt+1;
             }
-
-            //Save product stock service
-            $product_stock = ProductStock::where('product_id', $prod_id)->first();
-            //dd($product_stock);
-            $this->productStockService->store([
-                'colors_active' => $product_stock->colors_active,
-                'colors' => $product_stock->colors,
-                'choice_no' => $product_stock->choice_no,
-                'unit_price' => $product->unit_price,
-                'sku' => $product_stock->sku,
-                'current_stock' => $product->current_stock,
-                'product_id' => $product->id
-            ], $product);
-
-            //Default Language
-
-            $request->merge(['lang' => env('DEFAULT_LANGUAGE')]);
-            ProductTranslation::create([
-                'lang' => env('DEFAULT_LANGUAGE'),
-                'name' => $product->name,
-                'unit' => $product->unit,
-                'description' => $product->description,
-                'product_id' => $product->id
-            ]);
-
         }
 
         /*$request->except([
@@ -177,7 +191,7 @@ class ProductController extends Controller
             'lang', 'name', 'unit', 'description', 'product_id'
         ]));*/
 
-        flash(translate(count($product_ids).' Product'.(count($product_ids) > 1 ? 's' : '').' has been inserted successfully'))->success();
+        flash(translate($addProdCnt.' Product'.($addProdCnt > 1 ? 's' : '').' has been inserted successfully'))->success();
 
         Artisan::call('view:clear');
         Artisan::call('cache:clear');
@@ -404,5 +418,24 @@ class ProductController extends Controller
             flash(translate('Something went wrong'))->error();
             return back();
         }
+    }
+    
+    public function delete_bulk_product(Request $request)
+
+    {
+        if ($request->id) {
+
+            foreach ($request->id as $product_id) {
+
+                $this->destroy($product_id);
+
+            }
+
+        }
+
+
+
+        return 1;
+
     }
 }

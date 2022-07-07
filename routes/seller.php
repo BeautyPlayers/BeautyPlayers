@@ -36,6 +36,7 @@ Route::group(['prefix' => 'seller', 'middleware' => ['seller', 'verified', 'user
         Route::post('/products/seller/featured', 'updateFeatured')->name('products.featured');
         Route::post('/products/published', 'updatePublished')->name('products.published');
         Route::get('/products/destroy/{id}', 'destroy')->name('products.destroy');
+        Route::post('products/bulk-delete', 'delete_bulk_product')->name('bulk-product-delete');
     });
 
     // Product Bulk Upload

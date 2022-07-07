@@ -212,7 +212,7 @@
 
         <?php
         $featured_products = Cache::remember('featured_products', 3600, function () {
-                    return filter_products(\App\Models\Product::with('brand', 'user', 'category')->where('published', 1)->where('featured', '1'))->limit(12)->get();
+                    return filter_products(\App\Models\Product::with('brand', 'user', 'category')->where('added_by', 'admin')->where('published', 1)->where('featured', '1'))->limit(12)->get();
                 });
         if (count($featured_products)) {
             ?>

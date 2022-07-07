@@ -9,7 +9,7 @@
         style="display: flex;justify-content:center;align-items:center;height: 100%;">
         <div class="row w-100 px-3"
             style="background-color: #fff; padding-top: 75px !important;">
-            <div class=" col-lg-4 my-2">
+            <div class=" col-md-4 my-2">
                 <img
                     class="img-fluid img-header"
                     src="{{ uploaded_asset($photo) }}"
@@ -18,12 +18,12 @@
                     style="border-radius: 10px;"
                 >
             </div>
-            <div class="col-lg-7 my-2 p-2" style="background-color:#eee;border-radius: 10px;">
+            <div class="col-md-8 my-2 p-2" style="background-color:#eee;border-radius: 10px;">
                 <div class="row">
-                    <div class="col-md-9">
+                    <div class="col-md-8">
                         <h3 class="text-dark my-3">{{$product->getTranslation('name')}}</h3>
                     </div>
-                    <div class="col-md-3 my-1">
+                    <div class="col-md-4 my-1">
                         <span>
                             {{-- <img src="https://classiq.in/wp-content/uploads/2020/12/loreal.png" alt=""
                                 style="width: 100px;height: 50px;border-radius: 10px;"> --}}
@@ -74,51 +74,9 @@
                     </button>
             </div>
             <div class="row">
-                <h3 class="m-4" style="font-weight: 900;">What Includes?</h3>
-                <div class="col-12">
-                    <h4 class="mx-4">colors to choose</h4>
-                    <ul style="list-style-type: none;">
-                        <li><i class="fa-solid fa-check mx-2"
-                                style="color: green; font-weight:bolder;font-size: 1.3rem;"></i>Darkest Brown</li>
-                        <li><i class="fa-solid fa-check mx-2"
-                                style="color: green; font-weight:bolder;font-size: 1.3rem;"></i>Dark Brown</li>
-                        <li><i class="fa-solid fa-check mx-2"
-                                style="color: green; font-weight:bolder;font-size: 1.3rem;"></i>Black</li>
-                        <li><i class="fa-solid fa-check mx-2"
-                                style="color: green; font-weight:bolder;font-size: 1.3rem;"></i>Green</li>
-                    </ul>
-                </div>
-                <div class="col-12">
-                    <h4 class="mx-4">Advantages</h4>
-                    <ul style="list-style-type: none;">
-                        <li><i class="fa-solid fa-check mx-2"
-                                style="color: green; font-weight:bolder;font-size: 1.3rem;"></i>Coverage of white/grey
-                            hair</li>
-                        <li><i class="fa-solid fa-check mx-2"
-                                style="color: green; font-weight:bolder;font-size: 1.3rem;"></i>Evens out the hair color
-                        </li>
-                    </ul>
-                </div>
-                <div class="col-12">
-                    <h4 class="mx-4">Points to be Noted</h4>
-                    <ul style="list-style-type: none;">
-                        <li><i class="fa-solid fa-check mx-2"
-                                style="color: green; font-weight:bolder;font-size: 1.3rem;"></i>You can use your hair
-                            color and
-                            in this case you,
-                            exclude product cost mentioned.</li>
-                        <li><i class="fa-solid fa-check mx-2"
-                                style="color: green; font-weight:bolder;font-size: 1.3rem;"></i>Make sure to wash your
-                            hair
-                            atleast 3-4 hours before
-                            our beautician reach and do not oil
-                            them after washing.</li>
-                    </ul>
-                </div>
-                <div class="modal-container">
-                    <div class="col-12 p-3 rounded" style="background-color: #eee;">
-                        <h5>You may also like these... Here’s what others like you are buying right now.</h5>
-                    </div>
+                <h3 class="m-4" style="font-weight: 900;">Description</h3>
+                <div class="col-12" style="margin-left: 10px">
+                    {!! $product->getTranslation('description') !!}
                 </div>
             </div>
             <div class="row my-5">
@@ -370,7 +328,7 @@
                                         {{  translate('There have been no reviews for this product yet.') }}
                                     </div>
                                     @endif
-                                {{-- <div class="col-md-1">
+                                {{-- <div class="col-md-2">
                                     <svg class="MuiSvgIcon-root MuiSvgIcon-fontSizeLarge prof css-6flbmm"
                                         focusable="false" aria-hidden="true" viewBox="0 0 24 24"
                                         data-testid="AccountCircleIcon" style="width: 50px; height: 50px;">
@@ -416,11 +374,11 @@
                             <div class="faq-card-header" id="headingOne">
                                 <h5 class="mb-0">
                                     <div class="row">
-                                        <div class="col-md-11">
+                                        <div class="col-md-10">
                                             <p class="title">What are the requirements for hair color that I need to be prepared
                                                 with?</p>
                                         </div>
-                                        <div class="col-md-1">
+                                        <div class="col-md-2">
                                             <button class="btn btn-link collapsed"
                                                 style="text-decoration:none ; color:#000;" data-toggle="collapse"
                                                 data-target="#collapseOne" aria-expanded="false"
@@ -459,10 +417,10 @@
                             <div class="faq-card-header" id="headingTwo">
                                 <h5 class="mb-0">
                                     <div class="row">
-                                        <div class="col-md-11">
+                                        <div class="col-md-10">
                                             <p class="title">How your service is hygienic?</p>
                                         </div>
-                                        <div class="col-md-1">
+                                        <div class="col-md-2">
                                             <button class="btn btn-link collapsed"
                                                 style="text-decoration:none; color:#000;" data-toggle="collapse"
                                                 data-target="#collapseTwo" aria-expanded="false"
@@ -498,10 +456,10 @@
                             <div class="faq-card-header" id="headingThree">
                                 <h5 class="mb-0">
                                     <div class="row">
-                                        <div class="col-md-11">
+                                        <div class="col-md-10">
                                             <p class="title">Do I need to give my products during service?</p>
                                         </div>
-                                        <div class="col-md-1">
+                                        <div class="col-md-2">
                                             <button class="btn btn-link collapsed"
                                                 style="text-decoration:none; color:#000;" data-toggle="collapse"
                                                 data-target="#collapseThree" aria-expanded="false"
@@ -659,7 +617,7 @@
     <!-- Initialize Swiper -->
     <script>
         var swiper = new Swiper(".card-slider", {
-            slidesPerView: 3,
+            slidesPerView: 2,
             hashNavigation: {
                 watchState: true,
             },

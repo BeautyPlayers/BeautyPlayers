@@ -261,7 +261,6 @@
             </div>
         </div>
     </section>
-    @if (Auth::check() && (Auth::user()->user_type == 'seller'))
     <!-- Seller Service::START -->
     <section class="mb-4">
         <div class="container mt-3">
@@ -1008,7 +1007,6 @@
         </div>
     </section>
     <!-- Selller Service:: END -->
-    @endif
 @endsection
 
 @section('script')
@@ -1023,131 +1021,129 @@
             });
         });
     </script>
-    @if (Auth::check() && (Auth::user()->user_type == 'seller'))
-        <script src='https://unpkg.com/smoothscroll-polyfill/dist/smoothscroll.min.js'></script>
-        <script src='https://unpkg.com/smoothscroll-anchor-polyfill'></script>
-        <!--<script  src="./script.js"></script>-->
-        <script src="https://code.jquery.com/jquery-2.2.0.min.js" type="text/javascript"></script>
-        <!--<script src="{{ static_asset('catlayout/slick/slick.js') }}" type="text/javascript" charset="utf-8"></script>-->
-        <script src="{{ static_asset('assets/owlcarousel/owl.carousel.js') }}"></script>
-        <script src="{{ static_asset('catlayout/script.js') }}"></script>
+    <script src='https://unpkg.com/smoothscroll-polyfill/dist/smoothscroll.min.js'></script>
+    <script src='https://unpkg.com/smoothscroll-anchor-polyfill'></script>
+    <!--<script  src="./script.js"></script>-->
+    <script src="https://code.jquery.com/jquery-2.2.0.min.js" type="text/javascript"></script>
+    <!--<script src="{{ static_asset('catlayout/slick/slick.js') }}" type="text/javascript" charset="utf-8"></script>-->
+    <script src="{{ static_asset('assets/owlcarousel/owl.carousel.js') }}"></script>
+    <script src="{{ static_asset('catlayout/script.js') }}"></script>
 
-        <script type="text/javascript">
-        
-            $(document).ready(function () {
-                <?php
-                if(!empty($childrenCategories) && count($childrenCategories)) {
-                    ?>
-                        $('.menu-open-subcat').hide();
-                    <?php
-                }
+    <script type="text/javascript">
+    
+        $(document).ready(function () {
+            <?php
+            if(!empty($childrenCategories) && count($childrenCategories)) {
                 ?>
-                var existSlickIds = [];
-                $('.open-subcat').click(function () {
-                    $('.opencat-active').removeClass('opencat-active');
-                    $(this).addClass('opencat-active');
                     $('.menu-open-subcat').hide();
-                    var $id = $(this).attr("id");
-                    if ($id != 0) {
-                        $('.categoryId' + $id).show();
-                        if ($.inArray(parseInt($id), existSlickIds) >= 0) {
+                <?php
+            }
+            ?>
+            var existSlickIds = [];
+            $('.open-subcat').click(function () {
+                $('.opencat-active').removeClass('opencat-active');
+                $(this).addClass('opencat-active');
+                $('.menu-open-subcat').hide();
+                var $id = $(this).attr("id");
+                if ($id != 0) {
+                    $('.categoryId' + $id).show();
+                    if ($.inArray(parseInt($id), existSlickIds) >= 0) {
 
-                        } else {
-                            if ($('.subcat-slider-' + $id).length > 0) {
-                                existSlickIds.push(parseInt($id));
+                    } else {
+                        if ($('.subcat-slider-' + $id).length > 0) {
+                            existSlickIds.push(parseInt($id));
 
-                            }
                         }
                     }
+                }
 
-                });
-                $('.click-subcat').click(function () {
-                    $('.opensubcat-active').removeClass('opensubcat-active');
-                    $(this).addClass('opensubcat-active');
-                });
             });
-        </script>
+            $('.click-subcat').click(function () {
+                $('.opensubcat-active').removeClass('opensubcat-active');
+                $(this).addClass('opensubcat-active');
+            });
+        });
+    </script>
 
-        <script>
-            $(document).ready(function () {
-                var jq = $.noConflict(true);
-                jq('.owl-carousel').owlCarousel({
-                    margin: 10,
-                    nav: true,
-                    loop: false,
-                    rewind: true,
-                    dots: false,
-                    responsive: {
-                        0: {
-                            items: 1
-                        },
-                        300: {
-                            items: 2
-                        },
-                        500: {
-                            items: 4
-                        },
-                        1000: {
-                            items: 4
-                        }
+    <script>
+        $(document).ready(function () {
+            var jq = $.noConflict(true);
+            jq('.owl-carousel').owlCarousel({
+                margin: 10,
+                nav: true,
+                loop: false,
+                rewind: true,
+                dots: false,
+                responsive: {
+                    0: {
+                        items: 1
+                    },
+                    300: {
+                        items: 2
+                    },
+                    500: {
+                        items: 4
+                    },
+                    1000: {
+                        items: 4
                     }
-                })
+                }
             })
-        </script>
-        <script>
-            $(document).ready(function () {
-                var url = window.location.href;
-                var arr = url.split('#');
-                var number = 1;
-                if (number in arr) {
-                    var $prId = arr[1];
-                    if ($('.' + $prId).length > 0) {
-                        $('html, body').animate({
-                            scrollTop: $('.' + $prId).offset().top - 150
-                        }, 'slow');
-                    }
+        })
+    </script>
+    <script>
+        $(document).ready(function () {
+            var url = window.location.href;
+            var arr = url.split('#');
+            var number = 1;
+            if (number in arr) {
+                var $prId = arr[1];
+                if ($('.' + $prId).length > 0) {
+                    $('html, body').animate({
+                        scrollTop: $('.' + $prId).offset().top - 150
+                    }, 'slow');
                 }
-            });
-        </script>
-        <script>
-
-            function CopyToClipboard(e) {
-
-                var url = $(e).data('url');
-
-                var id = $(e).data('id');
-                var name = $(e).data('name');
-                $('.sh-pr' + id).toggle(400);
-                $('.sh-pr' + id + ' .jssocials-share-email .jssocials-share-link').attr('href', 'mailto:?subject=' + name + '&body=' + url);
-                $('.sh-pr' + id + ' .jssocials-share-twitter .jssocials-share-link').attr('href', 'https://twitter.com/share?url=' + url);
-                $('.sh-pr' + id + ' .jssocials-share-facebook .jssocials-share-link').attr('href', 'https://facebook.com/sharer/sharer.php?u=' + url);
-                $('.sh-pr' + id + ' .jssocials-share-linkedin .jssocials-share-link').attr('href', 'https://www.linkedin.com/shareArticle?mini=true&url=' + url);
-                $('.sh-pr' + id + ' .jssocials-share-whatsapp .jssocials-share-link').attr('href', 'whatsapp://send?text=' + url);
-
-                var $temp = $("<input>");
-                $("body").append($temp);
-                $temp.val(url).select();
-                try {
-                    document.execCommand("copy");
-                    AIZ.plugins.notify('success', '<?= translate('Link copied to clipboard') ?>');
-                } catch (err) {
-                    AIZ.plugins.notify('danger', '<?= translate('Oops, unable to copy') ?>');
-                }
-                $temp.remove();
             }
-        </script>
-        <script type="text/javascript">
+        });
+    </script>
+    <script>
 
-            function bid_modal($id) {
-        <?php if (Auth::check() && (Auth::user()->user_type == 'customer' || Auth::user()->user_type == 'seller')) { ?>
-                    $('#bid_for_product .min_bid_amount_txt').html(null).html('Rs' + $('.min_bid_amount' + $id).text());
-                    var $bidBody = $('.bid-form' + $id).html();
-                    $('#bid_for_product .bid-form-content').html(null).html($bidBody);
-                    $('#bid_for_product').modal('show');
-        <?php } else { ?>
-                    AIZ.plugins.notify('warning', "{{ translate('Please login first') }}");
-        <?php } ?>
+        function CopyToClipboard(e) {
+
+            var url = $(e).data('url');
+
+            var id = $(e).data('id');
+            var name = $(e).data('name');
+            $('.sh-pr' + id).toggle(400);
+            $('.sh-pr' + id + ' .jssocials-share-email .jssocials-share-link').attr('href', 'mailto:?subject=' + name + '&body=' + url);
+            $('.sh-pr' + id + ' .jssocials-share-twitter .jssocials-share-link').attr('href', 'https://twitter.com/share?url=' + url);
+            $('.sh-pr' + id + ' .jssocials-share-facebook .jssocials-share-link').attr('href', 'https://facebook.com/sharer/sharer.php?u=' + url);
+            $('.sh-pr' + id + ' .jssocials-share-linkedin .jssocials-share-link').attr('href', 'https://www.linkedin.com/shareArticle?mini=true&url=' + url);
+            $('.sh-pr' + id + ' .jssocials-share-whatsapp .jssocials-share-link').attr('href', 'whatsapp://send?text=' + url);
+
+            var $temp = $("<input>");
+            $("body").append($temp);
+            $temp.val(url).select();
+            try {
+                document.execCommand("copy");
+                AIZ.plugins.notify('success', '<?= translate('Link copied to clipboard') ?>');
+            } catch (err) {
+                AIZ.plugins.notify('danger', '<?= translate('Oops, unable to copy') ?>');
             }
-        </script>
-    @endif
+            $temp.remove();
+        }
+    </script>
+    <script type="text/javascript">
+
+        function bid_modal($id) {
+    <?php if (Auth::check() && (Auth::user()->user_type == 'customer' || Auth::user()->user_type == 'seller')) { ?>
+                $('#bid_for_product .min_bid_amount_txt').html(null).html('Rs' + $('.min_bid_amount' + $id).text());
+                var $bidBody = $('.bid-form' + $id).html();
+                $('#bid_for_product .bid-form-content').html(null).html($bidBody);
+                $('#bid_for_product').modal('show');
+    <?php } else { ?>
+                AIZ.plugins.notify('warning', "{{ translate('Please login first') }}");
+    <?php } ?>
+        }
+    </script>
 @endsection

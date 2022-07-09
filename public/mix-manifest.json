@@ -3,5 +3,7 @@
     "/css/app.css": "/css/app.css",
     "/css/frontend/nearby_sellers.css": "/css/frontend/nearby_sellers.css",
     "/css/frontend/nav_new.css": "/css/frontend/nav_new.css",
-    "/css/frontend/cart_modal.css": "/css/frontend/cart_modal.css"
+    "/css/frontend/cart_modal.css": "/css/frontend/cart_modal.css",
+    "/css/frontend/reseller_page.css": "/css/frontend/reseller_page.css",
+    "/js/frontend/reseller_page.js": "/js/frontend/reseller_page.js"
 }

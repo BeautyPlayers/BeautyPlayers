@@ -19,3 +19,8 @@ mix.sass('resources/sass/frontend/nearby_sellers.scss', 'public/css/frontend');
 mix.sass('resources/sass/frontend/nav_new.scss', 'public/css/frontend');
 
 mix.sass('resources/sass/frontend/cart_modal.scss', 'public/css/frontend');
+
+mix.sass('resources/sass/frontend/reseller_page.scss', 'public/css/frontend');
+
+//Js
+mix.js('resources/js/frontend/reseller_page.js', 'public/js/frontend');

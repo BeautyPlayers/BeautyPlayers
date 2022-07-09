@@ -44,6 +44,7 @@ use App\Http\Controllers\Payment\IyzicoController;
 use App\Http\Controllers\Payment\NagadController;
 use App\Http\Controllers\Payment\PaykuController;
 use App\Http\Controllers\ShopController;
+use App\Http\Controllers\StaticPagesController;
 use App\Http\Controllers\WishlistController;
 
 /*
@@ -95,6 +96,10 @@ Route::controller(LoginController::class)->group(function () {
 Route::controller(VerificationController::class)->group(function () {
     Route::get('/email/resend', 'resend')->name('verification.resend');
     Route::get('/verification-confirmation/{code}', 'verification_confirmation')->name('email.verification.confirmation');
+});
+
+Route::controller(StaticPagesController::class)->group(function () {
+    Route::get('/reseller', 'resellerPage')->name('static.page.reseller');
 });
 
 Route::controller(HomeController::class)->group(function () {

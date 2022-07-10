@@ -144,11 +144,9 @@
                             <div class="col-md-6 text-center text-md-right">
                                 @if(Auth::check())
                                         @if(session()->has('fromShop'))
-                                            <li class="list-inline-item">
-                                                <a href="{{ route('checkout.shipping_info') }}" class="btn btn-primary btn-sm">
-                                                    {{translate('Continue to Shipping')}}
-                                                </a>
-                                            </li>
+                                            <a href="{{ route('checkout.shipping_info') }}" class="btn btn-primary btn-sm">
+                                                {{translate('Continue to Shipping')}}
+                                            </a>
                                         @else
                                             <a href="{{ route('checkout.nearby_sellers') }}" class="btn btn-primary fw-600">
                                                 {{ translate('Continue to Nearby Sellers ')}}

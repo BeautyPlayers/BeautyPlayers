@@ -267,7 +267,14 @@
                     @endif
                      @endif
                 </div>
-                
+                {{-- Floating desktop Cart button::start --}}
+                <div class="d-none d-lg-block  align-self-stretch ml-3 mr-0 bg-primary desktop-cart-btn" data-hover="dropdown" >
+                    <div class="nav-cart-box dropdown h-100" id="cart_items">
+                        @include('frontend.partials.cart')
+                    </div>
+                </div>
+                {{-- Floating desktop Cart button::end --}}
+
                  @if(\Request::getRequestUri() != '/all/services')
                 <div class="d-lg-none ml-auto mr-0">
                     <a class="p-2 d-block text-reset" href="javascript:void(0);" data-toggle="class-toggle" data-target=".front-header-search">
@@ -332,13 +339,13 @@
                         @include('frontend.partials.wishlist')
                     </div>
                 </div>
-
-                <div class="d-none d-lg-block  align-self-stretch ml-3 mr-0" data-hover="dropdown">
+                {{-- 
+                <div class="d-none d-lg-block  align-self-stretch ml-3 mr-0 bg-primary desktop-cart-btn" data-hover="dropdown">
                     <div class="nav-cart-box dropdown h-100" id="cart_items">
                         @include('frontend.partials.cart')
                     </div>
                 </div>
-                
+                --}}
                 @else
                 
                 <div style="position: relative; right: -618px;display:flex;">
@@ -353,12 +360,13 @@
                         @include('frontend.partials.wishlist')
                     </div>
                 </div>
-                
-                 <div class="d-none d-lg-block  align-self-stretch ml-3 mr-0" data-hover="dropdown" >
+                {{--
+                 <div class="d-none d-lg-block  align-self-stretch ml-3 mr-0 bg-primary desktop-cart-btn" data-hover="dropdown" >
                     <div class="nav-cart-box dropdown h-100" id="cart_items">
                         @include('frontend.partials.cart')
                     </div>
                 </div>
+                --}}
                 </div>
                 @endif
 

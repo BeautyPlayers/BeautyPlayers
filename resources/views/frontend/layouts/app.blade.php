@@ -534,12 +534,15 @@ if it's not present, don't show loader */
             return false;
         }
 
-        function directAddToCart(id){
+        function directAddToCart(id,fromShop=''){
             $('.c-preloader').show();
 
             var data = new FormData();
             data.append('id', id);
             data.append('quantity', 1);
+            if(fromShop !==''){
+                data.append('fromShop',JSON.stringify({"fromShop":fromShop,"id":id}));
+            }
             $.ajax({
                 type: 'POST',
                 enctype: 'multipart/form-data',

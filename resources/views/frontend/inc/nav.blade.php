@@ -268,8 +268,8 @@
                      @endif
                 </div>
                 {{-- Floating desktop Cart button::start --}}
-                <div class="d-none d-lg-block  align-self-stretch ml-3 mr-0 bg-primary desktop-cart-btn" data-hover="dropdown" >
-                    <div class="nav-cart-box dropdown h-100" id="cart_items">
+                <div class="d-none d-lg-block  align-self-stretch ml-3 mr-0 bg-white shadow" id="cart_items" data-hover="dropdown" >
+                    <div class="nav-cart-box dropdown h-100">
                         @include('frontend.partials.cart')
                     </div>
                 </div>

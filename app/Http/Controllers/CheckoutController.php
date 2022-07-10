@@ -65,6 +65,9 @@ class CheckoutController extends Controller
                         $order->manual_payment = 1;
                         $order->save();
                     }
+                    if($request->session()->has('fromShop')){
+                        $request->session()->forget('fromShop');
+                    }
                     flash(translate('Your order has been placed successfully. Please submit payment information from purchase history'))->success();
                     return redirect()->route('order_confirmed');
                 }

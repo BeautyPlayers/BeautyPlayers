@@ -493,7 +493,7 @@
                                                     <a href="javascript:void(0)" style="/* position: relative; *//* right: 0; */margin-right: 7px;" onclick="addToCompare(<?= $v->id ?>)" data-toggle="tooltip" data-title="Add to compare" data-placement="bottom" tabindex="0" data-original-title="" title="">
                                                         <i class="las la-sync"  style="font-size: 21px;"></i>
                                                     </a>
-                                                    <a href="javascript:void(0)" style="/* position: relative; *//* right: 0; */margin-right: 7px;" onclick="directAddToCart(<?= $v->id ?>)" class="addcart-btn<?= $v->id ?>" data-toggle="tooltip" data-title="Add to cart" data-placement="bottom" tabindex="0" data-original-title="" title="">
+                                                    <a href="javascript:void(0)" style="/* position: relative; *//* right: 0; */margin-right: 7px;" onclick="directAddToCart(<?= $v->id ?>,{{$seller->id}})" class="addcart-btn<?= $v->id ?>" data-toggle="tooltip" data-title="Add to cart" data-placement="bottom" tabindex="0" data-original-title="" title="">
                                                         <i class="las la-shopping-cart"  style="font-size: 25px;"></i>
                                                     </a>
                                                 </p>
@@ -624,7 +624,7 @@
                                                     <a href="javascript:void(0)" style="/* position: relative; *//* right: 0; */margin-right: 7px;" onclick="addToCompare(<?= $v->id ?>)" data-toggle="tooltip" data-title="Add to compare" data-placement="bottom" tabindex="0" data-original-title="" title="">
                                                         <i class="las la-sync"  style="font-size: 21px;"></i>
                                                     </a>
-                                                    <a href="javascript:void(0)" style="/* position: relative; *//* right: 0; */margin-right: 7px;" onclick="directAddToCart(<?= $v->id ?>)" class="addcart-btn<?= $v->id ?>" data-toggle="tooltip" data-title="Add to cart" data-placement="bottom" tabindex="0" data-original-title="" title="">
+                                                    <a href="javascript:void(0)" style="/* position: relative; *//* right: 0; */margin-right: 7px;" onclick="directAddToCart(<?= $v->id ?>,{{$seller->id}})" class="addcart-btn<?= $v->id ?>" data-toggle="tooltip" data-title="Add to cart" data-placement="bottom" tabindex="0" data-original-title="" title="">
                                                         <i class="las la-shopping-cart"  style="font-size: 25px;"></i>
                                                     </a>                                        
                                                 </p>
@@ -951,7 +951,7 @@
                                                     <a href="javascript:void(0)" style="/* position: relative; *//* right: 0; */margin-right: 7px;" onclick="addToCompare(<?= $v->id ?>)" data-toggle="tooltip" data-title="Add to compare" data-placement="bottom" tabindex="0" data-original-title="" title="">
                                                         <i class="las la-sync"  style="font-size: 21px;"></i>
                                                     </a>
-                                                    <a href="javascript:void(0)" style="/* position: relative; *//* right: 0; */margin-right: 7px;" onclick="directAddToCart(<?= $v->id ?>)" class="addcart-btn<?= $v->id ?>" data-toggle="tooltip" data-title="Add to cart" data-placement="bottom" tabindex="0" data-original-title="" title="">
+                                                    <a href="javascript:void(0)" style="/* position: relative; *//* right: 0; */margin-right: 7px;" onclick="directAddToCart(<?= $v->id ?>,{{$seller->id}})" class="addcart-btn<?= $v->id ?>" data-toggle="tooltip" data-title="Add to cart" data-placement="bottom" tabindex="0" data-original-title="" title="">
                                                         <i class="las la-shopping-cart"  style="font-size: 25px;"></i>
                                                     </a>
                                                 </p>

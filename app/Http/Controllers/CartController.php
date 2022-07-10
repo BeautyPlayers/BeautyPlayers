@@ -304,6 +304,10 @@ class CartController extends Controller
         $data['product_id'] = $product->id;
         $data['owner_id'] = $product->user_id;
 
+        if($request->has('fromShop')){
+            $request->session()->put('fromShop',json_decode($request->input('fromShop'),true));
+        }
+
         $str = '';
         $tax = 0;
         if($product->auction_product == 0){
@@ -519,6 +523,10 @@ class CartController extends Controller
         } else {
             $temp_user_id = $request->session()->get('temp_user_id');
             $carts = Cart::where('temp_user_id', $temp_user_id)->get();
+        }
+
+        if($request->session()->has('fromShop') && $request->session()->get('fromShop')['id']==$request->id && count($carts) < 1){
+            $request->session()->forget('fromShop');
         }
 
         return array(

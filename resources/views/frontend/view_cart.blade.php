@@ -168,6 +168,7 @@
                     <div class="shadow-sm bg-white p-4 rounded">
                         <div class="text-center p-3">
                             <i class="las la-frown la-3x opacity-60 mb-3"></i>
+                            @php (session()->has('fromShop'))?(session()->forgot('fromShop')):'' @endphp
                             <h3 class="h4 fw-700">{{translate('Your Cart is empty')}}</h3>
                         </div>
                     </div>

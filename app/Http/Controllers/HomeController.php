@@ -611,7 +611,7 @@ class HomeController extends Controller
                 /*=================*/
                 $todays_deal_products = Cache::rememberForever('todays_deal_products', function () use ($shop) {
 
-                    return filter_products(Product::with('brand', 'user', 'category')->where('user_id',$shop->user_id)->where('todays_deal', '1')->where('user_id',$shop->user_id))->get();
+                    return filter_products(Product::with('brand', 'user', 'category')->where('user_id',$shop->user_id)->where('todays_deal', '1'))->where('user_id',$shop->user_id)->get();
 
                 });
                 /*=================*/

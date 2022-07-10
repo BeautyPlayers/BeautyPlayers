@@ -294,7 +294,7 @@
                     <?php
                     $featured_products = Cache::remember('featured_products', 3600, function () {
                                 return filter_products(\App\Models\Product::with('brand', 'user', 'category')->where('published', 1)->where('featured', '1'))->limit(12)->get();
-                            });
+                            })->where('user_id',$seller->id);
                     if (count($featured_products)) {
                         ?>
                         <li class="menu-item item">

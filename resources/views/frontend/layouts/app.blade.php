@@ -57,7 +57,8 @@
     @endif
     <link rel="stylesheet" href="{{ static_asset('assets/css/aiz-core.css') }}">
     <link rel="stylesheet" href="{{ static_asset('assets/css/custom-style.css') }}">
-    
+    @stack('style')	
+    @yield('header-styles')
 
   
     <script>
@@ -194,15 +195,34 @@
 @php
     echo get_setting('header_script');
 @endphp
-
+	
+<style>	
+/* Paste this css to your style sheet file or under head tag */	
+/* This only works with JavaScript, 	
+if it's not present, don't show loader */	
+.no-js #loader { display: none;  }	
+.js #loader { display: block; position: absolute; left: 100px; top: 0; }	
+.se-pre-con {	
+	position: fixed;	
+	left: 0px;	
+	top: 0px;	
+	width: 100%;	
+	height: 100%;	
+	z-index: 9999;	
+	background: url("{{ static_asset('assets/img/preloader_1.gif') }}") center no-repeat #fff;	
+}	
+</style>	
+<link rel="stylesheet" href="{{ static_asset('css/frontend/nav_new.css') }}">	
+<link rel="stylesheet" href="{{ static_asset('css/frontend/cart_modal.css') }}">	
 </head>
 <body>
     <!-- aiz-main-wrapper -->
     <div class="aiz-main-wrapper d-flex flex-column">
 
         <!-- Header -->
-        @include('frontend.inc.nav')
-
+        <?php /*@include('frontend.inc.nav')*/?>
+        @include('frontend.inc.nav_new')
+        
         @yield('content')
 
         @include('frontend.inc.footer')
@@ -271,8 +291,19 @@
         </div>
     </div>
 
-    @yield('modal')
-
+    @yield('modal')	
+    <!--/* For showing/hiding page loading animation - start*/-->	
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.4/jquery.min.js"></script>	
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/modernizr/2.8.3/modernizr.js"></script>	
+    <script>	
+    //paste this code under the head tag or in a separate js file.	
+        // Wait for window load	
+        $(window).load(function() {	
+            // Animate loader off screen	
+            $(".se-pre-con").fadeOut("slow");;	
+        });	
+    </script>	
+    /* For showing/hiding page loading animation - end*/	
     <!-- SCRIPTS -->
     <script src="{{ static_asset('assets/js/vendors.js') }}"></script>
     <script src="{{ static_asset('assets/js/aiz-core.js') }}"></script>
@@ -361,6 +392,9 @@
 
         function search(){
             var searchKey = $('#search').val();
+            if(searchKey === '' ){	
+                $('#search-content').html(null);	
+            }
             if(searchKey.length > 0){
                 $('body').addClass("typed-search-box-shown");
 
@@ -502,12 +536,15 @@
             return false;
         }
 
-        function directAddToCart(id){
+        function directAddToCart(id,fromShop=''){
             $('.c-preloader').show();
 
             var data = new FormData();
             data.append('id', id);
             data.append('quantity', 1);
+            if(fromShop !==''){	
+                data.append('fromShop',JSON.stringify({"fromShop":fromShop,"id":id}));	
+            }
             $.ajax({
                 type: 'POST',
                 enctype: 'multipart/form-data',
@@ -544,7 +581,7 @@
                     type:"POST",
                     url: '{{ route('cart.addToCart') }}',
                     data: $('#option-choice-form').serializeArray(),
-                    success: function(data){
+                    /*success: function(data){
 
                        //$('#addToCart-modal-body').html(null);
                        $('.c-preloader').hide();
@@ -555,6 +592,15 @@
                        AIZ.extra.plusMinus();
                        AIZ.plugins.slickCarousel();
                        updateNavCart(data.nav_cart_view,data.cart_count);
+                    }*/
+                    success: function(data){	
+                       $('#addToCart-modal-body').html(null);	
+                       $('.c-preloader').hide();	
+                       $('#modal-size').removeClass('modal-lg');	
+                       $('#addToCart-modal-body').html(data.modal_view);	
+                       AIZ.extra.plusMinus();	
+                       AIZ.plugins.slickCarousel();	
+                       updateNavCart(data.nav_cart_view,data.cart_count);	
                     }
                 });
             }
@@ -594,13 +640,22 @@
             }
         }
 
-    </script>
-
-    @yield('script')
-
-    @php
-        echo get_setting('footer_script');
-    @endphp
+    </script>	
+    <!-- Optional JavaScript -->	
+    <!-- jQuery first, then Popper.js, then Bootstrap JS -->	
+    {{-- <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"	
+        integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"	
+        crossorigin="anonymous"></script> --}}	
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.12.9/dist/umd/popper.min.js"	
+        integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"	
+        crossorigin="anonymous"></script>	
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/js/bootstrap.min.js"	
+        integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"	
+        crossorigin="anonymous"></script>	
+        <!-- swipper js -->	
+        <script src="https://unpkg.com/swiper/swiper-bundle.min.js"></script>	
+    @yield('script')	
+    @yield('footer-scripts')
 
 </body>
 </html>

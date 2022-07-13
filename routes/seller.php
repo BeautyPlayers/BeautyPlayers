@@ -89,8 +89,9 @@ Route::group(['prefix' => 'seller', 'middleware' => ['seller', 'verified', 'user
 
     //Shop
     Route::controller(ShopController::class)->group(function () {
-        Route::get('/shop', 'index')->name('shop.index');
-        Route::post('/shop/update', 'update')->name('shop.update');
+        Route::get('/shop', 'index')->name('shop.index');	
+//        Route::post('/shop/update', 'update')->name('shop.update');	
+        Route::post('/shop/update', 'updateShop')->name('shop.update');
         Route::get('/shop/apply_for_verification', 'verify_form')->name('shop.verify');
         Route::post('/shop/verification_info_store', 'verify_form_store')->name('shop.verify.store');
     });
@@ -139,7 +140,10 @@ Route::group(['prefix' => 'seller', 'middleware' => ['seller', 'verified', 'user
         Route::post('/support_ticket/reply', 'ticket_reply_store')->name('support_ticket.reply_store');
     });
 
-    // Notifications
-    Route::get('all-notification', [NotificationController::class, 'index'])->name('all-notification');
+    // Notifications	
+    Route::get('all-notification', [NotificationController::class, 'index'])->name('all-notification');	
+    //Appointments	
+    Route::resource('appointments', \App\Http\Controllers\Seller\AppointmentController::class);	
+    Route::get('bookings.status/{id}', [\App\Http\Controllers\Seller\AppointmentController::class, 'seller_booking_status'])->name('bookings.status');	
 });
 

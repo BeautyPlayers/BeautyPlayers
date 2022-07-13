@@ -587,7 +587,7 @@
                             $related_product_ids = \App\Models\ProductsAddon::where('product_id', $product->id)->where('addon_product_status', 1)->pluck('related_product_id')->toArray();
                             @endphp
                             @foreach (filter_products(\App\Models\Product::whereIn('id', $related_product_ids)->where('id', '!=', $product->id))->limit(10)->get() as $key => $related_product)
-                            <?php /* @foreach (filter_products(\App\Models\Product::where('category_id', $product->category_id)->where('id', '!=', $product->id))->limit(10)->get() as $key => $related_product) */ ?>
+                            <?php /*@foreach (filter_products(\App\Models\Product::where('category_id', $product->category_id)->where('id', '!=', $product->id))->limit(10)->get() as $key => $related_product)*/ ?>
                             <div class="carousel-box">
                                 <div class="aiz-card-box border border-light rounded hov-shadow-md my-2 has-transition">
                                     <div class="position-relative">
@@ -645,6 +645,6 @@
 
 <script type="text/javascript">
     $('#option-choice-form input').on('change', function () {
-    getVariantPrice();
+        getVariantPrice();
     });
 </script>

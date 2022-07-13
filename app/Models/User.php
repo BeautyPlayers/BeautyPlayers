@@ -126,7 +126,23 @@ class User extends Authenticatable implements MustVerifyEmail
         return $this->hasMany(AffiliateLog::class);
     }
 
-    public function product_bids() {
-        return $this->hasMany(AuctionProductBid::class);
-    }
-}
+	
+    public function product_bids() {	
+        return $this->hasMany(AuctionProductBid::class);	
+    }	
+    public function seller_education() {	
+        return $this->hasMany(SellerEducation::class);	
+    }	
+    public function seller_experiences() {	
+        return $this->hasMany(SellerExperience::class);	
+    }	
+    public function seller_awards() {	
+        return $this->hasMany(SellerAward::class);	
+    }	
+    public function seller_memberships() {	
+        return $this->hasMany(SellerMembership::class);	
+    }	
+    public function seller_registrations() {	
+        return $this->hasMany(SellerRegistration::class);	
+    }	
+}	

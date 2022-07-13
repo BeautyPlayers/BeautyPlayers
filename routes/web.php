@@ -44,6 +44,7 @@ use App\Http\Controllers\Payment\IyzicoController;
 use App\Http\Controllers\Payment\NagadController;
 use App\Http\Controllers\Payment\PaykuController;
 use App\Http\Controllers\ShopController;
+use App\Http\Controllers\StaticPagesController;
 use App\Http\Controllers\WishlistController;
 
 /*
@@ -97,12 +98,17 @@ Route::controller(VerificationController::class)->group(function () {
     Route::get('/verification-confirmation/{code}', 'verification_confirmation')->name('email.verification.confirmation');
 });
 
+Route::controller(StaticPagesController::class)->group(function () {
+    Route::get('/reseller', 'resellerPage')->name('static.page.reseller');
+});
+
 Route::controller(HomeController::class)->group(function () {
     Route::get('/email_change/callback', 'email_change_callback')->name('email_change.callback');
     Route::post('/password/reset/email/submit', 'reset_password_with_code')->name('password.update');
     Route::get('/users/login', 'login')->name('user.login');
     Route::get('/users/registration', 'registration')->name('user.registration');
     Route::post('/users/login/cart', 'cart_login')->name('cart.login.submit');
+    Route::post('user/affiliate/approved', 'userUpdateApproved')->name('user.affiliate_user.approved');
 
     //Home Page
     Route::get('/', 'index')->name('home');
@@ -123,6 +129,8 @@ Route::controller(HomeController::class)->group(function () {
     Route::get('/all/services', 'services_cat')->name('services');
     Route::post('/product/variant_price', 'variant_price')->name('products.variant_price');
     Route::get('/shop/{slug}', 'shop')->name('shop.visit');
+    Route::get('/shop/booking/{slug}', 'seller_booking')->name('shop.booking');
+    Route::post('/shop/booking', 'seller_booking_store')->name('shop.booking.store');
     Route::get('/shop/{slug}/{type}', 'filter_shop')->name('shop.visit.type');
 
     Route::get('/customer-packages', 'premium_package_index')->name('customer_packages_list_show');
@@ -132,6 +140,8 @@ Route::controller(HomeController::class)->group(function () {
     Route::get('/sellers', 'all_seller')->name('sellers');
     Route::get('/coupons', 'all_coupons')->name('coupons.all');
     Route::get('/inhouse', 'inhouse_products')->name('inhouse.all');
+
+    Route::get('/nearby-sellers', 'nearby_seller')->name('nearby.sellers');
 
     // Policies
     Route::get('/seller-policy', 'sellerpolicy')->name('sellerpolicy');
@@ -195,7 +205,7 @@ Route::controller(MercadopagoController::class)->group(function () {
     Route::any('/mercadopago/payment/done', 'paymentstatus')->name('mercadopago.done');
     Route::any('/mercadopago/payment/cancel', 'callback')->name('mercadopago.cancel');
 });
-//Mercadopago 
+//Mercadopago
 
 // SSLCOMMERZ Start
 Route::controller(SslcommerzController::class)->group(function () {
@@ -236,7 +246,7 @@ Route::group(['middleware' => ['user', 'verified', 'unbanned']], function() {
         Route::post('/new-user-email', 'update_email')->name('user.change.email');
         Route::post('/user/update-profile', 'userProfileUpdate')->name('user.profile.update');
     });
-    
+
     Route::get('/all-notifications', [NotificationController::class, 'index'])->name('all-notifications');
 
 });
@@ -247,6 +257,7 @@ Route::group(['middleware' => ['customer', 'verified', 'unbanned']], function() 
     Route::group(['prefix' => 'checkout'], function() {
         Route::controller(CheckoutController::class)->group(function () {
             Route::get('/', 'get_shipping_info')->name('checkout.shipping_info');
+            Route::get('/nearby_sellers', 'get_nearby_sellers')->name('checkout.nearby_sellers');
             Route::any('/delivery_info', 'store_shipping_info')->name('checkout.store_shipping_infostore');
             Route::post('/payment_select', 'store_delivery_info')->name('checkout.store_delivery_info');
             Route::get('/order-confirmed', 'order_confirmed')->name('order_confirmed');
@@ -257,7 +268,7 @@ Route::group(['middleware' => ['customer', 'verified', 'unbanned']], function() 
             Route::post('/remove_coupon_code', 'remove_coupon_code')->name('checkout.remove_coupon_code');
             //Club point
             Route::post('/apply-club-point', 'apply_club_point')->name('checkout.apply_club_point');
-            Route::post('/remove-club-point', 'remove_club_point')->name('checkout.remove_club_point'); 
+            Route::post('/remove-club-point', 'remove_club_point')->name('checkout.remove_club_point');
         });
     });
 
@@ -306,12 +317,12 @@ Route::group(['middleware' => ['customer', 'verified', 'unbanned']], function() 
 });
 
 Route::group(['middleware' => ['auth']], function() {
-    
+
     Route::get('invoice/{order_id}', [InvoiceController::class, 'invoice_download'])->name('invoice.download');
 
     // Reviews
     Route::resource('/reviews', ReviewController::class);
-    
+
     // Product Query
     Route::resource('conversations', ConversationController::class);
     Route::controller(ConversationController::class)->group(function () {

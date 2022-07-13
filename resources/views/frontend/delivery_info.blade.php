@@ -14,6 +14,12 @@
                         </div>
                     </div>
                     <div class="col done">
+                        <div class="text-center text-primary">
+                            <i class="la-3x mb-2 las la-search-location"></i>
+                            <h3 class="fs-14 fw-600 d-none d-lg-block ">Nearby sellers</h3>
+                        </div>
+                    </div>
+                    <div class="col done">
                         <div class="text-center text-success">
                             <i class="la-3x mb-2 las la-map"></i>
                             <h3 class="fs-14 fw-600 d-none d-lg-block">{{ translate('2. Shipping info')}}</h3>
@@ -67,7 +73,7 @@
                                 $seller_products[$product->user_id] = $product_ids;
                             }
                         }
-						
+
 						$pickup_point_list = array();
 						if (get_setting('pickup_point') == 1) {
 							$pickup_point_list = \App\Models\PickupPoint::where('pick_up_status',1)->get();
@@ -99,7 +105,7 @@
                                 </li>
                                 @endforeach
                             </ul>
-                            
+
                             <div class="row border-top pt-3">
                                 <div class="col-md-6">
                                     <h6 class="fs-15 fw-600">{{ translate('Choose Delivery Type') }}</h6>
@@ -164,7 +170,7 @@
 									@endif
                                 </div>
                             </div>
-                            
+
                         </div>
                     </div>
                     @endif
@@ -194,7 +200,7 @@
                                         </li>
                                         @endforeach
                                     </ul>
-                                    
+
                                     <div class="row border-top pt-3">
                                         <div class="col-md-6">
                                             <h6 class="fs-15 fw-600">{{ translate('Choose Delivery Type') }}</h6>
@@ -259,7 +265,7 @@
                                             @endif
                                         </div>
                                     </div>
-                                    
+
                                 </div>
                             </div>
                         @endforeach

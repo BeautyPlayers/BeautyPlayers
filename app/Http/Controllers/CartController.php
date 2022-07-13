@@ -40,7 +40,8 @@ class CartController extends Controller
     public function showCartModal(Request $request)
     {
         $product = Product::with('brand','user','category')->find($request->id);
-        return view('frontend.partials.addToCart', compact('product'));
+        //return view('frontend.partials.addToCart', compact('product'));	
+        return view('frontend.partials.addToCartNew', compact('product'));
     }
 
     public function showCartModalAuction(Request $request)
@@ -302,7 +303,11 @@ class CartController extends Controller
         }
 
         $data['product_id'] = $product->id;
-        $data['owner_id'] = $product->user_id;
+        $data['owner_id'] = $product->user_id;	
+        	
+        if($request->has('fromShop')){	
+            $request->session()->put('fromShop',json_decode($request->input('fromShop'),true));	
+        }
 
         $str = '';
         $tax = 0;
@@ -515,11 +520,15 @@ class CartController extends Controller
         if(auth()->user() != null) {
             $user_id = Auth::user()->id;
             $carts = Cart::where('user_id', $user_id)->get();
-        } else {
-            $temp_user_id = $request->session()->get('temp_user_id');
-            $carts = Cart::where('temp_user_id', $temp_user_id)->get();
-        }
-
+        } else {	
+            $temp_user_id = $request->session()->get('temp_user_id');	
+            $carts = Cart::where('temp_user_id', $temp_user_id)->get();	
+        }	
+        	
+        if($request->session()->has('fromShop') && $request->session()->get('fromShop')['id']==$request->id && count($carts) < 1){	
+            $request->session()->forget('fromShop');	
+        }	
+        	
         return array(
             'cart_count' => count($carts),
             'cart_view' => view('frontend.partials.cart_details', compact('carts'))->render(),

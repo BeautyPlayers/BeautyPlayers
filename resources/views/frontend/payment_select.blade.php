@@ -13,6 +13,12 @@
                         </div>
                     </div>
                     <div class="col done">
+                        <div class="text-center text-primary">
+                            <i class="la-3x mb-2 las la-search-location"></i>
+                            <h3 class="fs-14 fw-600 d-none d-lg-block ">Nearby sellers</h3>
+                        </div>
+                    </div>
+                    <div class="col done">
                         <div class="text-center text-success">
                             <i class="la-3x mb-2 las la-map"></i>
                             <h3 class="fs-14 fw-600 d-none d-lg-block">{{ translate('2. Shipping info')}}</h3>
@@ -472,7 +478,7 @@
 
         var minimum_order_amount_check = {{ get_setting('minimum_order_amount_check') == 1 ? 1 : 0 }};
         var minimum_order_amount = {{ get_setting('minimum_order_amount_check') == 1 ? get_setting('minimum_order_amount') : 0 }};
-        
+
         function use_wallet(){
             $('input[name=payment_option]').val('wallet');
             if($('#agree_checkbox').is(":checked")){;

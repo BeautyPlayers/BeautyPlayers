@@ -28,12 +28,6 @@
 	<link rel="stylesheet" href="{{ static_asset('assets/css/aiz-seller.css') }}">
 
     <style>
-		#map{
-            height:250px;
-            width:600px;
-
-
-        }
         body {
             font-size: 12px;
         }

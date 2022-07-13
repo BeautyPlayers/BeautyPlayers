@@ -183,7 +183,7 @@
         <!-- Pricing -->
         <div class="card">
             <div class="card-body">
-                <!--<h4 class="card-title">Seller Level</h4>-->
+                <h4 class="card-title">Seller Level</h4>
 
                 <div class="form-group row" id="seller_level">
                     <label class="col-md-2 col-form-label">{{ translate('Seller Level') }}</label>
@@ -209,6 +209,8 @@
                         </select>
                     </div>
                 </div>
+
+                <h4 class="card-title">Meta Data</h4>
                 <div class="row">
                     <label class="col-md-2 col-form-label">{{ translate('Meta Title') }}<span class="text-danger text-danger">*</span></label>
                     <div class="col-md-10">
@@ -252,9 +254,11 @@
                     @endphp
                     <select name="service_id[]" class="input-tags form-control" id="select2-dropdown"  multiple="multiple">
                         @foreach($products as $product)
-                            @foreach($sps as $ssd)
-                                <option value="{{$product->id}}" {{$product->id == $ssd ? 'selected' : ''}}>{{$product->name}}</option>
-                            @endforeach
+                            @if($sps)
+                                @foreach($sps as $ssd)
+                                    <option value="{{$product->id}}" {{$product->id == $ssd ? 'selected' : ''}}>{{$product->name}}</option>
+                                @endforeach
+                            @endif
                         @endforeach
                     </select>
     {{--                <input type="text" data-role="tagsinput" class="input-tags form-control" placeholder="Enter Services" name="services" value="Tooth cleaning " id="services">--}}

@@ -283,6 +283,7 @@
                                 <div class="service-list">
                                     <h4>Services</h4>
                                     <ul class="clearfix">
+                                        @if($services_id)
                                         @forelse($services_id as $sid)
                                             @php
                                                 $service = \App\Models\Product::select('name')->where('id', $sid)->first();
@@ -291,6 +292,7 @@
                                         @empty
                                             <li>N/A</li>
                                         @endforelse
+                                        @endif
                                     </ul>
                                 </div>
                                 <!-- /Services List -->

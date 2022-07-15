@@ -234,17 +234,7 @@ class HomeController extends Controller
         }	
         abort(404);	
     }	
-    public function seller_booking_store(Request $request)	
-    {	
-        $booking = Booking::create([	
-            'date_and_time' => $request->input('date_and_time'),	
-            'shop_id' => $request->input('shop_id'),	
-            'user_id' => Auth::user()->id,	
-            'status' => 'pending'	
-        ]);	
-        session(['booking_id' => $booking->id]);	
-        return redirect()->route('checkout.shipping_info');	
-    }	
+
 
     public function seller_booking_store(Request $request)
     {

@@ -24,12 +24,12 @@
         </div>
     </div>
     <div class="bg-white rounded shadow-sm">
-        <div class="border-bottom p-3">
+        {{-- <div class="border-bottom p-3">
             <h3 class="fs-16 fw-600 mb-0">
                 <span class="mr-4">{{ translate('Frequently Bought Together')}}</span>
             </h3>
-        </div>
-        <div class="p-3">
+        </div> --}}
+        {{-- <div class="p-3">
             <div class="aiz-carousel gutters-5 half-outside-arrow" data-items="2" data-xl-items="3" data-lg-items="4"  data-md-items="3" data-sm-items="2" data-xs-items="2" data-arrows='true' data-infinite='true'>
                 @foreach (filter_products(\App\Models\Product::where('category_id', $product->category_id)->where('id', '!=', $product->id))->limit(10)->get() as $key => $related_product)
                 <div class="carousel-box">
@@ -69,7 +69,7 @@
                 </div>
                 @endforeach
             </div>
-        </div>
+        </div> --}}
     </div>
     <div class="text-center">
         <button class="btn btn-outline-primary mb-3 mb-sm-0" data-dismiss="modal">{{ translate('Back to shopping')}}</button>

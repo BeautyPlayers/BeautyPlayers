@@ -2,7 +2,11 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Booking;
+
+use App\Models\Booking;	
+use App\Models\SellerAward;	
+use App\Models\SellerEducation;	
+use App\Models\SellerExperience;
 use Illuminate\Http\Request;
 use Auth;
 use Hash;
@@ -22,10 +26,14 @@ use Cookie;
 use Illuminate\Support\Str;
 use App\Mail\SecondEmailVerifyMailManager;
 use App\Models\AffiliateConfig;
+use App\Models\AffiliateUser;
 use App\Models\Page;
 use Mail;
 use Illuminate\Auth\Events\PasswordReset;
-use Cache;
+
+use Cache;	
+use Illuminate\Support\Facades\DB;	
+use Stevebauman\Location\Facades\Location;
 
 
 class HomeController extends Controller
@@ -213,19 +221,30 @@ class HomeController extends Controller
     public function load_best_sellers_section(){
         return view('frontend.partials.best_sellers_section');
     }
-
-    public function seller_booking($slug)
-    {
-        $seller = Shop::where('slug', $slug)->first();
-        $seller_services = $this->seller_services($slug);
-        $categories = $seller_services['categories'];
-        $producstList = $seller_services['producstList'];
-        $todays_deal_products = $seller_services['todays_deal_products'];
-        if ($seller != null) {
-            return view('frontend.booking', compact('seller','seller_services','categories','producstList','todays_deal_products'));
-        }
-        abort(404);
-    }
+    	
+    public function seller_booking($slug)	
+    {	
+        $seller = Shop::where('slug', $slug)->first();	
+        if ($seller != null) {	
+            $seller_services = $this->seller_services($slug);	
+            $categories = $seller_services['categories'];	
+            $producstList = $seller_services['producstList'];	
+            $todays_deal_products = $seller_services['todays_deal_products'];	
+            return view('frontend.booking', compact('seller','seller_services','categories','producstList','todays_deal_products'));	
+        }	
+        abort(404);	
+    }	
+    public function seller_booking_store(Request $request)	
+    {	
+        $booking = Booking::create([	
+            'date_and_time' => $request->input('date_and_time'),	
+            'shop_id' => $request->input('shop_id'),	
+            'user_id' => Auth::user()->id,	
+            'status' => 'pending'	
+        ]);	
+        session(['booking_id' => $booking->id]);	
+        return redirect()->route('checkout.shipping_info');	
+    }	
 
     public function seller_booking_store(Request $request)
     {
@@ -394,7 +413,7 @@ class HomeController extends Controller
                 $dataCatIds = [];
                 
                 $categories = [];
-                $catIds = Product::where('auction_product', 0)->where('approved', 1)->groupBy('category_id')->pluck('category_id')->toArray();
+                $catIds = Product::where('added_by', 'admin')->where('auction_product', 0)->where('approved', 1)->groupBy('category_id')->pluck('category_id')->toArray();
                 
                 
                 /*=================*/
@@ -413,9 +432,9 @@ class HomeController extends Controller
                         $subCategories = Category::with('categories')->whereIn('id',$catIds)->where('parent_id',$v->id)->get();
                         $getParentCategory[$k]['childrenCategories'] = $subCategories;
 
-                        $resproducts = Product::with('brand','user','category')->where('auction_product', 0)->where('approved', 1)->where('category_id', $v->id)->orderBy('id', 'desc')->get();
+                        $resproducts = Product::with('brand','user','category')->where('added_by', 'admin')->where('auction_product', 0)->where('approved', 1)->where('category_id', $v->id)->orderBy('id', 'desc')->get();
                         $subCategoryIds = Category::with('categories')->whereIn('id',$catIds)->where('parent_id',$v->id)->pluck('id')->toArray();
-                        $resSubCatproducts = Product::with('brand','user','category')->where('auction_product', 0)->where('approved', 1)->whereIn('category_id', $subCategoryIds)->orderBy('id', 'desc')->get();
+                        $resSubCatproducts = Product::with('brand','user','category')->where('added_by', 'admin')->where('auction_product', 0)->where('approved', 1)->whereIn('category_id', $subCategoryIds)->orderBy('id', 'desc')->get();
                         if(count($resSubCatproducts)){
                             $resproducts = $resproducts->merge($resSubCatproducts);
                         }
@@ -462,8 +481,8 @@ class HomeController extends Controller
                 /*=================*/
                 $todays_deal_products = Cache::rememberForever('todays_deal_products', function () {
 
-                    return filter_products(Product::with('brand', 'user', 'category')->where('published', 1)->where('todays_deal', '1'))->get();
-
+                    //return filter_products(Product::with('brand', 'user', 'category')->where('added_by', 'admin')->where('published', 1)->where('todays_deal', '1'))->get();
+                    return filter_products(Product::with('brand', 'user', 'category')->where('added_by', 'admin')->where('published', 1)->where('user_id',$shop->user_id)->where('todays_deal', '1'))->where('user_id',$shop->user_id)->get();
                 });
                 /*=================*/
                 
@@ -670,19 +689,25 @@ class HomeController extends Controller
             }
        // abort(404);
     }
-    public function shop($slug)
-    {
-        $shop  = Shop::where('slug', $slug)->first();
-        if($shop!=null){
-            if ($shop->verification_status != 0){
-                return view('frontend.seller_shop', compact('shop'));
-            }
-            else{
-                return view('frontend.seller_shop_without_verification', compact('shop'));
-            }
-        }
-        abort(404);
+
+    public function shop($slug)	
+    {	
+        $shop  = Shop::where('slug', $slug)->first();	
+        if($shop!=null){	
+            $education = SellerEducation::where('user_id', $shop->user_id)->get();	
+            $exps = SellerExperience::where('user_id', $shop->user_id)->get();	
+            $awards = SellerAward::where('user_id', $shop->user_id)->get();	
+            return view('new_frontend.seller_shop', compact('shop', 'education', 'exps', 'awards'));	
+//            if ($shop->verification_status != 0){	
+//                return view('new_frontend.seller_shop', compact('shop', 'education', 'exps', 'awards'));	
+//            }	
+//            else{	
+//                return view('frontend.seller_shop_without_verification', compact('shop', 'education', 'exps', 'awards'));	
+//            }	
+        }	
+        abort(404);	
     }
+
 
     public function filter_shop($slug, $type)
     {
@@ -1017,8 +1042,48 @@ class HomeController extends Controller
         return view('frontend.coupons', compact('coupons'));
     }
 
-    public function inhouse_products(Request $request) {
-        $products = filter_products(Product::where('added_by', 'admin'))->with('taxes')->paginate(12)->appends(request()->query());
-        return view('frontend.inhouse_products', compact('products'));
+
+
+    public function inhouse_products(Request $request) {	
+        $products = filter_products(Product::where('added_by', 'admin'))->with('taxes')->paginate(12)->appends(request()->query());	
+        return view('frontend.inhouse_products', compact('products'));	
+    }	
+public function nearby_seller(Request $request)	
+    {	
+        // $ip = "119.63.138.116";	
+        $ip = $request->ip();	
+        	
+        $currentUserInfo = Location::get($ip);	
+        $lat = $currentUserInfo->latitude;	
+        $lon = $currentUserInfo->longitude;	
+        //find distance against zip code.	
+        $distanceQuery = Shop::select('*',	
+            DB::raw("6371 * acos(cos(radians(" . $lat . "))	
+            * cos(radians(delivery_pickup_latitude))	
+            * cos(radians(delivery_pickup_longitude) - radians(" . $lon . "))	
+            + sin(radians(" . $lat . "))	
+            * sin(radians(delivery_pickup_latitude))) AS distance_in_km"));	
+        $nearby_sellers = Shop::query()	
+            ->fromSub($distanceQuery, 'shops')	
+            // ->where('distance_in_km', '<', '30')	
+            ->where('verification_status', 1)	
+            ->orderBy('distance_in_km', 'ASC')	
+            ->get();	
+        return view('frontend.all_nearby_sellers', compact('nearby_sellers'));	
+    }
+    
+    public function userUpdateApproved(Request $request)	
+    {	
+        if(Auth::user()->id == $request->id){	
+            $affiliate_user = AffiliateUser::where('user_id',(int)$request->id)->first();	
+            $affiliate_user->status = $request->status;	
+            if($affiliate_user->save()){	
+                return 1;	
+            }	
+            return 0;	
+        } else {	
+            	
+            return 0;	
+        }	
     }
 }

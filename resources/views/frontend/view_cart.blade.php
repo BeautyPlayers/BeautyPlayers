@@ -13,7 +13,13 @@
                             <h3 class="fs-14 fw-600 d-none d-lg-block">{{ translate('1. My Cart')}}</h3>
                         </div>
                     </div>
-                    <div class="col">
+                    <div class="col">	
+                        <div class="text-center">	
+                            <i class="la-3x mb-2 opacity-50 las la-search-location"></i>	
+                            <h3 class="fs-14 fw-600 d-none d-lg-block opacity-50">Nearby sellers</h3>	
+                        </div>	
+                    </div>	
+                    <div class="col">	
                         <div class="text-center">
                             <i class="la-3x mb-2 opacity-50 las la-search-location"></i>
                             <h3 class="fs-14 fw-600 d-none d-lg-block opacity-50">Nearby sellers</h3>
@@ -142,16 +148,16 @@
                                 </a>
                             </div>
                             <div class="col-md-6 text-center text-md-right">
-                                @if(Auth::check())
-                                        @if(session()->has('fromShop'))
-                                            <a href="{{ route('checkout.shipping_info') }}" class="btn btn-primary btn-sm">
-                                                {{translate('Continue to Shipping')}}
-                                            </a>
-                                        @else
-                                            <a href="{{ route('checkout.nearby_sellers') }}" class="btn btn-primary fw-600">
-                                                {{ translate('Continue to Nearby Sellers ')}}
-                                            </a>
-                                    @endif
+                                @if(Auth::check())	
+                                    @if(session()->has('fromShop'))	
+                                        <a href="{{ route('checkout.shipping_info') }}" class="btn btn-primary btn-sm">	
+                                            {{translate('Continue to Shipping')}}	
+                                        </a>	
+                                    @else	
+                                        <a href="{{ route('checkout.nearby_sellers') }}" class="btn btn-primary fw-600">	
+                                            {{ translate('Continue to Nearby Sellers ')}}	
+                                        </a>	
+                                    @endif	
                                 @else
                                     <button class="btn btn-primary fw-600" onclick="showCheckoutModal()">{{ translate('Continue to Shipping')}}</button>
                                 @endif
@@ -164,10 +170,10 @@
             <div class="row">
                 <div class="col-xl-8 mx-auto">
                     <div class="shadow-sm bg-white p-4 rounded">
-                        <div class="text-center p-3">
-                            <i class="las la-frown la-3x opacity-60 mb-3"></i>
-                            @php (session()->has('fromShop'))?(session()->forgot('fromShop')):'' @endphp
-                            <h3 class="h4 fw-700">{{translate('Your Cart is empty')}}</h3>
+                        <div class="text-center p-3">	
+                            <i class="las la-frown la-3x opacity-60 mb-3"></i>	
+                            @php (session()->has('fromShop'))?(session()->forgot('fromShop')):'' @endphp	
+                            <h3 class="h4 fw-700">{{translate('Your Cart is empty')}}</h3>	
                         </div>
                     </div>
                 </div>

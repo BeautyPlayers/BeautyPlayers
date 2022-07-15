@@ -58,7 +58,7 @@
                         <th data-breakpoints="lg"></th>
                         <th data-breakpoints="lg">{{translate('Doctor')}}</th>
                         <th data-breakpoints="lg"></th>
-                        <th data-breakpoints="lg">{{translate('Disease')}}</th>
+                        <th data-breakpoints="lg">{{translate('Service Name')}}</th>
                         <th data-breakpoints="lg">{{translate('Status')}}</th>
                         <th data-breakpoints="lg">{{translate('Booking Info')}}</th>
                         <th data-breakpoints="lg">{{ translate('Amount') }}</th>

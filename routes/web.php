@@ -44,6 +44,7 @@ use App\Http\Controllers\Payment\IyzicoController;
 use App\Http\Controllers\Payment\NagadController;
 use App\Http\Controllers\Payment\PaykuController;
 use App\Http\Controllers\ShopController;
+use App\Http\Controllers\StaticPagesController;
 use App\Http\Controllers\WishlistController;
 
 /*
@@ -97,12 +98,17 @@ Route::controller(VerificationController::class)->group(function () {
     Route::get('/verification-confirmation/{code}', 'verification_confirmation')->name('email.verification.confirmation');
 });
 
+Route::controller(StaticPagesController::class)->group(function () {
+    Route::get('/reseller', 'resellerPage')->name('static.page.reseller');
+});
+
 Route::controller(HomeController::class)->group(function () {
     Route::get('/email_change/callback', 'email_change_callback')->name('email_change.callback');
     Route::post('/password/reset/email/submit', 'reset_password_with_code')->name('password.update');
     Route::get('/users/login', 'login')->name('user.login');
     Route::get('/users/registration', 'registration')->name('user.registration');
     Route::post('/users/login/cart', 'cart_login')->name('cart.login.submit');
+    Route::post('user/affiliate/approved', 'userUpdateApproved')->name('user.affiliate_user.approved');
 
     //Home Page
     Route::get('/', 'index')->name('home');
@@ -134,6 +140,8 @@ Route::controller(HomeController::class)->group(function () {
     Route::get('/sellers', 'all_seller')->name('sellers');
     Route::get('/coupons', 'all_coupons')->name('coupons.all');
     Route::get('/inhouse', 'inhouse_products')->name('inhouse.all');
+
+    Route::get('/nearby-sellers', 'nearby_seller')->name('nearby.sellers');
 
     // Policies
     Route::get('/seller-policy', 'sellerpolicy')->name('sellerpolicy');

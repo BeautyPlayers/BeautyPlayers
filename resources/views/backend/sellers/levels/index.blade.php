@@ -42,7 +42,7 @@
                 <tr>
                     <td>{{ ($key+1) + ($sellerlevels->currentPage() - 1)*$sellerlevels->perPage() }}</td>
                     <td>{{ $sellerlevel->name }}</td>
-                    <td>{{ $sellerlevel->commission }}%</td>
+                    <td>{{ $sellerlevel->commission }}₹</td>
                     <td>{{ $sellerlevel->status == 1 ? 'Yes' : 'No' }}</td>
                     <td>{{ $sellerlevel->is_default == 1 ? 'Yes' : 'No' }}</td>
                     <td>{{ date('d-m-Y h:i A',strtotime($sellerlevel->updated_at)) }}</td>

@@ -44,6 +44,7 @@ use App\Http\Controllers\TaxController;
 use App\Http\Controllers\UpdateController;
 use App\Http\Controllers\WebsiteController;
 use App\Http\Controllers\SellerLevelController;
+use App\Http\Controllers\SellerTagController;
 
 /*
   |--------------------------------------------------------------------------
@@ -160,7 +161,11 @@ Route::group(['prefix' => 'admin', 'middleware' => ['auth', 'admin']], function(
     //Seller Level
     Route::resource('seller-levels', SellerLevelController::class);
     Route::get('/seller-levels/destroy/{id}', [SellerLevelController::class, 'destroy'])->name('seller-levels.destroy');
-
+    
+    //Seller Tag
+    Route::resource('seller-tags', SellerTagController::class);
+    Route::get('/seller-tags/destroy/{id}', [SellerTagController::class, 'destroy'])->name('seller-tags.destroy');
+    
     // Seller Payment
     Route::controller(PaymentController::class)->group(function () {
         Route::get('/seller/payments', 'payment_histories')->name('sellers.payment_histories');

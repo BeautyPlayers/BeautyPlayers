@@ -2,22 +2,22 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Shop;
-use App\Utility\PayfastUtility;
-use Goutte\Client;
-use Illuminate\Http\Request;
-use App\Models\Category;
-use App\Models\Cart;
-use App\Models\Order;
-use App\Models\Coupon;
-use App\Models\CouponUsage;
-use App\Models\Address;
-use App\Models\CombinedOrder;
-use App\Utility\PayhereUtility;
-use App\Utility\NotificationUtility;
-use Illuminate\Support\Facades\DB;
-use Session;
-use Auth;
+use App\Models\Shop;	
+use App\Utility\PayfastUtility;	
+use Goutte\Client;	
+use Illuminate\Http\Request;	
+use App\Models\Category;	
+use App\Models\Cart;	
+use App\Models\Order;	
+use App\Models\Coupon;	
+use App\Models\CouponUsage;	
+use App\Models\Address;	
+use App\Models\CombinedOrder;	
+use App\Utility\PayhereUtility;	
+use App\Utility\NotificationUtility;	
+use Illuminate\Support\Facades\DB;	
+use Session;	
+use Auth;	
 use Stevebauman\Location\Facades\Location;
 
 class CheckoutController extends Controller
@@ -65,8 +65,8 @@ class CheckoutController extends Controller
                         $order->manual_payment = 1;
                         $order->save();
                     }
-                    if($request->session()->has('fromShop')){
-                        $request->session()->forget('fromShop');
+                    if($request->session()->has('fromShop')){	
+                        $request->session()->forget('fromShop');	
                     }
                     flash(translate('Your order has been placed successfully. Please submit payment information from purchase history'))->success();
                     return redirect()->route('order_confirmed');
@@ -94,33 +94,30 @@ class CheckoutController extends Controller
         Session::put('combined_order_id', $combined_order_id);
         return redirect()->route('order_confirmed');
     }
-
-    public function get_nearby_sellers(Request $request)
-    {
-//        $ip = "119.63.138.116";
-        $ip = $request->ip();
-        
-        $currentUserInfo = Location::get($ip);
-        $lat = $currentUserInfo->latitude;
-        $lon = $currentUserInfo->longitude;
-        //find distance against zip code.
-        $distanceQuery = Shop::select('*',
-            DB::raw("6371 * acos(cos(radians(" . $lat . "))
-            * cos(radians(delivery_pickup_latitude))
-            * cos(radians(delivery_pickup_longitude) - radians(" . $lon . "))
-            + sin(radians(" . $lat . "))
-            * sin(radians(delivery_pickup_latitude))) AS distance_in_km"));
-
-        $nearby_sellers = Shop::query()
-            ->fromSub($distanceQuery, 'shops')
-            // ->where('distance_in_km', '<', '30')
-            ->where('verification_status', 1)
-            ->orderBy('distance_in_km', 'ASC')
-            ->get();
-
-        return view('frontend.nearby_sellers', compact('nearby_sellers'));
-    }
-
+	
+    public function get_nearby_sellers(Request $request)	
+    {	
+//        $ip = "119.63.138.116";	
+        $ip = $request->ip();	
+        	
+        $currentUserInfo = Location::get($ip);	
+        $lat = $currentUserInfo->latitude;	
+        $lon = $currentUserInfo->longitude;	
+        //find distance against zip code.	
+        $distanceQuery = Shop::select('*',	
+            DB::raw("6371 * acos(cos(radians(" . $lat . "))	
+            * cos(radians(delivery_pickup_latitude))	
+            * cos(radians(delivery_pickup_longitude) - radians(" . $lon . "))	
+            + sin(radians(" . $lat . "))	
+            * sin(radians(delivery_pickup_latitude))) AS distance_in_km"));	
+        $nearby_sellers = Shop::query()	
+            ->fromSub($distanceQuery, 'shops')	
+            // ->where('distance_in_km', '<', '30')	
+            ->where('verification_status', 1)	
+            ->orderBy('distance_in_km', 'ASC')	
+            ->get();	
+        return view('frontend.nearby_sellers', compact('nearby_sellers'));	
+    }	
     public function get_shipping_info(Request $request)
     {
         $carts = Cart::where('user_id', Auth::user()->id)->get();

@@ -9,7 +9,7 @@ class Product extends Model
 {
 
     protected $fillable = [
-        'name', 'added_by', 'user_id', 'category_id', 'brand_id', 'photos', 'thumbnail_img', 'video_provider', 'video_link', 
+        'name', 'added_by', 'user_id', 'from_product_id', 'category_id', 'brand_id', 'photos', 'thumbnail_img', 'video_provider', 'video_link', 
         'tags', 'description', 'unit_price', 'purchase_price', 'variant_product', 'attributes', 'choice_options', 'unit', 'slug', 'earn_point',
         'approved', 'choice_options', 'colors', 'variations', 'todays_deal', 'published', 'approved', 'stock_visibility_state', 
         'cash_on_delivery', 'featured', 'seller_featured', 'current_stock', 'unit', 'min_qty', 'low_stock_quantity', 
@@ -88,5 +88,15 @@ class Product extends Model
     public function scopePhysical($query)
     {
         return $query->where('digital', 0);
+    }
+
+    public function averageRating()
+    {
+        $totalPoints = 0;
+        foreach($this->reviews as $review){
+            $totalPoints += $review->rating;
+        }
+
+        return count($this->reviews) ? (int)($totalPoints/count($this->reviews)) : 0; 
     }
 }

@@ -541,6 +541,7 @@
             </div>
             <div class="aiz-carousel gutters-10 half-outside-arrow" data-items="6" data-xl-items="5" data-lg-items="4"
                 data-md-items="3" data-sm-items="2" data-arrows='true'>
+                @if(isset($products) && count($products))
                 @foreach ($products as $key => $product)
                     <div class="carousel-box">
                         <div
@@ -572,6 +573,7 @@
                         </div>
                     </div>
                 @endforeach
+                @endif
             </div>
         </div>
     </div>
@@ -584,16 +586,20 @@
             type: 'bar',
             data: {
                 labels: [
+                    @if(isset($last_7_days_sales) && count($last_7_days_sales))
                     @foreach ($last_7_days_sales as $key => $last_7_days_sale)
                         '{{ $key }}',
                     @endforeach
+                    @endif
                 ],
                 datasets: [{
                     label: 'Sales ($)',
                     data: [
+                        @if(isset($last_7_days_sales) && count($last_7_days_sales))
                         @foreach ($last_7_days_sales as $key => $last_7_days_sale)
                             '{{ $last_7_days_sale }}',
                         @endforeach
+                        @endif
                     ],
 
                     backgroundColor: ['#0277BD', '#0277BD', '#0277BD', '#0277BD', '#0277BD', '#0277BD',

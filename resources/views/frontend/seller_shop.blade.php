@@ -52,6 +52,12 @@
                                 {{ renderStarRating($shop->rating) }}
                             </div>
                             <div class="location opacity-60">{{ $shop->address }}</div>
+                        </div>	
+                        <div class="text-right">	
+                            <a href="{{ route('shop.booking', $shop->slug) }}"	
+                               class="btn btn-soft-primary btn-sm mb-2">	
+                                Book Appointment	
+                            </a>	
                         </div>
                         <div class="text-right">
                             <a href="{{ route('shop.booking', $shop->slug) }}"

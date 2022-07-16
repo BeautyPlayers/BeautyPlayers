@@ -246,6 +246,7 @@ class ProductService
                 unset($collection['sku_' . str_replace('.', '_', $str)]);
                 unset($collection['qty_' . str_replace('.', '_', $str)]);
                 unset($collection['img_' . str_replace('.', '_', $str)]);
+                unset($collection['duration_' . str_replace('.', '_', $str)]);
             }
         }
 

@@ -176,7 +176,7 @@ $qty += $stock->qty;
                         <p class="mb-1" style="font-weight: 600">
                             <!-- <i class="fa-solid fa-clock"></i> -->
                             <img src="https://www.beautyplayers.com/public/uploads/all/RYspA4IVDo4a3k700tzDTfX3qcnau5I4FUjiNqqb.png" style="width: 25px;height: 25px;" alt="">
-                            {{ $product->getTranslation('unit') }} mins
+                            <span id="variationDuration">{{ $product->getTranslation('unit') }}</span> mins
                         </p>
                     </div>
                     {{-- <button type="submit" onclick="addToCart() class="btn btn-success btn-book-now" style="font-size: 1.3rem;"> BOOK

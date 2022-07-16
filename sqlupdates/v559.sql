@@ -1,0 +1,1 @@
+ALTER TABLE `product_stocks` ADD `duration` INT NULL DEFAULT NULL AFTER `qty`;

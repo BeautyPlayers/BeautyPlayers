@@ -185,7 +185,9 @@ class AttributeController extends Controller
             'code' => 'required|unique:colors|max:255',
         ]);
         $color = new Color;
-        $color->name = Str::replace(' ', '', $request->name);
+        //Allow the space in the string
+        // $color->name = Str::replace(' ', '', $request->name);
+        $color->name = trim($request->name);
         $color->code = $request->code;
         
         $color->save();
@@ -215,7 +217,9 @@ class AttributeController extends Controller
             'code' => 'required|unique:colors,code,'.$color->id,
         ]);
         
-        $color->name = Str::replace(' ', '', $request->name);
+        // $color->name = Str::replace(' ', '', $request->name);
+        //Allow the space in the string
+        $color->name = trim($request->name);
         $color->code = $request->code;
         
         $color->save();

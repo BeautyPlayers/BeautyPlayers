@@ -503,6 +503,9 @@ if it's not present, don't show loader */
                         if($('#variationPrice').length > 0){
                             $('#variationPrice').html(data.price);
                         }
+                        if($('#variationDuration').length > 0){
+                            $('#variationDuration').html(data.duration);
+                        }
                         $('#available-quantity').html(data.quantity);
                         $('.input-number').prop('max', data.max_limit);
                         if(parseInt(data.in_stock) == 0 && data.digital  == 0){

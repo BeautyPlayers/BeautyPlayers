@@ -1102,6 +1102,8 @@ class HomeController extends Controller
 
         $max_limit = $product_stock->qty;
 
+        $duration = $product_stock->duration ?? $product->unit;
+
 
 
         if($quantity >= 1 && $product->min_qty <= $quantity){
@@ -1210,7 +1212,9 @@ class HomeController extends Controller
 
             'max_limit' => $max_limit,
 
-            'in_stock' => $in_stock
+            'in_stock' => $in_stock,
+
+            'duration' => $duration
 
         );
 

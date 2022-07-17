@@ -48,7 +48,9 @@ use App\Mail\SecondEmailVerifyMailManager;
 use App\Models\AffiliateConfig;
 use App\Models\AffiliateUser;
 use App\Models\Page;
-
+use App\Models\SellerPackage;
+use App\Models\ServicePackage;
+use App\Models\ServicePackageProduct;
 use Mail;
 
 use Illuminate\Auth\Events\PasswordReset;
@@ -694,6 +696,7 @@ class HomeController extends Controller
                     return filter_products(Product::with('brand', 'user', 'category')->where('added_by', 'admin')->where('published', 1)->where('todays_deal', '1'))->get();
                     // return filter_products(Product::with('brand', 'user', 'category')->where('added_by', 'admin')->where('published', 1)->where('user_id',$shop->user_id)->where('todays_deal', '1'))->where('user_id',$shop->user_id)->get();
                 });
+                $servicePackages = ServicePackage::with('servicePackageProducts')->get();
                 /*=================*/
                 
                 
@@ -745,7 +748,8 @@ class HomeController extends Controller
                 }*/
                 //return $categories;
                 //return $categories;
-                return view('frontend.cat_services', compact('categories','producstList','todays_deal_products'));
+                // dd($servicePackages);
+                return view('frontend.cat_services', compact('categories','producstList','todays_deal_products','servicePackages'));
 
 
        // abort(404);
@@ -898,6 +902,14 @@ class HomeController extends Controller
 
             }
        // abort(404);
+    }
+
+    public function edit_service_package(ServicePackage $servicePackage){
+        $products =Product::with('brand')->orderBy('id', 'desc')
+                    ->where('auction_product', 0)
+                    ->where('wholesale_product', 0)->get();
+        $select_products = $servicePackage->servicePackageProducts->pluck('product_id')->toArray();
+        return view('frontend.partials.service_package_edit', compact('servicePackage', 'products','select_products'));
     }
 
     public function shop($slug)	

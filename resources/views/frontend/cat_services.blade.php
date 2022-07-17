@@ -419,6 +419,17 @@
 
     <ul class="menu regular text-center mb-0 owl-carousel owl-theme" style="max-width: initial;">
 
+        <li class="menu-item item">
+
+            <a class="menu-item-link open-subcat" id="customerPackage" href="javascript:void(0);">
+
+                <img style="width: 40px;/* float: left; */display: unset;" src="{{ static_asset('assets/img/auctions.png') }}">
+
+                <div style="/*float: left;*/">{{ translate('Make Your Own Package') }}</div>
+
+            </a>
+
+        </li>
         @if (count($categories) > 0)
 
         <?php
@@ -609,6 +620,156 @@
 
 <main id="main-content" class="page-sections pt-4" style="z-index: 0; position: relative;top: -25px;width:100%;">
 
+    <!-- Custom Package::Start -->
+    @if(isset($servicePackages) && count($servicePackages))
+    
+    @foreach($servicePackages as $k=>$v)
+
+    <section class="page-section my-3 pr{{ $v->id }}" id="servicePackage{{ $v->id }}">
+
+        <div class="container" style="background-color: #ffffff;">
+
+            <h2 class="section-title">
+                <h4 class="mt-3 pt-3 p-0 top-catTitle container" id="servicePackage" style="/* background: rgb(37, 211, 102); *//* padding: 15px; */font-size: 30px;font-weight: 700;text-transform: uppercase;color: rgb(37, 211, 102);">
+                    <!-- <img class="cat-image lazyload mr-2 w-100" src="{{ static_asset('assets/img/featured-banner.jpeg') }}"> -->
+                    <span>{{ translate('Make Your Own Package') }}</span>
+                </h4>
+                <div class="mt-5">
+                    <smal class="text-success h6"><strong><i class="fa fa-bookmark"></i> {{ translate('Package') }}</strong></smal>
+                </div>
+            </h2>
+
+            <div class="row" id="Xp{{ $v->category ? (($v->category->parent_id !== 0)? $v->category->parent_id: $v->category->id) : 0 }}">
+
+                <div class="col-md-12">
+
+                    <div class="row shadow rounded">
+
+                        <div class="pl-3 pt-3 pr-2 pb-2 col-md-12 col-xs-12">
+
+                            <div class="row">
+
+                                <div class="col-md-12 col-sm-12 cat-title">
+
+                                    <h6 style="font-size: 15px;font-weight: 600;">{{ substr($v->name, 0, 20) }}
+
+                                        <?php /* &nbsp;<span style="font-size:12px;">{{ $v->brand->name ?? '' }}</span> */ ?>
+
+                                        <i class="fa fa-info-circle view-detail-btn-i" onclick="showAddToCartModal(<?= $v->id ?>)" data-toggle="tooltip" data-placement="left" tabindex="0" data-original-title="" title=""></i>
+
+                                    </h6>
+
+                                    <h5 class="text-primary rating-list">
+
+                                        @php
+
+                                        $total = 0;
+                                        if(!empty($v->reviews))
+                                        $total += $v->reviews->count();
+
+                                        @endphp
+
+                                        <span class="rating" style="font-size: 15px;">
+
+                                            @if(!empty($v->review))
+                                            @for ($i=0; $i < $v->averageRating(); $i++)
+
+                                            <i class="fa-solid fa-star" style="color: #f7a616;"></i>
+
+                                            @endfor
+
+                                            @for ($i=0; $i < 5-$v->averageRating(); $i++)
+
+                                            <i class="fa-solid fa-star" style="color: #e2e2e2;"></i>
+
+                                            @endfor
+                                            @endif
+
+                                        </span>
+
+                                        <span style="font-size: 12px;">({{ $total }} {{ translate('reviews')}})</span>
+
+                                    </h5>
+
+
+
+                                    <div class="fs-15">
+
+                                        <del class="fw-600 opacity-50 mr-1">Rs{{ $v->cost_price }}</del>
+
+                                        <span class="fw-700 text-primary cat-price">Rs{{ $v->special_price }}
+                                        <hr>
+                                            @if($v->has('servicePackageProducts'))
+                                                @foreach($v->servicePackageProducts as $servicePackageProduct)
+                                                    @if($servicePackageProduct->product)
+                                                    <p>
+                                                    <small><i class="fa fa-circle fa-xs"></i></small> <span>{{$servicePackageProduct->product->name ?? 'N/A'}}</span>
+                                                    </p>
+                                                    @endif
+                                                @endforeach
+                                            @endif
+
+                                        </span>
+
+                                    </div>
+
+                                </div>
+
+                            </div>
+
+                            <div class="row">
+
+                                <div class="col-sm-6">
+                                    <!-- <a href="javascript:void(0)" class="ml-auto mr-0 mt-3 btn btn-primary btn-sm shadow-md theme-btn-pink view-detail-btn-section" onclick="showAddToCartModal(<?php /* echo $v->id; */ ?>)" data-toggle="tooltip" data-placement="left" tabindex="0" data-original-title="" title=""> -->
+                                    <a href="javascript:void(0)" class="ml-auto mr-0 mt-3 btn btn-primary btn-sm shadow-md theme-btn-pink view-detail-btn-section" onclick="showEditPackageModal(<?php  echo $v->id;  ?>)" data-toggle="tooltip" data-placement="left" tabindex="0" data-original-title="" title="">
+                                        {{translate('Edit your package')}}
+                                    </a>
+                                </div>
+
+                                <div class="col-sm-6">
+
+                                    <p class="text-right m-2 catbtnList">
+
+                                        <a href="javascript:void(0)" style="/* position: relative; *//* right: 0; */margin-right: 7px;" onclick="addToWishList(<?= $v->id ?>)" data-toggle="tooltip" data-title="Add to wishlist" data-placement="bottom" tabindex="0" data-original-title="" title="">
+
+                                            <i class="la la-heart-o" style="font-size: 21px;"></i>
+
+                                        </a>
+
+                                        <a href="javascript:void(0)" style="/* position: relative; *//* right: 0; */margin-right: 7px;" onclick="addToCompare(<?= $v->id ?>)" data-toggle="tooltip" data-title="Add to compare" data-placement="bottom" tabindex="0" data-original-title="" title="">
+
+                                            <i class="las la-sync" style="font-size: 21px;"></i>
+
+                                        </a>
+
+                                        <a href="javascript:void(0)" style="/* position: relative; *//* right: 0; */margin-right: 7px;" onclick="directAddToCart(<?= $v->id ?>)" class="addcart-btn<?= $v->id ?>" data-toggle="tooltip" data-title="Add to cart" data-placement="bottom" tabindex="0" data-original-title="" title="">
+
+                                            <i class="las la-shopping-cart" style="font-size: 25px;"></i>
+
+                                        </a>
+
+                                    </p>
+
+                                </div>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </section>
+
+    @endforeach
+
+    @endif
+    <!-- Custom Package::End -->
     @if(isset($todays_deal_products) && count($todays_deal_products))
 
     @if(file_exists('public/assets/img/today-deal-banner.jpeg'))
@@ -1833,6 +1994,38 @@
 
 </div>
 
+<div class="modal fade" id="customerPackageModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+
+    <div class="modal-dialog modal-dialog-centered" role="document">
+
+        <div class="modal-content">
+
+            <div class="modal-header">
+
+                <h5 class="modal-title" id="exampleModalLabel">{{ translate('Package') }}</h5>
+
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+
+                </button>
+
+            </div>
+
+            <div class="modal-body">
+
+                <div class="bid-form-content">
+
+
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
 @endsection
 
 
@@ -1903,6 +2096,33 @@
     //                                            });
 
     //});
+
+    function showEditPackageModal(id){
+        // start
+        // if($('#option-choice-form input[name=quantity]').val() > 0 && checkAddToCartValidity()){
+            $.ajax({
+                type:"GET",
+                url: `/service-package/edit/${id}`,
+                data: $('#option-choice-form').serializeArray(),
+                success: function(data){
+                    $('#available-quantity').html(data.quantity);
+                    if(parseInt(data.in_stock) == 0 && data.digital  == 0){
+                        $('.buy-now').addClass('d-none');
+                        $('.add-to-cart').addClass('d-none');
+                        $('.out-of-stock').removeClass('d-none');
+                    }
+                    else{
+                        $('.buy-now').removeClass('d-none');
+                        $('.add-to-cart').removeClass('d-none');
+                        $('.out-of-stock').addClass('d-none');
+                    }
+                    $('#customerPackageModal').modal('show');
+                    AIZ.extra.plusMinus();
+                }
+            });
+        // }
+        // end
+    }
 
     $(document).ready(function() {
 

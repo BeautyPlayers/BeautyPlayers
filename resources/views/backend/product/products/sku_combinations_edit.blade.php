@@ -17,6 +17,9 @@
             <td class="text-center" data-breakpoints="lg">
                 {{translate('Photo')}}
             </td>
+            <td class="text-center" data-breakpoints="lg">
+                {{translate('Duration')}}
+            </td>
         </tr>
     </thead>
     <tbody>
@@ -108,6 +111,17 @@
                                @endphp">
                     </div>
                     <div class="file-preview box sm"></div>
+                </td>
+                <td>
+                    <input type="number" lang="en" name="duration_{{ $str }}" value="@php
+                                if($stock != null){
+                                    echo $stock->duration;
+                                }
+                                else {
+                                    echo $product->unit;
+                                }
+                           @endphp" min="5" step="5" class="form-control">
+                           <small class="text-muted">(Always in minutes)</small>
                 </td>
             </tr>
             @endif

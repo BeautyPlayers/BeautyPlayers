@@ -40,17 +40,143 @@ $qty += $stock->qty;
                             </span>
                         </div>
                     </div>
+                    <!-- Form ::START -->
+                    <!-- Form for product submission -->
+                    <form id="option-choice-form">
+                        @csrf
+                        <input type="hidden" name="id" value="{{ $product->id }}">
+
+                        <!-- Quantity + Add to cart -->
+                        @if($product->digital !=1)
+                        @if ($product->choice_options != null)
+                        @foreach (json_decode($product->choice_options) as $key => $choice)
+
+                        <div class="row no-gutters">
+                            <div class="col-2">
+                                @php
+                                $attr = \App\Models\Attribute::find($choice->attribute_id);
+                                @endphp
+                                <div class="opacity-50 mt-2 ">{{ $attr ? $attr->getTranslation('name') : 'Attribute' }}:</div>
+                            </div>
+                            <div class="col-10">
+                                <div class="aiz-radio-inline">
+                                    @foreach ($choice->values as $key => $value)
+                                    <label class="aiz-megabox pl-0 mr-2">
+                                        <input type="radio" name="attribute_id_{{ $choice->attribute_id }}" value="{{ $value }}" @if($key==0) checked @endif>
+                                        <span class="aiz-megabox-elem rounded d-flex align-items-center justify-content-center py-2 px-3 mb-2">
+                                            {{ $value }}
+                                        </span>
+                                    </label>
+                                    @endforeach
+                                </div>
+                            </div>
+                        </div>
+
+                        @endforeach
+                        @endif
+                        {{--
+                        @if (count(json_decode($product->colors)) > 0)
+                        <div class="row no-gutters">
+                            <div class="col-2">
+                                <div class="opacity-50 mt-2">{{ translate('Color')}}:
+                                </div>
+                            </div>
+                            <div class="col-10">
+                                <div class="aiz-radio-inline">
+                                    @foreach (json_decode($product->colors) as $key => $color)
+                                    <label class="aiz-megabox pl-0 mr-2" data-toggle="tooltip" data-title="{{ \App\Models\Color::where('code', $color)->first()->name }}">
+                                        <input type="radio" name="color" value="{{ \App\Models\Color::where('code', $color)->first()->name }}" @if($key==0) checked @endif>
+                                        <span class="aiz-megabox-elem rounded d-flex align-items-center justify-content-center p-1 mb-2">
+                                            <span class="size-30px d-inline-block rounded" style="background-color: #{{ \Str::limit($color,6,'') }};"></span>
+                                        </span>
+                                    </label>
+                                    @endforeach
+                                </div>
+                            </div>
+                        </div>
+
+                        <hr>
+                        @endif
+                        --}}
+                        <!-- Variation with Image ::START  -->
+                        @if (!empty($product->stocks) && $product->stocks->count() > 0)
+                        <div class="row no-gutters">
+                            <!-- <div class="col-2">
+                                                <div class="opacity-50 mt-2">{{ translate('Color')}}:</div>
+                                            </div> -->
+                            <div class="col-10">
+                                <div class="aiz-radio-inline">
+                                    @foreach ($product->stocks as $key => $stock)
+                                    <label class="aiz-megabox pl-0 mr-2" data-toggle="tooltip" data-title="{{ $stock->variant }}">
+                                        <input type="radio" class="variation" name="color" value="{{ $stock->variant }}" @if($key==0) checked @endif>
+                                        <span class="aiz-megabox-elem d-flex align-items-center justify-content-center p-1 mb-2">
+                                            {{-- <span class="size-30px d-inline-block rounded" style="background-color: #{{ \Str::limit($color,6,'') }};"></span> --}}
+                                        <img class="img-fluid {{$stock->image}}" src="{{ (!empty($stock->image))?uploaded_asset($stock->image):static_asset('assets/img/placeholder.jpg') }}" data-src="{{ (!empty($stock->image))?uploaded_asset($stock->image):static_asset('assets/img/placeholder.jpg') }}" onerror="if this.onerror=null this.src='{{ static_asset('assets/img/placeholder.jpg') }}';" style="border-radius: 10px; width: 40px; height:40px; !Important;">
+                                        </span>
+                                    </label>
+                                    @endforeach
+                                </div>
+                            </div>
+                        </div>
+
+                        <hr>
+                        @endif
+                        <!-- Variation with Image ::END -->
+
+                        <div class="row no-gutters" style="display: none">
+                            <div class="col-2">
+                                <div class="opacity-50 mt-2">{{ translate('Quantity')}}:</div>
+                            </div>
+                            <div class="col-10">
+                                <div class="product-quantity d-flex align-items-center">
+                                    <div class="row no-gutters align-items-center aiz-plus-minus mr-3" style="width: 130px;">
+                                        <button class="btn col-auto btn-icon btn-sm btn-circle btn-light" type="button" data-type="minus" data-field="quantity" disabled="">
+                                            <i class="las la-minus"></i>
+                                        </button>
+                                        <input type="number" name="quantity" class="col border-0 text-center flex-grow-1 fs-16 input-number" placeholder="1" value="{{ $product->min_qty }}" min="{{ $product->min_qty }}" max="10" lang="en">
+                                        <button class="btn  col-auto btn-icon btn-sm btn-circle btn-light" type="button" data-type="plus" data-field="quantity">
+                                            <i class="las la-plus"></i>
+                                        </button>
+                                    </div>
+                                    <div class="avialable-amount opacity-60">
+                                        @if($product->stock_visibility_state == 'quantity')
+                                        (<span id="available-quantity">{{ $qty }}</span> {{ translate('available')}})
+                                        @elseif($product->stock_visibility_state == 'text' && $qty >= 1)
+                                        (<span id="available-quantity">{{ translate('In Stock') }}</span>)
+                                        @endif
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <hr>
+                        @endif
+
+                        <div class="row no-gutters pb-3 d-none" id="chosen_price_div" style="display: none">
+                            <div class="col-2">
+                                <div class="opacity-50">{{ translate('Total Price')}}:</div>
+                            </div>
+                            <div class="col-10">
+                                <div class="product-price">
+                                    <strong id="chosen_price" class="h4 fw-600 text-primary">
+
+                                    </strong>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                    <!-- Form ::END -->
                     <div>
                         <p class="two-11 mb-0" style="display: flex; justify-content: flex-start;">
                             @if(home_price($product) != home_discounted_price($product) )
-                            <small class="two-str" style="text-decoration: line-through;width:auto;font-size:1rem;">{{ home_price($product) }}</small>
+                            <small  class="two-str" style="text-decoration: line-through;width:auto;font-size:1rem;">{{ home_price($product) }}</small>
                             @endif
-                            <strong class="ml-3" style="font-size: 1.2rem;">{{ home_discounted_price($product) }}</strong>
+                            <strong id="variationPrice" class="ml-3" style="font-size: 1.2rem;">{{ home_discounted_price($product) }}</strong>
                         </p>
                         <p class="mb-1" style="font-weight: 600">
                             <!-- <i class="fa-solid fa-clock"></i> -->
                             <img src="https://www.beautyplayers.com/public/uploads/all/RYspA4IVDo4a3k700tzDTfX3qcnau5I4FUjiNqqb.png" style="width: 25px;height: 25px;" alt="">
-                            {{ $product->getTranslation('unit') }} mins
+                            <span id="variationDuration">{{ $product->getTranslation('unit') }}</span> mins
                         </p>
                     </div>
                     {{-- <button type="submit" onclick="addToCart() class="btn btn-success btn-book-now" style="font-size: 1.3rem;"> BOOK
@@ -85,7 +211,7 @@ $qty += $stock->qty;
                 {!! $product->getTranslation('description') !!}
             </div>
         </div>
-        <div class="row my-5">
+        <div class="row my-5 col-md-12">
             <div class="col-md-12">
                 <div class="swiper mySwiper card-slider">
                     <div class="swiper-wrapper">
@@ -483,105 +609,6 @@ $qty += $stock->qty;
 </div>
 </div>
 
-<!-- Form for product submission -->
-<form id="option-choice-form">
-    @csrf
-    <input type="hidden" name="id" value="{{ $product->id }}">
-
-    <!-- Quantity + Add to cart -->
-    @if($product->digital !=1)
-    @if ($product->choice_options != null)
-    @foreach (json_decode($product->choice_options) as $key => $choice)
-
-    <div class="row no-gutters">
-        <div class="col-2">
-            @php
-            $attr = \App\Models\Attribute::find($choice->attribute_id);
-            @endphp
-            <div class="opacity-50 mt-2 ">{{ $attr ? $attr->getTranslation('name') : 'Attribute' }}:</div>
-        </div>
-        <div class="col-10">
-            <div class="aiz-radio-inline">
-                @foreach ($choice->values as $key => $value)
-                <label class="aiz-megabox pl-0 mr-2">
-                    <input type="radio" name="attribute_id_{{ $choice->attribute_id }}" value="{{ $value }}" @if($key==0) checked @endif>
-                    <span class="aiz-megabox-elem rounded d-flex align-items-center justify-content-center py-2 px-3 mb-2">
-                        {{ $value }}
-                    </span>
-                </label>
-                @endforeach
-            </div>
-        </div>
-    </div>
-
-    @endforeach
-    @endif
-
-    @if (count(json_decode($product->colors)) > 0)
-    <div class="row no-gutters">
-        <div class="col-2">
-            <div class="opacity-50 mt-2">{{ translate('Color')}}:</div>
-        </div>
-        <div class="col-10">
-            <div class="aiz-radio-inline">
-                @foreach (json_decode($product->colors) as $key => $color)
-                <label class="aiz-megabox pl-0 mr-2" data-toggle="tooltip" data-title="{{ \App\Models\Color::where('code', $color)->first()->name }}">
-                    <input type="radio" name="color" value="{{ \App\Models\Color::where('code', $color)->first()->name }}" @if($key==0) checked @endif>
-                    <span class="aiz-megabox-elem rounded d-flex align-items-center justify-content-center p-1 mb-2">
-                        <span class="size-30px d-inline-block rounded" style="background: {{ $color }};"></span>
-                    </span>
-                </label>
-                @endforeach
-            </div>
-        </div>
-    </div>
-
-    <hr>
-    @endif
-
-    <div class="row no-gutters" style="display: none">
-        <div class="col-2">
-            <div class="opacity-50 mt-2">{{ translate('Quantity')}}:</div>
-        </div>
-        <div class="col-10">
-            <div class="product-quantity d-flex align-items-center">
-                <div class="row no-gutters align-items-center aiz-plus-minus mr-3" style="width: 130px;">
-                    <button class="btn col-auto btn-icon btn-sm btn-circle btn-light" type="button" data-type="minus" data-field="quantity" disabled="">
-                        <i class="las la-minus"></i>
-                    </button>
-                    <input type="number" name="quantity" class="col border-0 text-center flex-grow-1 fs-16 input-number" placeholder="1" value="{{ $product->min_qty }}" min="{{ $product->min_qty }}" max="10" lang="en">
-                    <button class="btn  col-auto btn-icon btn-sm btn-circle btn-light" type="button" data-type="plus" data-field="quantity">
-                        <i class="las la-plus"></i>
-                    </button>
-                </div>
-                <div class="avialable-amount opacity-60">
-                    @if($product->stock_visibility_state == 'quantity')
-                    (<span id="available-quantity">{{ $qty }}</span> {{ translate('available')}})
-                    @elseif($product->stock_visibility_state == 'text' && $qty >= 1)
-                    (<span id="available-quantity">{{ translate('In Stock') }}</span>)
-                    @endif
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <hr>
-    @endif
-
-    <div class="row no-gutters pb-3 d-none" id="chosen_price_div" style="display: none">
-        <div class="col-2">
-            <div class="opacity-50">{{ translate('Total Price')}}:</div>
-        </div>
-        <div class="col-10">
-            <div class="product-price">
-                <strong id="chosen_price" class="h4 fw-600 text-primary">
-
-                </strong>
-            </div>
-        </div>
-    </div>
-
-</form>
 
 <script type="text/javascript">
     $('#option-choice-form input').on('change', function() {

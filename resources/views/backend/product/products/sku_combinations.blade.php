@@ -17,6 +17,9 @@
 			<td class="text-center" data-breakpoints="lg">
 				{{translate('Photo')}}
 			</td>
+			<td class="text-center" data-breakpoints="lg">
+                {{translate('Duration')}}
+            </td>
 		</tr>
 	</thead>
 	<tbody>
@@ -69,6 +72,9 @@
 						<input type="hidden" name="img_{{ $str }}" class="selected-files">
 					</div>
 					<div class="file-preview box sm"></div>
+				</td>
+				<td>
+					<input type="number" lang="en" name="duration_{{ $str }}" value="5" min="5" step="5" class="form-control">
 				</td>
 			</tr>
 		@endif

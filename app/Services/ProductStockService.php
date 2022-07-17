@@ -18,6 +18,7 @@ class ProductStockService
         $combinations = Combinations::makeCombinations($options);
         
         $variant = '';
+        $duration = '';
         if (count($combinations[0]) > 0) {
             $product->variant_product = 1;
             $product->save();
@@ -30,6 +31,7 @@ class ProductStockService
                 $product_stock->sku = request()['sku_' . str_replace('.', '_', $str)];
                 $product_stock->qty = request()['qty_' . str_replace('.', '_', $str)];
                 $product_stock->image = request()['img_' . str_replace('.', '_', $str)];
+                $product_stock->duration = request()['duration_' . str_replace('.', '_', $str)];
                 $product_stock->save();
             }
         } else {
@@ -38,7 +40,7 @@ class ProductStockService
             $price = $collection['unit_price'];
             unset($collection['current_stock']);
 
-            $data = $collection->merge(compact('variant', 'qty', 'price'))->toArray();
+            $data = $collection->merge(compact('variant', 'qty', 'price','duration'))->toArray();
             
             ProductStock::create($data);
         }
@@ -53,6 +55,7 @@ class ProductStockService
             $product_stock->price       = $stock->price;
             $product_stock->sku         = $stock->sku;
             $product_stock->qty         = $stock->qty;
+            $product_stock->duration    = $stock->duration;
             $product_stock->save();
         }
     }

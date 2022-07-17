@@ -1,0 +1,53 @@
+::selection {
+    background-color: #404A3C;
+    color: #fff;
+}
+
+::-moz-selection {
+    background-color: #404A3C;
+    color: #fff;
+}
+
+a:hover {
+    color: #404A3C;
+}
+
+a,
+.m-btn-t-theme,
+.m-btn-t-theme:hover,
+.m-btn-theme:hover,
+.theme-color {
+    color: #404A3C;
+}
+
+.theme-before:before,
+.theme-after:after,
+.theme-hover:hover,
+.m-btn-theme,
+.theme-bg {
+    background-color: #404A3C;
+}
+
+.m-btn-theme,
+.theme-border {
+    border-color: #404A3C !important;
+}
+
+.m-btn-t-theme {
+    border-color: #404A3C;
+}
+
+.m-btn-t-theme {
+    box-shadow: 0 0 #404A3C;
+}
+
+.m-btn-t-theme:hover {
+    box-shadow: 2px 2px #404A3C;
+}
+
+.m-dropdown-multilevel .m-dropdown-menu>li>ul>li>ul>li>ul>li:hover>a,
+.m-dropdown-multilevel .m-dropdown-menu>li>ul>li>ul>li:hover>a,
+.m-dropdown-multilevel .m-dropdown-menu>li>ul>li:hover>a,
+.m-dropdown-multilevel .m-dropdown-menu>li:hover>a {
+    color: #404A3C;
+}

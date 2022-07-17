@@ -5,7 +5,6 @@ namespace App\Services;
 use App\Models\ProductStock;
 use App\Utility\ProductUtility;
 use Combinations;
-use Exception;
 
 class ProductStockService
 {
@@ -17,7 +16,6 @@ class ProductStockService
         
         //Generates the combinations of customer choice options
         $combinations = Combinations::makeCombinations($options);
-        try{
 
         $variant = '';
         $duration = '';
@@ -45,9 +43,6 @@ class ProductStockService
             $data = $collection->merge(compact('variant', 'qty', 'price','duration'))->toArray();
             
             ProductStock::create($data);
-        }
-        }catch(Exception $e){
-            dd($e);
         }
     }
 

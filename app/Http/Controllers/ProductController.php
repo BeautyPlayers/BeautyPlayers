@@ -46,8 +46,8 @@ use App\Models\ProductsAddon;
 
 use App\Models\ServicePackage;
 use App\Models\ServicePackageProduct;
-
-
+use App\Utility\ProductUtility;
+use Exception;
 
 class ProductController extends Controller
 
@@ -1004,7 +1004,6 @@ class ProductController extends Controller
 
         foreach ($products as $product){
             $request->merge(['id' => $product->id]);
-
             $product = $this->productService->update($request->except([
                 '_token', 'sku', 'choice', 'tax_id', 'tax', 'tax_type', 'flash_deal_id', 'flash_discount', 'flash_discount_type'
             ]), $product);

@@ -5,6 +5,7 @@ namespace App\Services;
 use App\Models\ProductStock;
 use App\Utility\ProductUtility;
 use Combinations;
+use Exception;
 
 class ProductStockService
 {
@@ -16,7 +17,8 @@ class ProductStockService
         
         //Generates the combinations of customer choice options
         $combinations = Combinations::makeCombinations($options);
-        
+        try{
+
         $variant = '';
         $duration = '';
         if (count($combinations[0]) > 0) {
@@ -27,11 +29,11 @@ class ProductStockService
                 $product_stock = new ProductStock();
                 $product_stock->product_id = $product->id;
                 $product_stock->variant = $str;
-                $product_stock->price = request()['price_' . str_replace('.', '_', $str)]??0;
-                $product_stock->sku = request()['sku_' . str_replace('.', '_', $str)];
-                $product_stock->qty = request()['qty_' . str_replace('.', '_', $str)]??1;
-                $product_stock->image = request()['img_' . str_replace('.', '_', $str)];
-                $product_stock->duration = request()['duration_' . str_replace('.', '_', $str)];
+                $product_stock->price = request()['price_' . str_replace(' ','#',str_replace('.', '_', $str))]??0;
+                $product_stock->sku = request()['sku_' . str_replace(' ','_',str_replace('.', '_', $str))];
+                $product_stock->qty = request()['qty_' . str_replace(' ','#',str_replace('.', '_', $str))]??1;
+                $product_stock->image = request()['img_' . str_replace(' ','#',str_replace('.', '_', $str))];
+                $product_stock->duration = request()['duration_' . str_replace(' ','#',str_replace('.', '_', $str))];
                 $product_stock->save();
             }
         } else {
@@ -43,6 +45,9 @@ class ProductStockService
             $data = $collection->merge(compact('variant', 'qty', 'price','duration'))->toArray();
             
             ProductStock::create($data);
+        }
+        }catch(Exception $e){
+            dd($e);
         }
     }
 

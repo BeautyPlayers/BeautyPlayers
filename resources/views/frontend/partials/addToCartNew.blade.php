@@ -106,7 +106,7 @@ $qty += $stock->qty;
                                             </div> -->
                             <div class="col-10">
                                 <div class="aiz-radio-inline">
-                                    @foreach ($product->stocks as $key => $stock)
+                                    @foreach ($product->stocks()->orderBy('sort_order')->get() as $key => $stock)
                                     <label class="aiz-megabox pl-0 mr-2" data-toggle="tooltip" data-title="{{ $stock->variant }}">
                                         <input type="radio" class="variation" name="color" value="{{ $stock->variant }}" @if($key==0) checked @endif>
                                         <span class="aiz-megabox-elem d-flex align-items-center justify-content-center p-1 mb-2">

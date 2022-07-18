@@ -32,6 +32,7 @@ class ProductStockService
                 $product_stock->qty = request()['qty_' . str_replace(' ','#',str_replace('.', '_', $str))]??1;
                 $product_stock->image = request()['img_' . str_replace(' ','#',str_replace('.', '_', $str))];
                 $product_stock->duration = request()['duration_' . str_replace(' ','#',str_replace('.', '_', $str))];
+                $product_stock->sort_order = request()['sort_order_' . str_replace(' ','#',str_replace('.', '_', $str))];
                 $product_stock->save();
             }
         } else {

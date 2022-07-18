@@ -20,6 +20,9 @@
 			<td class="text-center" data-breakpoints="lg">
                 {{translate('Duration')}}
             </td>
+			<td class="text-center" data-breakpoints="lg">
+                {{translate('Sort Order')}}
+            </td>
 		</tr>
 	</thead>
 	<tbody>
@@ -79,6 +82,9 @@
 				</td>
 				<td>
 					<input type="number" lang="en" name="duration_{{ $str_var }}" value="5" min="5" step="5" class="form-control">
+				</td>
+				<td>
+					<input type="number" lang="en" name="sort_order_{{ $str_var }}" value="1" min="1" step="1" class="form-control">
 				</td>
 			</tr>
 		@endif

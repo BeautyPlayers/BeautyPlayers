@@ -20,6 +20,9 @@
 			<td class="text-center" data-breakpoints="lg">
                 {{translate('Duration')}}
             </td>
+			<td class="text-center" data-breakpoints="lg">
+                {{translate('Sort Order')}}
+            </td>
 		</tr>
 	</thead>
 	<tbody>
@@ -31,19 +34,23 @@
 			}
 
 			$str = '';
+			$str_var = '';
 			foreach ($combination as $key => $item){
 				if($key > 0 ){
 					$str .= '-'.str_replace(' ', '', $item);
+					$str_var .= str_replace(' ', '#', $item);
 					$sku .='-'.str_replace(' ', '', $item);
 				}
 				else{
 					if($colors_active == 1){
 						$color_name = \App\Models\Color::where('code', $item)->first()->name;
 						$str .= $color_name;
+						$str_var .= str_replace(' ', '#', $color_name);
 						$sku .='-'.$color_name;
 					}
 					else{
 						$str .= str_replace(' ', '', $item);
+						$str_var .= str_replace(' ', '#', $item);
 						$sku .='-'.str_replace(' ', '', $item);
 					}
 				}
@@ -55,13 +62,13 @@
 					<label for="" class="control-label">{{ $str }}</label>
 				</td>
 				<td>
-					<input type="number" lang="en" name="price_{{ $str }}" value="{{ $unit_price }}" min="0" step="0.01" class="form-control" required>
+					<input type="number" lang="en" name="price_{{ $str_var }}" value="{{ $unit_price }}" min="0" step="0.01" class="form-control" required>
 				</td>
 				<td>
-					<input type="text" name="sku_{{ $str }}" value="" class="form-control">
+					<input type="text" name="sku_{{ $str_var }}" value="" class="form-control">
 				</td>
 				<td>
-					<input type="number" lang="en" name="qty_{{ $str }}" value="10" min="0" step="1" class="form-control" required>
+					<input type="number" lang="en" name="qty_{{ $str_var }}" value="10" min="0" step="1" class="form-control" required>
 				</td>
 				<td>
 					<div class=" input-group " data-toggle="aizuploader" data-type="image">
@@ -69,12 +76,15 @@
 							<div class="input-group-text bg-soft-secondary font-weight-medium">{{ translate('Browse') }}</div>
 						</div>
 						<div class="form-control file-amount text-truncate">{{ translate('Choose File') }}</div>
-						<input type="hidden" name="img_{{ $str }}" class="selected-files">
+						<input type="hidden" name="img_{{ $str_var }}" class="selected-files">
 					</div>
 					<div class="file-preview box sm"></div>
 				</td>
 				<td>
-					<input type="number" lang="en" name="duration_{{ $str }}" value="5" min="5" step="5" class="form-control">
+					<input type="number" lang="en" name="duration_{{ $str_var }}" value="5" min="5" step="5" class="form-control">
+				</td>
+				<td>
+					<input type="number" lang="en" name="sort_order_{{ $str_var }}" value="1" min="1" step="1" class="form-control">
 				</td>
 			</tr>
 		@endif

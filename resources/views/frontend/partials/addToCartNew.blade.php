@@ -99,14 +99,14 @@ $qty += $stock->qty;
                         @endif
                         --}}
                         <!-- Variation with Image ::START  -->
-                        @if (!empty($product->stocks) && $product->stocks->count() > 0)
+                        @if (count(json_decode($product->colors)) > 0)
                         <div class="row no-gutters">
                             <!-- <div class="col-2">
                                                 <div class="opacity-50 mt-2">{{ translate('Color')}}:</div>
                                             </div> -->
                             <div class="col-10">
                                 <div class="aiz-radio-inline">
-                                    @foreach ($product->stocks as $key => $stock)
+                                    @foreach ($product->stocks()->orderBy('sort_order')->get() as $key => $stock)
                                     <label class="aiz-megabox pl-0 mr-2" data-toggle="tooltip" data-title="{{ $stock->variant }}">
                                         <input type="radio" class="variation" name="color" value="{{ $stock->variant }}" @if($key==0) checked @endif>
                                         <span class="aiz-megabox-elem d-flex align-items-center justify-content-center p-1 mb-2">
@@ -119,7 +119,7 @@ $qty += $stock->qty;
                             </div>
                         </div>
 
-                        <hr>
+                        <!-- <hr> -->
                         @endif
                         <!-- Variation with Image ::END -->
 

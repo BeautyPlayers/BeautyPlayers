@@ -21,4 +21,8 @@ class ServicePackage extends Model {
         return $this->belongsTo(User::class);
     }
 
+    public function servicePackageProducts(){
+        return $this->hasMany(ServicePackageProduct::class);
+    }
+
 }

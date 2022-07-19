@@ -132,6 +132,7 @@ Route::controller(HomeController::class)->group(function () {
     Route::get('/shop/booking/{slug}', 'seller_booking')->name('shop.booking');
     Route::post('/shop/booking', 'seller_booking_store')->name('shop.booking.store');
     Route::get('/shop/{slug}/{type}', 'filter_shop')->name('shop.visit.type');
+    Route::get('/service-package/edit/{servicePackage}', 'edit_service_package')->name('service.package.edit');
 
     Route::get('/customer-packages', 'premium_package_index')->name('customer_packages_list_show');
 

@@ -56,6 +56,17 @@
                 </select>
             </div>
             @endif
+            <div class="col-md-2 ml-auto">                
+                <select class="select2 form-control form-control-sm aiz-selectpicker mb-2 mb-md-0" name="category_id" id="category_id" data-toggle="select2" data-placeholder="Choose ..." data-live-search="true"  onchange="sort_products()">
+                    <option value="">{{ translate('By Category') }}</option>
+                    @foreach ($categories as $category)
+                                    <option value="{{ $category->id }}">{{ $category->getTranslation('name') }}</option>
+                                    @foreach ($category->childrenCategories as $childCategory)
+                                    @include('categories.child_category', ['child_category' => $childCategory])
+                                    @endforeach
+                                    @endforeach
+                </select>
+            </div>
             <div class="col-md-2 ml-auto">
                 <select class="form-control form-control-sm aiz-selectpicker mb-2 mb-md-0" name="type" id="type" onchange="sort_products()">
                     <option value="">{{ translate('Sort By') }}</option>
@@ -94,6 +105,8 @@
                             <th data-breakpoints="lg">{{translate('Added By')}}</th>
                         @endif
                         <th data-breakpoints="sm">{{translate('Info')}}</th>
+                        <th data-breakpoints="md">{{translate('Category')}}</th>
+                        <th data-breakpoints="md">{{translate('Sub Category')}}</th>
                         <th data-breakpoints="md">{{translate('Total Stock')}}</th>
                         <th data-breakpoints="lg">{{translate('Todays Deal')}}</th>
                         <th data-breakpoints="lg">{{translate('Published')}}</th>
@@ -133,6 +146,20 @@
                             <strong>{{translate('Num of Sale')}}:</strong> {{ $product->num_of_sale }} {{translate('times')}} </br>
                             <strong>{{translate('Base Price')}}:</strong> {{ single_price($product->unit_price) }} </br>
                             <strong>{{translate('Rating')}}:</strong> {{ $product->rating }} </br>
+                        </td>
+                        <td>
+                            @if($product->category && $product->category->parent_id == 0)
+                            {{ $product->category->name }}
+                            @else
+                            -
+                            @endif
+                        </td>
+                        <td>
+                            @if($product->category && $product->category->parent_id > 0)
+                            {{ $product->category->name }}
+                            @else
+                            -
+                            @endif
                         </td>
                         <td>
                             @php
@@ -235,6 +262,13 @@
         });
 
         $(document).ready(function(){
+            <?php 
+            if(isset($_GET['category_id'])){
+                ?>
+                        $('#category_id').val('<?= $_GET['category_id'] ?>');
+                    <?php
+            }
+            ?>
             //$('#container').removeClass('mainnav-lg').addClass('mainnav-sm');
         });
 

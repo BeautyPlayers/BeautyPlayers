@@ -130,7 +130,14 @@ class ProductController extends Controller
             $sort_type = $request->type;
 
         }
-
+        $categories = Category::where('parent_id', 0)
+            ->where('digital', 0)
+            ->with('childrenCategories')
+            ->get();
+        if ($request->category_id != null) {
+             $products = $products->where('category_id', $request->category_id);
+        }
+       
         if ($request->search != null) {
 
             $sort_search = $request->search;
@@ -150,10 +157,20 @@ class ProductController extends Controller
 
 
         $products = $products->where('digital', 0)->orderBy('created_at', 'desc')->paginate(15);
+//        if(count($products)){
+//            foreach($products as $k => $product){
+//                if($product->category && $product->category->parent_id > 0){
+//                    $products[$k]->parent_category = Category::where('id', $product->category->parent_id)->first();
+//                    $products[$k]->sub_category = $product->category;
+//                }else{
+//                    $products[$k]->parent_category = $product->category;
+//                    $products[$k]->sub_category = NULL;
+//                }
+//            }
+//        }
 
 
-
-        return view('backend.product.products.index', compact('products', 'type', 'col_name', 'query', 'sort_search'));
+        return view('backend.product.products.index', compact('products','categories', 'type', 'col_name', 'query', 'sort_search'));
 
     }
 
@@ -190,6 +207,13 @@ class ProductController extends Controller
             $seller_id = $request->user_id;
 
         }
+        $categories = Category::where('parent_id', 0)
+            ->where('digital', 0)
+            ->with('childrenCategories')
+            ->get();
+        if ($request->category_id != null) {
+             $products = $products->where('category_id', $request->category_id);
+        }
 
         if ($request->search != null) {
 
@@ -218,12 +242,22 @@ class ProductController extends Controller
 
 
         $products = $products->where('digital', 0)->orderBy('created_at', 'desc')->paginate(15);
-
+//        if(count($products)){
+//            foreach($products as $k => $product){
+//                if($product->category && $product->category->parent_id > 0){
+//                    $products[$k]->parent_category = Category::where('id', $product->category->parent_id)->first();
+//                    $products[$k]->sub_category = $product->category;
+//                }else{
+//                    $products[$k]->parent_category = $product->category;
+//                    $products[$k]->sub_category = NULL;
+//                }
+//            }
+//        }
         $type = 'Seller';
 
 
 
-        return view('backend.product.products.index', compact('products', 'type', 'col_name', 'query', 'seller_id', 'sort_search'));
+        return view('backend.product.products.index', compact('products','categories', 'type', 'col_name', 'query', 'seller_id', 'sort_search'));
 
     }
 
@@ -293,7 +327,7 @@ class ProductController extends Controller
 
         $sort_search = null;
 
-        $products = Product::orderBy('created_at', 'desc')->where('auction_product', 0)->where('wholesale_product', 0);
+        $products = Product::with('category')->orderBy('created_at', 'desc')->where('auction_product', 0)->where('wholesale_product', 0);
 
         if ($request->has('user_id') && $request->user_id != null) {
 
@@ -302,7 +336,14 @@ class ProductController extends Controller
             $seller_id = $request->user_id;
 
         }
-
+        $categories = Category::where('parent_id', 0)
+            ->where('digital', 0)
+            ->with('childrenCategories')
+            ->get();
+        if ($request->category_id != null) {
+             $products = $products->where('category_id', $request->category_id);
+        }
+       
         if ($request->search != null) {
 
             $sort_search = $request->search;
@@ -332,16 +373,22 @@ class ProductController extends Controller
             $sort_type = $request->type;
 
         }
-
-
-
+        
         $products = $products->paginate(15);
-
+//        if(count($products)){
+//            foreach($products as $k => $product){
+//                if($product->category && $product->category->parent_id > 0){
+//                    $products[$k]->parent_category = Category::where('id', $product->category->parent_id)->first();
+//                    $products[$k]->sub_category = $product->category;
+//                }else{
+//                    $products[$k]->parent_category = $product->category;
+//                    $products[$k]->sub_category = NULL;
+//                }
+//            }
+//        }
         $type = 'All';
 
-
-
-        return view('backend.product.products.index', compact('products', 'type', 'col_name', 'query', 'seller_id', 'sort_search'));
+        return view('backend.product.products.index', compact('products','categories' ,'type', 'col_name', 'query', 'seller_id', 'sort_search'));
 
     }
 

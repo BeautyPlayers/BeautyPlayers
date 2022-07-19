@@ -12,8 +12,17 @@
     <link rel="stylesheet" href="{{ static_asset('css/frontend/reseller_page.css') }}">
 @endsection
 
-@section('content')
-
+	@section('content')	
+<style>	
+  @media only screen and (max-width: 600px) {	
+    .tab-style-1 .nav-link span {	
+      display: block;	
+    }	
+    .tab-style-1 .nav-item {	
+      border: 1px dashed rgba(255, 255, 255, 0.5);	
+    }	
+  }	
+</style>	
 <!-- Modal -->
 <div class="modal fade" id="affiliateModal" tabindex="-1" role="dialog" aria-labelledby="affiliateModalLabel" aria-hidden="true">
   <div class="modal-dialog" role="document">

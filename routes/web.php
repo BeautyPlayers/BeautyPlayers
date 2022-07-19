@@ -151,6 +151,8 @@ Route::controller(HomeController::class)->group(function () {
     Route::get('/privacy-policy', 'privacypolicy')->name('privacypolicy');
 
     Route::get('/track-your-order', 'trackOrder')->name('orders.track');
+    Route::view('/beautyexperts', 'frontend/beautyexperts');	
+    Route::view('/beautypoints', 'frontend/beautypoints');
 });
 
 // Language Switch

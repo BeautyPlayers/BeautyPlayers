@@ -1996,9 +1996,9 @@
 
 <div class="modal fade" id="customerPackageModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
 
-    <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-dialog modal-dialog-centered modal-xl mw-100" role="document">
 
-        <div class="modal-content">
+        <div class="modal-content w-75">
 
             <div class="modal-header">
 
@@ -2012,7 +2012,7 @@
 
             <div class="modal-body">
 
-                <div class="bid-form-content">
+                <div class="package-form-content">
 
 
 
@@ -2105,7 +2105,7 @@
                 url: `/service-package/edit/${id}`,
                 data: $('#option-choice-form').serializeArray(),
                 success: function(data){
-                    $('#available-quantity').html(data.quantity);
+                    $('.package-form-content').html(data);
                     if(parseInt(data.in_stock) == 0 && data.digital  == 0){
                         $('.buy-now').addClass('d-none');
                         $('.add-to-cart').addClass('d-none');
@@ -2117,6 +2117,7 @@
                         $('.out-of-stock').addClass('d-none');
                     }
                     $('#customerPackageModal').modal('show');
+                    AIZ.plugins.bootstrapSelect('refresh');
                     AIZ.extra.plusMinus();
                 }
             });

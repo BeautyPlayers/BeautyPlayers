@@ -902,6 +902,8 @@ class HomeController extends Controller
                     ->where('auction_product', 0)
                     ->where('wholesale_product', 0)->get();
         $select_products = $servicePackage->servicePackageProducts->pluck('product_id')->toArray();
+        // dd($select_products,$products->whereIn('id',$select_products)->toArray());
+        // dd($products);
         return view('frontend.partials.service_package_edit', compact('servicePackage', 'products','select_products'));
     }
 
